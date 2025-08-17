@@ -1,0 +1,45 @@
+---
+import Layout from '@layouts/Layout.astro';
+import SelectionScreen from '@components/SelectionScreen.astro';
+
+const options = [
+  {
+    id: 'kawaii',
+    title: 'かわいいようかん',
+    description: 'キュートで愛らしい一面について',
+    emoji: '🥺',
+    href: '/kawaii'
+  },
+  {
+    id: 'engineer',
+    title: 'エンジニアようかん',
+    description: '技術スキル、開発経験について',
+    emoji: '💻',
+    href: '/engineer'
+  },
+  {
+    id: 'flying',
+    title: '空飛ぶようかん',
+    description: '夢や冒険、創造的な活動について',
+    emoji: '🚀',
+    href: '/flying'
+  }
+];
+
+const metaProps = {
+  title: 'ようかんの自己紹介ページ',
+  description: 'あなたの興味のある分野を選択して、それぞれの自己紹介をご覧ください。かわいい、エンジニア、空飛ぶ',
+  keywords: ['自己紹介', 'プロフィール', 'エンジニア', 'ポートフォリオ'],
+  author: 'youkan',
+  ogp: {
+    title: 'ようかんの自己紹介ページ',
+    description: '3つの個性から選んで自己紹介をご覧ください',
+    type: 'website' as const,
+    siteName: 'youkan.uk'
+  }
+};
+---
+
+<Layout {...metaProps}>
+  <SelectionScreen options={options} />
+</Layout>

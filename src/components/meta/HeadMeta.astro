@@ -1,0 +1,49 @@
+---
+import "@assets/css/index.css";
+import "@styles/styles.css";
+
+import DescriptionMeta from "./internals/DescriptionMeta.astro";
+import FaviconMeta from "./internals/FaviconMeta.astro";
+import GtmMeta from "./internals/GtmMeta.astro";
+import OgpMeta from "./internals/OgpMeta.astro";
+import SecurityMeta from "./internals/SecurityMeta.astro";
+
+import { ViewTransitions } from "astro:transitions";
+
+import type { HeadMetaProps } from "./types";
+
+interface Props extends HeadMetaProps {
+  canonical?: string;
+  noindex?: boolean;
+  nofollow?: boolean;
+}
+
+const props = Astro.props;
+const { canonical, noindex, nofollow } = props;
+
+const isProduction = import.meta.env.MODE === "production";
+---
+
+<DescriptionMeta {...props} />
+<OgpMeta
+  title={props.title}
+  description={props.description}
+  ogp={props.ogp}
+/>
+<GtmMeta />
+<FaviconMeta />
+{isProduction ? <SecurityMeta /> : null}
+
+<!-- Canonical URL -->
+{canonical && <link rel="canonical" href={canonical} />}
+
+<!-- Robots meta -->
+{(noindex || nofollow) && (
+  <meta 
+    name="robots" 
+    content={`${noindex ? 'noindex' : 'index'}${noindex && nofollow ? ',' : ''}${nofollow ? 'nofollow' : ''}`} 
+  />
+)}
+
+<!-- View Transitions for SPA-like navigation -->
+<ViewTransitions />

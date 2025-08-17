@@ -1,0 +1,141 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { css } from "@styles/css";
+
+const metaProps = {
+  title: '【VRChat】ようかん',
+  description: '好きな食べ物はようかんです!えっと紅茶も好きなの。ラテアートがんばるからね♪',
+  keywords: ['かわいい', 'VRChat', 'ぷぷりえ', 'ようかん'],
+  author: 'youkan',
+  ogp: {
+    title: '【VRChat】ようかん',
+    description: '好きな食べ物はようかんです!えっと紅茶も好きなの。ラテアートがんばるからね♪',
+    type: 'article' as const,
+    siteName: 'youkan.uk'
+  }
+};
+---
+
+<Layout {...metaProps}>
+  <div class={css({
+    maxWidth: '4xl',
+    margin: '0 auto',
+    padding: '2rem',
+    lineHeight: '1.6'
+  })}>
+    <a 
+      href="/"
+      class={css({
+        display: 'inline-flex',
+        alignItems: 'center',
+        marginBottom: '2rem',
+        color: 'blue.600',
+        textDecoration: 'none',
+        _hover: { textDecoration: 'underline' }
+      })}
+    >
+      ← 選択画面に戻る
+    </a>
+
+    <div class={css({ textAlign: 'center', marginBottom: '3rem' })}>
+      <h1 class={css({
+        fontSize: '3xl',
+        fontWeight: 'bold',
+        marginBottom: '1rem',
+        color: 'blue.800'
+      })}>
+        💻 エンジニアようかん
+      </h1>
+      <p class={css({ fontSize: 'lg', color: 'blue.600' })}>
+        技術スキルと開発経験について
+      </p>
+    </div>
+
+    <div class={css({
+      display: 'grid',
+      gap: '2rem',
+      gridTemplateColumns: { base: '1fr', lg: 'repeat(2, 1fr)' }
+    })}>
+      <!-- スキルセクション -->
+      <section class={css({
+        padding: '2rem',
+        backgroundColor: 'blue.50',
+        borderRadius: 'lg',
+        border: '2px solid',
+        borderColor: 'blue.200'
+      })}>
+        <h2 class={css({
+          fontSize: '2xl',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          color: 'blue.800'
+        })}>
+          技術スキル 🔧
+        </h2>
+        <div class={css({ color: 'blue.700' })}>
+          <ul class={css({ paddingLeft: '1rem', space: '0.5rem' })}>
+            <li>⚛️ React / Vue.js / Svelte</li>
+            <li>🟦 TypeScript / JavaScript</li>
+            <li>🚀 Astro / Next.js / Vite</li>
+            <li>🎨 CSS / PandaCSS / TailwindCSS</li>
+            <li>🔧 Node.js / Python / Go</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 経験セクション -->
+      <section class={css({
+        padding: '2rem',
+        backgroundColor: 'blue.50',
+        borderRadius: 'lg',
+        border: '2px solid',
+        borderColor: 'blue.200'
+      })}>
+        <h2 class={css({
+          fontSize: '2xl',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          color: 'blue.800'
+        })}>
+          開発経験 📚
+        </h2>
+        <div class={css({ color: 'blue.700' })}>
+          <ul class={css({ paddingLeft: '1rem', space: '0.5rem' })}>
+            <li>🌐 Webアプリケーション開発</li>
+            <li>📱 モバイルアプリ開発</li>
+            <li>🔗 API設計・開発</li>
+            <li>☁️ クラウドインフラ構築</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- プロジェクト一覧 -->
+    <section class={css({
+      marginTop: '2rem',
+      padding: '2rem',
+      backgroundColor: 'blue.50',
+      borderRadius: 'lg',
+      border: '2px solid',
+      borderColor: 'blue.200'
+    })}>
+      <h2 class={css({
+        fontSize: '2xl',
+        fontWeight: 'bold',
+        marginBottom: '1rem',
+        color: 'blue.800'
+      })}>
+        主要プロジェクト 🚀
+      </h2>
+      <div class={css({ color: 'blue.700' })}>
+        <p class={css({ marginBottom: '1rem' })}>
+          高速でモダンな自己紹介サイト (Astro + PandaCSS)
+        </p>
+        <p>
+          パフォーマンスを重視した静的サイト生成で、
+          分野別に自己紹介コンテンツを切り替えられる仕組みを実装
+        </p>
+      </div>
+    </section>
+  </div>
+</Layout>

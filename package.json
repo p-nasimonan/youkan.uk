@@ -1,0 +1,23 @@
+{
+  "name": "youkan.uk",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "prepare": "panda codegen",
+    "dev": "concurrently \"npm run dev:panda\" \"npm run dev:astro\"",
+    "dev:panda": "panda -w",
+    "dev:astro": "astro dev",
+    "build": " build:panda && astro build",
+    "build:panda": "panda --minify",
+    "preview": "astro preview",
+    "astro": "astro",
+    "panda": "panda codegen"
+  },
+  "dependencies": {
+    "astro": "^5.13.2"
+  },
+  "devDependencies": {
+    "@pandacss/dev": "^1.0.1",
+    "concurrently": "^9.2.0"
+  }
+}

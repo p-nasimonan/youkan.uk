@@ -1,0 +1,139 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { css } from '@styles/css';
+
+const metaProps = {
+  title: '【VRChat】ようかん',
+  description: '好きな食べ物はようかんです!えっと紅茶も好きなの。ラテアートがんばるからね♪',
+  keywords: ['かわいい', 'VRChat', 'ぷぷりえ', 'ようかん'],
+  author: 'youkan',
+  ogp: {
+    title: '【VRChat】ようかん',
+    description: '好きな食べ物はようかんです!えっと紅茶も好きなの。ラテアートがんばるからね♪',
+    type: 'article' as const,
+    siteName: 'youkan.uk'
+  }
+};
+---
+
+<Layout {...metaProps}>
+  <div class={css({
+    maxWidth: '4xl',
+    margin: '0 auto',
+    padding: '2rem',
+    lineHeight: '1.6'
+  })}>
+    <a 
+      href="/"
+      class={css({
+        display: 'inline-flex',
+        alignItems: 'center',
+        marginBottom: '2rem',
+        color: 'pink.600',
+        textDecoration: 'none',
+        _hover: { textDecoration: 'underline' }
+      })}
+    >
+      ← 選択画面に戻る
+    </a>
+
+    <div class={css({ textAlign: 'center', marginBottom: '3rem' })}>
+      <h1 class={css({
+        fontSize: '3xl',
+        fontWeight: 'bold',
+        marginBottom: '1rem',
+        color: 'pink.800'
+      })}>
+        🥺 かわいいようかん
+      </h1>
+      <p class={css({ fontSize: 'lg', color: 'pink.600' })}>
+        キュートで愛らしい一面について
+      </p>
+    </div>
+
+    <div class={css({
+      display: 'grid',
+      gap: '2rem',
+      gridTemplateColumns: { base: '1fr', lg: 'repeat(2, 1fr)' }
+    })}>
+      <!-- かわいい特徴セクション -->
+      <section class={css({
+        padding: '2rem',
+        backgroundColor: 'pink.50',
+        borderRadius: 'lg',
+        border: '2px solid',
+        borderColor: 'pink.200'
+      })}>
+        <h2 class={css({
+          fontSize: '2xl',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          color: 'pink.800'
+        })}>
+          かわいい特徴 ✨
+        </h2>
+        <div class={css({ color: 'pink.700' })}>
+          <ul class={css({ paddingLeft: '1rem', space: '0.5rem' })}>
+            <li>🌸 やわらかい雰囲気</li>
+            <li>🎀 優しい声のトーン</li>
+            <li>🌺 笑顔が素敵</li>
+            <li>🍡 ふんわりした性格</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 好きなものセクション -->
+      <section class={css({
+        padding: '2rem',
+        backgroundColor: 'pink.50',
+        borderRadius: 'lg',
+        border: '2px solid',
+        borderColor: 'pink.200'
+      })}>
+        <h2 class={css({
+          fontSize: '2xl',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          color: 'pink.800'
+        })}>
+          好きなもの 💕
+        </h2>
+        <div class={css({ color: 'pink.700' })}>
+          <ul class={css({ paddingLeft: '1rem', space: '0.5rem' })}>
+            <li>🧸 ぬいぐるみ</li>
+            <li>🌈 パステルカラー</li>
+            <li>🍰 スイーツ</li>
+            <li>🎵 やさしい音楽</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- チャームポイントセクション -->
+    <section class={css({
+      marginTop: '2rem',
+      padding: '2rem',
+      backgroundColor: 'pink.50',
+      borderRadius: 'lg',
+      border: '2px solid',
+      borderColor: 'pink.200',
+      textAlign: 'center'
+    })}>
+      <h2 class={css({
+        fontSize: '2xl',
+        fontWeight: 'bold',
+        marginBottom: '1rem',
+        color: 'pink.800'
+      })}>
+        チャームポイント 🌟
+      </h2>
+      <p class={css({ 
+        color: 'pink.700',
+        fontSize: 'lg',
+        fontStyle: 'italic'
+      })}>
+        「どんな時でも前向きで、周りの人を笑顔にできること」
+      </p>
+    </section>
+  </div>
+</Layout>

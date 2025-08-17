@@ -1,0 +1,17 @@
+---
+import HeadMeta from "@components/meta/HeadMeta.astro";
+import type { HeadMetaProps } from "@components/meta/types";
+
+interface Props extends HeadMetaProps {}
+
+const props = Astro.props;
+---
+
+<html lang="ja">
+  <head>
+    <HeadMeta {...props} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

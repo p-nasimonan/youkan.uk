@@ -1,0 +1,34 @@
+---
+import type { OgpMetaProps } from "../types";
+
+interface Props {
+  title: string;
+  description: string;
+  ogp?: OgpMetaProps;
+}
+
+const { title, description, ogp } = Astro.props;
+
+const defaultOgp = {
+  title: ogp?.title || title,
+  description: ogp?.description || description,
+  type: ogp?.type || 'website',
+  siteName: ogp?.siteName || 'youkan.uk',
+  url: ogp?.url || Astro.url.href,
+  image: ogp?.image || '/og-image.png'
+};
+---
+
+<!-- Open Graph -->
+<meta property="og:title" content={defaultOgp.title} />
+<meta property="og:description" content={defaultOgp.description} />
+<meta property="og:type" content={defaultOgp.type} />
+<meta property="og:url" content={defaultOgp.url} />
+<meta property="og:site_name" content={defaultOgp.siteName} />
+{defaultOgp.image && <meta property="og:image" content={defaultOgp.image} />}
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={defaultOgp.title} />
+<meta name="twitter:description" content={defaultOgp.description} />
+{defaultOgp.image && <meta name="twitter:image" content={defaultOgp.image} />}
