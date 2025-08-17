@@ -1,5 +1,9 @@
 {
   "name": "youkan.uk",
+  "author": {
+    "name": "youkan",
+    "email": "pnasimonan@gmail.com"
+  },
   "type": "module",
   "version": "0.0.1",
   "scripts": {
