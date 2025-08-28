@@ -1,0 +1,184 @@
+---
+import { readFileSync } from 'fs';
+import { css } from '@styles/css';
+import 'github-markdown-css/github-markdown-light.css';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkGfm from 'remark-gfm';
+import remarkRehype from 'remark-rehype';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeStringify from 'rehype-stringify';
+
+interface Props {
+  className?: string;
+}
+
+interface ProfileMeta {
+  title: string;
+  description?: string;
+  updatedAt: string;
+  source: string;
+}
+
+interface ParsedProfile {
+  content: string;
+  meta: ProfileMeta;
+}
+
+const { className } = Astro.props;
+
+const defaultMeta: ProfileMeta = {
+  title: 'GitHubプロフィール',
+  updatedAt: new Date().toISOString(),
+  source: 'fallback'
+};
+
+function parseMarkdownFile(filePath: string): ParsedProfile {
+  try {
+    const fileContent = readFileSync(filePath, 'utf8');
+    
+    // フロントマターとマークダウン本文を分離
+    const frontmatterMatch = fileContent.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+    
+    if (frontmatterMatch) {
+      const frontmatterText = frontmatterMatch[1];
+      const content = frontmatterMatch[2];
+      
+      const meta: ProfileMeta = { ...defaultMeta };
+      
+      // フロントマター解析
+      frontmatterText.split('\n').forEach((line: string) => {
+        const colonIndex = line.indexOf(':');
+        if (colonIndex === -1) return;
+        
+        const key = line.substring(0, colonIndex).trim();
+        const value = line.substring(colonIndex + 1).trim().replace(/^["']|["']$/g, '');
+        
+        switch (key) {
+          case 'title':
+            meta.title = value;
+            break;
+          case 'description':
+            meta.description = value;
+            break;
+          case 'updatedAt':
+            meta.updatedAt = value;
+            break;
+          case 'source':
+            meta.source = value;
+            break;
+        }
+      });
+      
+      return { content, meta };
+    } else {
+      return { content: fileContent, meta: defaultMeta };
+    }
+  } catch (error) {
+    console.warn('GitHubプロフィールファイルの読み込みに失敗:', error instanceof Error ? error.message : 'Unknown error');
+    
+    const fallbackContent = `# プロフィール
+
+GitHubプロフィールが利用できません。
+\`npm run fetch:github\` を実行してください。
+
+- GitHub: [p-nasimonan](https://github.com/p-nasimonan)
+`;
+    
+    return { content: fallbackContent, meta: defaultMeta };
+  }
+}
+
+// unified/remark/rehypeを使ったマークダウン処理
+async function markdownToHtml(markdown: string): Promise<string> {
+  try {
+    const result = await unified()
+      .use(remarkParse) // マークダウンをparseする
+      .use(remarkGfm)   // GitHub Flavored Markdown対応
+      .use(remarkRehype) // マークダウンASTからHTMLASTに変換
+      .use(rehypeHighlight) // シンタックスハイライト
+      .use(rehypeStringify) // HTMLに変換
+      .process(markdown);
+    
+    return String(result);
+  } catch (error) {
+    console.error('マークダウン処理エラー:', error);
+    return `<p>マークダウンの処理に失敗しました: ${error instanceof Error ? error.message : 'Unknown error'}</p>`;
+  }
+}
+
+const { content, meta } = parseMarkdownFile('./src/content/github-profile.md');
+const htmlContent = await markdownToHtml(content);
+---
+
+<section class={`${css({
+  padding: '2rem',
+  backgroundColor: 'blue.50',
+  borderRadius: 'lg',
+  border: '2px solid',
+  borderColor: 'blue.200'
+})} ${className || ''}`}>
+  <div class={css({
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '1rem'
+  })}>
+    <h2 class={css({
+      fontSize: '2xl',
+      fontWeight: 'bold',
+      color: 'blue.800'
+    })}>
+      📖 {meta.title}
+    </h2>
+    
+    <div class={css({
+      fontSize: 'sm',
+      color: 'blue.600'
+    })}>
+      最終更新: {new Date(meta.updatedAt).toLocaleDateString('ja-JP')}
+    </div>
+  </div>
+
+  <!-- GitHub Markdown CSS スタイルを適用 -->
+  <div class="markdown-body">
+    <div 
+      class={css({
+        fontSize: '14px',
+        lineHeight: '1.6',
+        '& img': {
+          maxWidth: '100%',
+          height: 'auto',
+          borderRadius: 'md',
+          display: 'block',
+          margin: '1rem auto'
+        },
+        '& .markdown-body': {
+          boxSizing: 'border-box',
+          minWidth: '200px',
+          maxWidth: '980px',
+          margin: '0 auto'
+        }
+      })}
+      set:html={htmlContent}
+    />
+  </div>
+  
+  {meta.source !== 'fallback' && (
+    <div class={css({
+      marginTop: '1rem',
+      padding: '1rem',
+      backgroundColor: 'blue.100',
+      borderRadius: 'md',
+      fontSize: 'sm',
+      color: 'blue.600'
+    })}>
+      <p>
+        🔗 <a href="https://github.com/p-nasimonan/p-nasimonan" target="_blank" rel="noopener noreferrer" class={css({ color: 'blue.600', textDecoration: 'underline' })}>
+          GitHubプロフィール
+        </a> から自動取得
+      </p>
+    </div>
+  )}
+</section>
+---

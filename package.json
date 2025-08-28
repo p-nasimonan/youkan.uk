@@ -7,11 +7,12 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "prepare": "panda codegen",
+    "prepare": "npm run fetch:github && panda codegen",
+    "fetch:github": "tsx scripts/fetch-github-profile.ts",
     "dev": "concurrently \"npm run dev:panda\" \"npm run dev:astro\"",
     "dev:panda": "panda -w",
     "dev:astro": "astro dev",
-    "build": " build:panda && astro build",
+    "build": "npm run build:panda && astro build",
     "build:panda": "panda --minify",
     "preview": "astro preview",
     "astro": "astro",
@@ -19,11 +20,20 @@
   },
   "dependencies": {
     "@react-spring/web": "^10.0.1",
+    "@types/node": "^24.3.0",
     "astro": "^5.13.2",
-    "framer-motion": "^12.23.12"
+    "framer-motion": "^12.23.12",
+    "github-markdown-css": "^5.8.1",
+    "rehype-highlight": "^7.0.2",
+    "rehype-stringify": "^10.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "unified": "^11.0.5"
   },
   "devDependencies": {
     "@pandacss/dev": "^1.0.1",
-    "concurrently": "^9.2.0"
+    "concurrently": "^9.2.0",
+    "tsx": "^4.20.5"
   }
 }

@@ -1,15 +1,16 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import { css } from "@styles/css";
+import GitHubProfile from "@components/GitHubProfile.astro";
 
 const metaProps = {
-  title: '【VRChat】ようかん',
-  description: '好きな食べ物はようかんです!えっと紅茶も好きなの。ラテアートがんばるからね♪',
-  keywords: ['かわいい', 'VRChat', 'ぷぷりえ', 'ようかん'],
+  title: '【エンジニア】ようかん',
+  description: 'フロントエンドからインフラまで幅広く興味がある',
+  keywords: ['Python', '自宅鯖', 'react', 'astro'],
   author: 'youkan',
   ogp: {
-    title: '【VRChat】ようかん',
-    description: '好きな食べ物はようかんです!えっと紅茶も好きなの。ラテアートがんばるからね♪',
+    title: '【エンジニア】ようかん',
+    description: 'フロントエンドと自宅鯖が好き！',
     type: 'article' as const,
     siteName: 'youkan.uk'
   }
@@ -44,81 +45,13 @@ const metaProps = {
         marginBottom: '1rem',
         color: 'blue.800'
       })} transition:name="button-engineer">
-         エンジニア
+        💻 エンジニア
       </h1>
       <p class={css({ fontSize: 'lg', color: 'blue.600' })}>
         技術スキルと開発経験について
       </p>
     </div>
 
-    <div class={css({
-      display: 'grid',
-      gap: '2rem',
-      gridTemplateColumns: { base: '1fr', lg: 'repeat(2, 1fr)' }
-    })}>
-      <!-- スキルセクション -->
-      <section class={css({
-        padding: '2rem',
-        backgroundColor: 'blue.50',
-        borderRadius: 'lg',
-        border: '2px solid',
-        borderColor: 'blue.200'
-      })}>
-        <h2 class={css({
-          fontSize: '2xl',
-          fontWeight: 'bold',
-          marginBottom: '1rem',
-          color: 'blue.800'
-        })}>
-          技術スキル 🔧
-        </h2>
-        <div class={css({ color: 'blue.700' })}>
-          <ul class={css({ 
-            paddingLeft: '1rem',
-            '& li': {
-              marginBottom: '0.5rem'
-            }
-          })}>
-            <li>⚛️ React / Vue.js / Svelte</li>
-            <li>🟦 TypeScript / JavaScript</li>
-            <li>🚀 Astro / Next.js / Vite</li>
-            <li>🎨 CSS / PandaCSS / TailwindCSS</li>
-            <li>🔧 Node.js / Python / Go</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- 経験セクション -->
-      <section class={css({
-        padding: '2rem',
-        backgroundColor: 'blue.50',
-        borderRadius: 'lg',
-        border: '2px solid',
-        borderColor: 'blue.200'
-      })}>
-        <h2 class={css({
-          fontSize: '2xl',
-          fontWeight: 'bold',
-          marginBottom: '1rem',
-          color: 'blue.800'
-        })}>
-          開発経験 📚
-        </h2>
-        <div class={css({ color: 'blue.700' })}>
-          <ul class={css({ 
-            paddingLeft: '1rem',
-            '& li': {
-              marginBottom: '0.5rem'
-            }
-          })}>
-            <li>🌐 Webアプリケーション開発</li>
-            <li>📱 モバイルアプリ開発</li>
-            <li>🔗 API設計・開発</li>
-            <li>☁️ クラウドインフラ構築</li>
-          </ul>
-        </div>
-      </section>
-    </div>
 
     <!-- プロジェクト一覧 -->
     <section class={css({
@@ -147,5 +80,8 @@ const metaProps = {
         </p>
       </div>
     </section>
+
+    <!-- GitHubプロフィール -->
+    <GitHubProfile className={css({ marginTop: '2rem' })} />
   </div>
 </Layout>
