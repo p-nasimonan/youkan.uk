@@ -5,7 +5,7 @@ import rehypeHighlight from 'rehype-highlight';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://www.youkan.uk',
+  site: 'https://youkan.uk',
   base: '/',
   trailingSlash: 'always',
   markdown: {
