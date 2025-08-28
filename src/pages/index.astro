@@ -3,31 +3,31 @@ import Layout from '@layouts/Layout.astro';
 import SelectionScreen from '@components/SelectionScreen.astro';
 
 // 背景画像をインポート（最適化あり）
-import kawaiiBg from '@assets/images/backgrounds/kawaii-bg.svg';
+import vrcBg from '@assets/images/backgrounds/vrc-bg.svg';
 import engineerBg from '@assets/images/backgrounds/engineer-bg.svg';
-import flyingBg from '@assets/images/backgrounds/flying-bg.svg';
+import aircraftBg from '@assets/images/backgrounds/aircraft-bg.svg';
 
 const options = [
   {
-    id: 'kawaii',
-    title: 'かわいいようかん',
-    description: 'キュートで愛らしい一面について',
-    backgroundImage: kawaiiBg.src,
-    href: '/kawaii'
+    id: 'vrc',
+    title: 'VRChat',
+    description: 'VRChatでの活動や交流について',
+    backgroundImage: vrcBg.src,
+    href: '/vrc'
   },
   {
     id: 'engineer',
-    title: 'エンジニアようかん',
+    title: 'エンジニア',
     description: '技術スキル、開発経験について',
     backgroundImage: engineerBg.src,
     href: '/engineer'
   },
   {
-    id: 'flying',
-    title: '空飛ぶようかん',
-    description: '夢や冒険、創造的な活動について',
-    backgroundImage: flyingBg.src,
-    href: '/flying'
+    id: 'aircraft',
+    title: '飛行機',
+    description: '飛行ロボコンについて',
+    backgroundImage: aircraftBg.src,
+    href: '/aircraft'
   }
 ];
 

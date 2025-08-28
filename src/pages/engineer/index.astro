@@ -44,7 +44,7 @@ const metaProps = {
         marginBottom: '1rem',
         color: 'blue.800'
       })} transition:name="button-engineer">
-        💻 エンジニアようかん
+         エンジニア
       </h1>
       <p class={css({ fontSize: 'lg', color: 'blue.600' })}>
         技術スキルと開発経験について
@@ -73,7 +73,12 @@ const metaProps = {
           技術スキル 🔧
         </h2>
         <div class={css({ color: 'blue.700' })}>
-          <ul class={css({ paddingLeft: '1rem', space: '0.5rem' })}>
+          <ul class={css({ 
+            paddingLeft: '1rem',
+            '& li': {
+              marginBottom: '0.5rem'
+            }
+          })}>
             <li>⚛️ React / Vue.js / Svelte</li>
             <li>🟦 TypeScript / JavaScript</li>
             <li>🚀 Astro / Next.js / Vite</li>
@@ -100,7 +105,12 @@ const metaProps = {
           開発経験 📚
         </h2>
         <div class={css({ color: 'blue.700' })}>
-          <ul class={css({ paddingLeft: '1rem', space: '0.5rem' })}>
+          <ul class={css({ 
+            paddingLeft: '1rem',
+            '& li': {
+              marginBottom: '0.5rem'
+            }
+          })}>
             <li>🌐 Webアプリケーション開発</li>
             <li>📱 モバイルアプリ開発</li>
             <li>🔗 API設計・開発</li>

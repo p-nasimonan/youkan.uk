@@ -1,11 +1,11 @@
 ---
 // 透過PNG画像をインポート（最適化あり）
-import kawaiiAvatar from '@images/avatars/kawaii.png';
+import vrcAvatar from '@images/avatars/vrc.png';
 import engineerAvatar from '@images/avatars/engineer.png';
-import flyingAvatar from '@images/avatars/flying.png';
+import aircraftAvatar from '@images/avatars/aircraft.png';
 
 export interface AvatarProps {
-  type: 'kawaii' | 'engineer' | 'flying';
+  type: 'vrc' | 'engineer' | 'aircraft';
 }
 
 interface Props extends AvatarProps {}
@@ -13,8 +13,8 @@ interface Props extends AvatarProps {}
 const { type } = Astro.props;
 
 const avatarData = {
-  kawaii: {
-    image: kawaiiAvatar, // 最適化された透過PNG
+  vrc: {
+    image: vrcAvatar, // 最適化された透過PNG
     bgColor: 'rgba(255, 182, 193, 0.3)',
     accent: '#ffb6c1',
     name: 'かわいいようかん'
@@ -25,8 +25,8 @@ const avatarData = {
     accent: '#6495ed',
     name: 'エンジニアようかん'
   },
-  flying: {
-    image: flyingAvatar, // 最適化された透過PNG
+  aircraft: {
+    image: aircraftAvatar, // 最適化された透過PNG
     bgColor: 'rgba(255, 215, 0, 0.3)',
     accent: '#ffd700',
     name: '空飛ぶようかん'

@@ -29,7 +29,7 @@ const metaProps = {
         display: 'inline-flex',
         alignItems: 'center',
         marginBottom: '2rem',
-        color: 'pink.600',
+        color: 'purple.600',
         textDecoration: 'none',
         _hover: { textDecoration: 'underline' }
       })}
@@ -37,17 +37,17 @@ const metaProps = {
       ← 選択画面に戻る
     </a>
 
-    <div class={css({ textAlign: 'center', marginBottom: '3rem' })} transition:name="card-kawaii">
+    <div class={css({ textAlign: 'center', marginBottom: '3rem' })} transition:name="card-aircraft">
       <h1 class={css({
         fontSize: '3xl',
         fontWeight: 'bold',
         marginBottom: '1rem',
-        color: 'pink.800'
-      })} transition:name="button-kawaii">
-        🥺 かわいいようかん
+        color: 'purple.800'
+      })} transition:name="button-aircraft">
+        飛行機
       </h1>
-      <p class={css({ fontSize: 'lg', color: 'pink.600' })}>
-        キュートで愛らしい一面について
+      <p class={css({ fontSize: 'lg', color: 'purple.600' })}>
+        飛行ロボコンについて
       </p>
     </div>
 
@@ -56,83 +56,85 @@ const metaProps = {
       gap: '2rem',
       gridTemplateColumns: { base: '1fr', lg: 'repeat(2, 1fr)' }
     })}>
-      <!-- かわいい特徴セクション -->
+      <!-- 夢・目標セクション -->
       <section class={css({
         padding: '2rem',
-        backgroundColor: 'pink.50',
+        backgroundColor: 'purple.50',
         borderRadius: 'lg',
         border: '2px solid',
-        borderColor: 'pink.200'
+        borderColor: 'purple.200'
       })}>
         <h2 class={css({
           fontSize: '2xl',
           fontWeight: 'bold',
           marginBottom: '1rem',
-          color: 'pink.800'
+          color: 'purple.800'
         })}>
-          かわいい特徴 ✨
+          夢・目標 ⭐
         </h2>
-        <div class={css({ color: 'pink.700' })}>
-          <ul class={css({ paddingLeft: '1rem', space: '0.5rem' })}>
-            <li>🌸 やわらかい雰囲気</li>
-            <li>🎀 優しい声のトーン</li>
-            <li>🌺 笑顔が素敵</li>
-            <li>🍡 ふんわりした性格</li>
+        <div class={css({ color: 'purple.700' })}>
+          <ul class={css({ paddingLeft: '1rem' })}>
+            <li>🌟 革新的なプロダクトの創造</li>
+            <li>🌍 世界中の人々に価値を提供</li>
+            <li>🎯 テクノロジーで社会問題を解決</li>
+            <li>🌱 次世代のエンジニア育成</li>
           </ul>
         </div>
       </section>
 
-      <!-- 好きなものセクション -->
+      <!-- 冒険・チャレンジセクション -->
       <section class={css({
         padding: '2rem',
-        backgroundColor: 'pink.50',
+        backgroundColor: 'purple.50',
         borderRadius: 'lg',
         border: '2px solid',
-        borderColor: 'pink.200'
+        borderColor: 'purple.200'
       })}>
         <h2 class={css({
           fontSize: '2xl',
           fontWeight: 'bold',
           marginBottom: '1rem',
-          color: 'pink.800'
+          color: 'purple.800'
         })}>
-          好きなもの 💕
+          冒険・チャレンジ 🗺️
         </h2>
-        <div class={css({ color: 'pink.700' })}>
+        <div class={css({ color: 'purple.700' })}>
           <ul class={css({ paddingLeft: '1rem' })}>
-            <li class={css({ marginBottom: '0.5rem' })}>🧸 ぬいぐるみ</li>
-            <li class={css({ marginBottom: '0.5rem' })}>🌈 パステルカラー</li>
-            <li class={css({ marginBottom: '0.5rem' })}>🍰 スイーツ</li>
-            <li>🎵 やさしい音楽</li>
+            <li>🚁 新しい技術への挑戦</li>
+            <li>🏔️ 未知の分野への探求</li>
+            <li>🎪 クリエイティブなプロジェクト</li>
+            <li>🌈 異分野コラボレーション</li>
           </ul>
         </div>
       </section>
     </div>
 
-    <!-- チャームポイントセクション -->
+    <!-- ビジョンセクション -->
     <section class={css({
       marginTop: '2rem',
       padding: '2rem',
-      backgroundColor: 'pink.50',
+      backgroundColor: 'purple.50',
       borderRadius: 'lg',
       border: '2px solid',
-      borderColor: 'pink.200',
+      borderColor: 'purple.200',
       textAlign: 'center'
     })}>
       <h2 class={css({
         fontSize: '2xl',
         fontWeight: 'bold',
         marginBottom: '1rem',
-        color: 'pink.800'
+        color: 'purple.800'
       })}>
-        チャームポイント 🌟
+        ビジョン 🔮
       </h2>
       <p class={css({ 
-        color: 'pink.700',
+        color: 'purple.700',
         fontSize: 'lg',
-        fontStyle: 'italic'
+        fontStyle: 'italic',
+        lineHeight: '1.8'
       })}>
-        「どんな時でも前向きで、周りの人を笑顔にできること」
+        「技術を通じて人々の想像力を現実にし、<br />
+        みんなが空を飛べるような自由な世界を創造したい」
       </p>
     </section>
   </div>
