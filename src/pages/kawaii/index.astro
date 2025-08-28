@@ -37,13 +37,13 @@ const metaProps = {
       ← 選択画面に戻る
     </a>
 
-    <div class={css({ textAlign: 'center', marginBottom: '3rem' })}>
+    <div class={css({ textAlign: 'center', marginBottom: '3rem' })} transition:name="card-kawaii">
       <h1 class={css({
         fontSize: '3xl',
         fontWeight: 'bold',
         marginBottom: '1rem',
         color: 'pink.800'
-      })}>
+      })} transition:name="button-kawaii">
         🥺 かわいいようかん
       </h1>
       <p class={css({ fontSize: 'lg', color: 'pink.600' })}>
@@ -99,10 +99,10 @@ const metaProps = {
           好きなもの 💕
         </h2>
         <div class={css({ color: 'pink.700' })}>
-          <ul class={css({ paddingLeft: '1rem', space: '0.5rem' })}>
-            <li>🧸 ぬいぐるみ</li>
-            <li>🌈 パステルカラー</li>
-            <li>🍰 スイーツ</li>
+          <ul class={css({ paddingLeft: '1rem' })}>
+            <li class={css({ marginBottom: '0.5rem' })}>🧸 ぬいぐるみ</li>
+            <li class={css({ marginBottom: '0.5rem' })}>🌈 パステルカラー</li>
+            <li class={css({ marginBottom: '0.5rem' })}>🍰 スイーツ</li>
             <li>🎵 やさしい音楽</li>
           </ul>
         </div>

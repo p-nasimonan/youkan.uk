@@ -1,6 +1,7 @@
 ---
 import HeadMeta from "@components/meta/HeadMeta.astro";
 import type { HeadMetaProps } from "@components/meta/types";
+import { ClientRouter } from 'astro:transitions';
 
 interface Props extends HeadMetaProps {}
 
@@ -10,6 +11,7 @@ const props = Astro.props;
 <html lang="ja">
   <head>
     <HeadMeta {...props} />
+    <ClientRouter />
   </head>
   <body>
     <slot />

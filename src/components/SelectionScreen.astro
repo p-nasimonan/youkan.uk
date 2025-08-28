@@ -1,11 +1,12 @@
 ---
 import { css } from '@styles/css';
+import Avatar from './Avatar.astro';
 
 export interface SelectionOption {
   id: string;
   title: string;
   description: string;
-  emoji: string;
+  backgroundImage: string;
   href: string;
 }
 
@@ -14,6 +15,42 @@ interface Props {
 }
 
 const { options } = Astro.props;
+
+const cardContainer = css({
+  position: 'relative',
+  cursor: 'pointer',
+  opacity: 0,
+  transform: 'translateY(20px)',
+  animation: 'fadeInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+  transitionProperty: 'transform, box-shadow',
+  transitionDuration: '300ms',
+  transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+  '&:hover': {
+    transform: 'translateY(-8px) scale(1.02)',
+    boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
+    '& [data-avatar-container]': {
+      opacity: 1,
+      transform: 'translate(-50%, -50%) scale(1)'
+    },
+    '& .bg-image': {
+      opacity: 0.7,
+      transform: 'scale(1.05)'
+    }
+  }
+});
+
+const avatarContainer = css({
+  position: 'relative',
+  top: '10%',
+  left: '10%',
+  transform: 'translate(-50%, -50%) scale(0.8)',
+  zIndex: 1,
+  opacity: 0,
+  transitionProperty: 'opacity, transform',
+  transitionDuration: '400ms',
+  transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+  pointerEvents: 'none'
+});
 ---
 
 <div class={css({
@@ -23,76 +60,123 @@ const { options } = Astro.props;
   justifyContent: 'center',
   minHeight: '100vh',
   padding: '2rem',
-  backgroundColor: 'gray.50',
-  fontFamily: 'system-ui, -apple-system, sans-serif'
+  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  fontFamily: 'system-ui, -apple-system, sans-serif',
+  overflow: 'hidden'
 })}>
   <h1 class={css({
     fontSize: '3xl',
     fontWeight: 'bold',
     marginBottom: '1rem',
-    color: 'gray.800'
+    color: 'white',
+    textShadow: '0 2px 4px rgba(0,0,0,0.3)'
   })}>
     自己紹介を見る
   </h1>
   
   <p class={css({
     fontSize: 'lg',
-    color: 'gray.600',
+    color: 'rgba(255,255,255,0.9)',
     marginBottom: '3rem',
     textAlign: 'center'
   })}>
     あなたの興味のある分野を選択してください
   </p>
 
-  <div class={css({
-    display: 'grid',
-    gridTemplateColumns: { base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' },
-    gap: '1.5rem',
-    width: '100%',
-    maxWidth: '4xl'
-  })}>
-    {options.map((option) => (
-      <a
-        href={option.href}
-        class={css({
-          display: 'block',
-          padding: '2rem',
-          backgroundColor: 'white',
-          borderRadius: 'lg',
-          boxShadow: 'md',
-          textDecoration: 'none',
-          transition: 'all 0.2s',
-          _hover: {
-            transform: 'translateY(-2px)',
-            boxShadow: 'lg'
-          }
-        })}
+  <div 
+    class={css({
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      gap: '2rem',
+      width: '100%',
+      maxWidth: '4xl',
+      position: 'relative'
+    })}
+  >
+    {options.map((option, index) => (
+      <div
+        class={cardContainer}
+        style={`animation-delay: ${index * 150}ms`}
+        transition:name={`card-${option.id}`}
       >
-        <div class={css({
-          fontSize: '3xl',
-          marginBottom: '1rem',
-          textAlign: 'center'
-        })}>
-          {option.emoji}
+        <!-- アバターコンテナ（背景に配置） -->
+        <div class={avatarContainer} data-avatar-container transition:name={`avatar-${option.id}`}>
+          <Avatar type={option.id as 'kawaii' | 'engineer' | 'flying'}/>
         </div>
         
-        <h2 class={css({
-          fontSize: 'xl',
-          fontWeight: 'bold',
-          marginBottom: '0.5rem',
-          color: 'gray.800',
-          textAlign: 'center'
-        })}>
-          {option.title}
-        </h2>
-        
-        <p class={css({
-          color: 'gray.600',
-          textAlign: 'center'
-        })}>
-          {option.description}
-        </p>
-      </a>
+        <!-- 選択ボタン（コンパクトサイズ） -->
+        <a
+          href={option.href}
+          class={css({
+            display: 'block',
+            width: '280px',
+            height: '180px',
+            padding: '1.5rem',
+            backgroundColor: 'rgba(255,255,255,0.1)',
+            backdropFilter: 'blur(10px)',
+            borderRadius: '24px',
+            border: '1px solid rgba(255,255,255,0.2)',
+            textDecoration: 'none',
+            position: 'relative',
+            overflow: 'hidden',
+            zIndex: 10,
+            transitionProperty: 'background-color, transform, box-shadow',
+            transitionDuration: '300ms',
+            transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            _hover: {
+              backgroundColor: 'rgba(255,255,255,0.15)',
+              transform: 'scale(1.02)',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+            }
+          })}
+          transition:name={`button-${option.id}`}
+        >
+          <div class={`bg-image ${css({
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            borderRadius: '24px',
+            opacity: 0,
+            zIndex: -1,
+            transitionProperty: 'opacity, transform',
+            transitionDuration: '300ms',
+            transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+          })}`} style={`background-image: url(${option.backgroundImage})`}></div>
+          
+          <h2 class={css({
+            fontSize: 'xl',
+            fontWeight: 'bold',
+            marginBottom: '0.5rem',
+            color: 'white',
+            textAlign: 'center',
+            textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+            transitionProperty: 'transform, text-shadow',
+            transitionDuration: '300ms',
+            transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+          })}>
+            {option.title}
+          </h2>
+          
+          <p class={css({
+            color: 'rgba(255,255,255,0.9)',
+            textAlign: 'center',
+            textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+            fontSize: 'sm',
+            transitionProperty: 'color, text-shadow',
+            transitionDuration: '300ms',
+            transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+          })}>
+            {option.description}
+          </p>
+        </a>
+      </div>
     ))}
   </div>
+
+
 </div>

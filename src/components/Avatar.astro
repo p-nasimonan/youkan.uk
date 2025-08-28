@@ -1,0 +1,66 @@
+---
+// 透過PNG画像をインポート（最適化あり）
+import kawaiiAvatar from '@images/avatars/kawaii.png';
+import engineerAvatar from '@images/avatars/engineer.png';
+import flyingAvatar from '@images/avatars/flying.png';
+
+export interface AvatarProps {
+  type: 'kawaii' | 'engineer' | 'flying';
+}
+
+interface Props extends AvatarProps {}
+
+const { type } = Astro.props;
+
+const avatarData = {
+  kawaii: {
+    image: kawaiiAvatar, // 最適化された透過PNG
+    bgColor: 'rgba(255, 182, 193, 0.3)',
+    accent: '#ffb6c1',
+    name: 'かわいいようかん'
+  },
+  engineer: {
+    image: engineerAvatar, // 最適化された透過PNG
+    bgColor: 'rgba(100, 149, 237, 0.3)',
+    accent: '#6495ed',
+    name: 'エンジニアようかん'
+  },
+  flying: {
+    image: flyingAvatar, // 最適化された透過PNG
+    bgColor: 'rgba(255, 215, 0, 0.3)',
+    accent: '#ffd700',
+    name: '空飛ぶようかん'
+  }
+};
+
+const avatar = avatarData[type];
+---
+
+<div 
+  class="avatar-container"
+  style={`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform, opacity;
+  `}
+>
+  <img 
+    src={avatar.image.src}
+    alt={`${avatar.name} avatar`}
+    width={avatar.image.width}
+    height={avatar.image.height}
+    style={`
+      width: 350px;
+      height: 450px;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    `}
+  />
+</div>
+
+

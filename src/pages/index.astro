@@ -2,26 +2,31 @@
 import Layout from '@layouts/Layout.astro';
 import SelectionScreen from '@components/SelectionScreen.astro';
 
+// 背景画像をインポート（最適化あり）
+import kawaiiBg from '@assets/images/backgrounds/kawaii-bg.svg';
+import engineerBg from '@assets/images/backgrounds/engineer-bg.svg';
+import flyingBg from '@assets/images/backgrounds/flying-bg.svg';
+
 const options = [
   {
     id: 'kawaii',
     title: 'かわいいようかん',
     description: 'キュートで愛らしい一面について',
-    emoji: '🥺',
+    backgroundImage: kawaiiBg.src,
     href: '/kawaii'
   },
   {
     id: 'engineer',
     title: 'エンジニアようかん',
     description: '技術スキル、開発経験について',
-    emoji: '💻',
+    backgroundImage: engineerBg.src,
     href: '/engineer'
   },
   {
     id: 'flying',
     title: '空飛ぶようかん',
     description: '夢や冒険、創造的な活動について',
-    emoji: '🚀',
+    backgroundImage: flyingBg.src,
     href: '/flying'
   }
 ];
