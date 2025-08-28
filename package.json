@@ -8,7 +8,7 @@
   "version": "0.0.1",
   "scripts": {
     "prepare": "npm run fetch:github && panda codegen",
-    "fetch:github": "tsx scripts/fetch-github-profile.ts",
+    "fetch:github": "npx tsx scripts/fetch-github-profile.ts",
     "dev": "concurrently \"npm run dev:panda\" \"npm run dev:astro\"",
     "dev:panda": "panda -w",
     "dev:astro": "astro dev",

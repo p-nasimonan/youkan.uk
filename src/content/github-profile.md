@@ -1,10 +1,3 @@
----
-title: "GitHubプロフィール"
-description: "GitHubプロフィールREADME"
-updatedAt: 2025-08-28T07:10:57.163Z
-source: "https://raw.githubusercontent.com/p-nasimonan/p-nasimonan/main/README.md"
----
-
 ## Hi there 👋
 琉大知能情報2年だよ！!!VRChat民です。
 色々やってて器用貧乏かも？
@@ -45,27 +38,6 @@ https://scrapbox.io/pnasi/
     - バック: https://github.com/develoop-official/ChoibenAssist-Back
     - 文系だけどスクール通っててエンジニア目指してる先輩と二人でやった。初めてガチのプロダクトにできそうなものができた
 
-## 質問コーナー
-変な書き方をしてみました(html)
-<table>
-<thead>
-<tr>
-  <th>質問</th>
-  <th>回答</th>
-  <th>詳細</th>
-</tr>
-</thead>
-  <tr>
-  <th>p-nasiについて</th>
-  <td> データセンター名だったりそうゆうのに付ける</td>
-  <td>ただのいいわけで大学生になったかユーザー名変えるか...といって変えてみたもののようかんのほうがよかった....</td>
-  </tr>
-  <tr>
-  <th>ユーザー名は？</th>
-  <td>ようかんです</td>
-  <td>ようかんが好きなので。</td>
-  </tr>
-</table>
 
 
 

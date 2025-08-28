@@ -56,22 +56,13 @@ async function fetchGitHubProfile(): Promise<FetchResult> {
 }
 
 function createMarkdownFile(content: string, meta: ProfileMeta): void {
-  const frontmatter = `---
-title: "${meta.title}"
-description: "${meta.description}"
-updatedAt: ${meta.updatedAt}
-source: "${meta.source}"
----
-
-${content}`;
-
   // 出力ディレクトリを作成
   mkdirSync(dirname(OUTPUT_PATH), { recursive: true });
   
-  writeFileSync(OUTPUT_PATH, frontmatter, 'utf8');
+  writeFileSync(OUTPUT_PATH, content, 'utf8');
   
   console.log('✅ GitHubプロフィールを取得しました:', OUTPUT_PATH);
-  console.log(`📊 サイズ: ${Math.round(frontmatter.length / 1024 * 100) / 100}KB`);
+  console.log(`📊 サイズ: ${Math.round(content.length / 1024 * 100) / 100}KB`);
 }
 
 function createFallbackFile(error?: string): void {
@@ -113,11 +104,9 @@ async function main(): Promise<void> {
 }
 
 // スクリプト実行
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main().catch((error) => {
-    console.error('❌ 予期しないエラーが発生しました:', error);
-    process.exit(1);
-  });
-}
+main().catch((error) => {
+  console.error('❌ 予期しないエラーが発生しました:', error);
+  process.exit(1);
+});
 
 export { fetchGitHubProfile, createMarkdownFile, createFallbackFile };
