@@ -3,64 +3,85 @@
 import vrcAvatar from '@images/avatars/vrc.png';
 import engineerAvatar from '@images/avatars/engineer.png';
 import aircraftAvatar from '@images/avatars/aircraft.png';
+import { avatarRecipe } from '../lib/recipes/avatarRecipe';
+
+
+// 位置はレシピのバリアント名で指定
+// 上段: 'top-left', 'top-center', 'top-right'／中央: 'middle-left', 'center', 'middle-right'／下段: 'bottom-left', 'bottom-center', 'bottom-right'
+export type AvatarPosition = 'top-left' | 'top-center' | 'top-right' | 'middle-left' | 'middle-center' | 'middle-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
+
+export interface AvatarAnimation {
+  type: 'float' | 'bounce' | 'pulse' | 'rotate' | 'slide' | 'fade' | 'scale' | 'none';
+  duration?: string;
+  delay?: string;
+  direction?: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse';
+  timing?: string;
+}
+
+
+
+export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 
 export interface AvatarProps {
   type: 'vrc' | 'engineer' | 'aircraft';
+  position?: AvatarPosition;
+  size?: AvatarSize;
+  zIndex?: number;
+  opacity?: number;
 }
 
 interface Props extends AvatarProps {}
 
-const { type } = Astro.props;
-
 const avatarData = {
   vrc: {
-    image: vrcAvatar, // 最適化された透過PNG
-    bgColor: 'rgba(255, 182, 193, 0.3)',
-    accent: '#ffb6c1',
-    name: 'かわいいようかん'
+    image: vrcAvatar,
+    name: 'かわいいようかん',
   },
   engineer: {
-    image: engineerAvatar, // 最適化された透過PNG
-    bgColor: 'rgba(100, 149, 237, 0.3)',
-    accent: '#6495ed',
-    name: 'エンジニアようかん'
+    image: engineerAvatar,
+    name: 'エンジニアようかん',
   },
   aircraft: {
-    image: aircraftAvatar, // 最適化された透過PNG
-    bgColor: 'rgba(255, 215, 0, 0.3)',
-    accent: '#ffd700',
-    name: '空飛ぶようかん'
+    image: aircraftAvatar,
+    name: '空飛ぶようかん',
   }
 };
 
+
+
+const {
+  type,
+  position = 'middle-center',
+  size = 'md',
+  zIndex = 1,
+  opacity = 1
+} = Astro.props;
+
 const avatar = avatarData[type];
+
+
+
+
+// レシピでclassName生成（type, position, sizeバリアント対応）
+const avatarClass = avatarRecipe({ type, position, size });
+
+// zIndex・opacityのみstyle属性で適用（サイズ・位置はCSSで制御）
+const avatarStyle = {
+  zIndex,
+  opacity,
+};
 ---
 
-<div 
-  class="avatar-container"
-  style={`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-    pointer-events: none;
-    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    will-change: transform, opacity;
-  `}
->
-  <img 
-    src={avatar.image.src}
-    alt={`${avatar.name} avatar`}
-    width={avatar.image.width}
-    height={avatar.image.height}
-    style={`
-      width: 350px;
-      height: 450px;
-      object-fit: contain;
-      transition: transform 0.3s ease;
-    `}
-  />
-</div>
+
+
+
+<img 
+  src={avatar.image.src}
+  alt={`${avatar.name} avatar`}
+  width={avatar.image.width}
+  height={avatar.image.height}
+  class={avatarClass}
+  style={avatarStyle}
+/>
 
 

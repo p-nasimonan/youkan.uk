@@ -25,12 +25,12 @@ const cardContainer = css({
   transitionProperty: 'transform, box-shadow',
   transitionDuration: '300ms',
   transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-  '&:hover': {
+  _hover: {
     transform: 'translateY(-8px) scale(1.02)',
     boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
     '& [data-avatar-container]': {
       opacity: 1,
-      transform: 'translate(-50%, -50%) scale(1)'
+      transform: 'translate(-50%, -50%)'
     },
     '& .bg-image': {
       opacity: 0.7,
@@ -41,13 +41,10 @@ const cardContainer = css({
 
 const avatarContainer = css({
   position: 'relative',
-  top: '10%',
-  left: '10%',
-  transform: 'translate(-50%, -50%) scale(0.8)',
   zIndex: 1,
   opacity: 0,
   transitionProperty: 'opacity, transform',
-  transitionDuration: '400ms',
+  transitionDuration: '500ms',
   transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
   pointerEvents: 'none'
 });
@@ -96,13 +93,27 @@ const avatarContainer = css({
   >
     {options.map((option, index) => (
       <div
-        class={cardContainer}
+        class={`group ${cardContainer}`}
         style={`animation-delay: ${index * 150}ms`}
         transition:name={`card-${option.id}`}
       >
         <!-- アバターコンテナ（背景に配置） -->
         <div class={avatarContainer} data-avatar-container transition:name={`avatar-${option.id}`}>
-          <Avatar type={option.id as 'vrc' | 'engineer' | 'aircraft'}/>
+          <Avatar 
+            type={option.id as 'vrc' | 'engineer' | 'aircraft'}
+            position={
+              option.id === 'vrc' ? 'top-left' :
+              option.id === 'engineer' ? 'middle-center' :
+              option.id === 'aircraft' ? 'middle-right' :
+              'middle-center'
+            }
+            size={
+              option.id === 'vrc' ? 'md' :
+              option.id === 'engineer' ? 'lg' :
+              option.id === 'aircraft' ? 'lg' :
+              'md'
+            }
+          />
         </div>
         
         <!-- 選択ボタン（コンパクトサイズ） -->

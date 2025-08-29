@@ -12,6 +12,7 @@ export default defineConfig({
 
   // Global CSS styles
   globalCss: {
+    // 既存のアニメーション
     '@keyframes fadeInUp': {
       '0%': {
         opacity: '0',
@@ -29,6 +30,71 @@ export default defineConfig({
       },
       '100%': {
         opacity: '1',
+        transform: 'scale(1)'
+      }
+    },
+    
+    '@keyframes float': {
+      '0%, 100%': {
+        transform: 'translateY(0px)'
+      },
+      '50%': {
+        transform: 'translateY(-20px)'
+      }
+    },
+    '@keyframes bounce': {
+      '0%, 20%, 53%, 80%, 100%': {
+        transform: 'translateY(0px)'
+      },
+      '40%, 43%': {
+        transform: 'translateY(-30px)'
+      },
+      '70%': {
+        transform: 'translateY(-15px)'
+      },
+      '90%': {
+        transform: 'translateY(-4px)'
+      }
+    },
+    '@keyframes pulse': {
+      '0%, 100%': {
+        transform: 'scale(1)'
+      },
+      '50%': {
+        transform: 'scale(1.1)'
+      }
+    },
+    '@keyframes rotate': {
+      '0%': {
+        transform: 'rotate(0deg)'
+      },
+      '100%': {
+        transform: 'rotate(360deg)'
+      }
+    },
+    '@keyframes slide': {
+      '0%': {
+        transform: 'translateX(-500px)',
+        opacity: '0'
+      },
+      '100%': {
+        transform: 'translateX(0px)',
+        opacity: '1'
+      }
+    },
+    '@keyframes fade': {
+      '0%': {
+        opacity: '0'
+      },
+      '100%': {
+        opacity: '1'
+      }
+    },
+    '@keyframes scale': {
+      '0%': {
+        transform: 'scale(0)'
+      },
+      '100%': {
         transform: 'scale(1)'
       }
     }
