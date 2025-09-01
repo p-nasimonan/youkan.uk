@@ -13,7 +13,7 @@
 https://ie.u-ryukyu.ac.jp/p-nasi
 
 自宅鯖:  
-
+https://dev.youkan.uk/
 
 ## 自宅サーバー
 #### やってることのメモ  

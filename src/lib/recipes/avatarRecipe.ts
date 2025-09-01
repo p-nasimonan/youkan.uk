@@ -35,13 +35,13 @@ export const avatarRecipe = cva({
     position: {
         // 代表的な位置バリアント例。必要に応じて追加・拡張可能。
     // 上段
-  'top-left': { bottom: '0', left: '0' },
-  'top-center': { bottom: '0', left: '50%' },
-  'top-right': { bottom: '0', right: '0' },
+  'top-left': { top: '-40', left: '10' },
+  'top-center': { top: '-40', left: '50%' },
+  'top-right': { top: '-40', right: '-100%' },
   // 中央
   'middle-left': { top: '-200', left: '-100' },
   'middle-center': { top: '-200', left: '50%' },
-  'middle-right': { top: '-200', right: '0' },
+  'middle-right': { top: '-200', right: '-100%' },
   // 下段
   'bottom-left': { bottom: '0', left: '0' },
   'bottom-center': { bottom: '0', left: '50%' },
