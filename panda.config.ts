@@ -10,6 +10,12 @@ export default defineConfig({
   // Files to exclude
   exclude: [],
 
+  // ダークモード設定
+  conditions: {
+    dark: '@media (prefers-color-scheme: dark)',
+    light: '@media (prefers-color-scheme: light)',
+  },
+
   // Global CSS styles
   globalCss: {
     // 既存のアニメーション

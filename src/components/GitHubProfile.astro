@@ -1,7 +1,6 @@
 ---
 import { readFileSync } from 'fs';
 import { css } from '@styles/css';
-import 'github-markdown-css/github-markdown-light.css';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
@@ -116,7 +115,11 @@ const htmlContent = await markdownToHtml(content);
   backgroundColor: 'blue.50',
   borderRadius: 'lg',
   border: '2px solid',
-  borderColor: 'blue.200'
+  borderColor: 'blue.200',
+  _dark: {
+    backgroundColor: 'gray.900',
+    borderColor: 'gray.700'
+  }
 })} ${className || ''}`}>
   <div class={css({
     display: 'flex',
@@ -127,14 +130,20 @@ const htmlContent = await markdownToHtml(content);
     <h2 class={css({
       fontSize: '2xl',
       fontWeight: 'bold',
-      color: 'blue.800'
+      color: 'blue.800',
+      _dark: {
+        color: 'blue.200'
+      }
     })}>
       📖 {meta.title}
     </h2>
     
     <div class={css({
       fontSize: 'sm',
-      color: 'blue.600'
+      color: 'blue.600',
+      _dark: {
+        color: 'blue.400'
+      }
     })}>
       最終更新: {new Date(meta.updatedAt).toLocaleDateString('ja-JP')}
     </div>
@@ -171,10 +180,20 @@ const htmlContent = await markdownToHtml(content);
       backgroundColor: 'blue.100',
       borderRadius: 'md',
       fontSize: 'sm',
-      color: 'blue.600'
+      color: 'blue.600',
+      _dark: {
+        backgroundColor: 'gray.800',
+        color: 'blue.400'
+      }
     })}>
       <p>
-        🔗 <a href="https://github.com/p-nasimonan/p-nasimonan" target="_blank" rel="noopener noreferrer" class={css({ color: 'blue.600', textDecoration: 'underline' })}>
+        🔗 <a href="https://github.com/p-nasimonan/p-nasimonan" target="_blank" rel="noopener noreferrer" class={css({ 
+          color: 'blue.600', 
+          textDecoration: 'underline',
+          _dark: {
+            color: 'blue.400'
+          }
+        })}>
           GitHubプロフィール
         </a> から自動取得
       </p>

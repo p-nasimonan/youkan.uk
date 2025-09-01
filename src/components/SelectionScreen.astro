@@ -59,14 +59,21 @@ const avatarContainer = css({
   padding: '2rem',
   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
   fontFamily: 'system-ui, -apple-system, sans-serif',
-  overflow: 'hidden'
+  overflow: 'hidden',
+  _dark: {
+    background: 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)',
+  }
 })}>
   <h1 class={css({
     fontSize: '3xl',
     fontWeight: 'bold',
     marginBottom: '1rem',
     color: 'white',
-    textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+    textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+    _dark: {
+      color: '#f7fafc',
+      textShadow: '0 2px 4px rgba(0,0,0,0.6)'
+    }
   })}>
     自己紹介を見る
   </h1>
@@ -75,7 +82,10 @@ const avatarContainer = css({
     fontSize: 'lg',
     color: 'rgba(255,255,255,0.9)',
     marginBottom: '3rem',
-    textAlign: 'center'
+    textAlign: 'center',
+    _dark: {
+      color: 'rgba(247, 250, 252, 0.8)'
+    }
   })}>
     あなたの興味のある分野を選択してください(開発中なのでほぼモック)
   </p>
@@ -139,6 +149,14 @@ const avatarContainer = css({
               backgroundColor: 'rgba(255,255,255,0.15)',
               transform: 'scale(1.02)',
               boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+            },
+            _dark: {
+              backgroundColor: 'rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              _hover: {
+                backgroundColor: 'rgba(255,255,255,0.12)',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
+              }
             }
           })}
           transition:name={`button-${option.id}`}
@@ -168,7 +186,11 @@ const avatarContainer = css({
             textShadow: '0 2px 4px rgba(0,0,0,0.5)',
             transitionProperty: 'transform, text-shadow',
             transitionDuration: '300ms',
-            transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+            transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            _dark: {
+              color: '#f7fafc',
+              textShadow: '0 2px 4px rgba(0,0,0,0.8)'
+            }
           })}>
             {option.title}
           </h2>
@@ -180,7 +202,11 @@ const avatarContainer = css({
             fontSize: 'sm',
             transitionProperty: 'color, text-shadow',
             transitionDuration: '300ms',
-            transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+            transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            _dark: {
+              color: 'rgba(247, 250, 252, 0.8)',
+              textShadow: '0 1px 2px rgba(0,0,0,0.8)'
+            }
           })}>
             {option.description}
           </p>
