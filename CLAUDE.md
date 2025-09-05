@@ -16,6 +16,9 @@
 - コミット
 - PR作成
 
+## 曖昧な指示の場合
+具体的な指示ではなく、推測する可能性があるものやユーザーが理解できていないと判断した場合は質問するようにしてください
+
 ## Repository 設定
 - **リポジトリ名**: youkan.uk
 - **MCP GitHub API**:常にこのリポジトリを使用する。
@@ -89,12 +92,7 @@ astro.config.mjsやtsconfig.jsonを確認してください
 - Dark mode support via media queries
 - Custom animations and transitions defined in global CSS
 - Watch mode integrated with development workflow
-
-### Content Management
-- GitHub profile fetched via script in `scripts/fetch-github-profile.ts`
-- Profile data stored in `src/content/github-profile.md`
-- Automatic fallback content generation on fetch failure
-
+- 
 ### SEO and Meta Management
 The `HeadMeta.astro` component provides comprehensive meta tag management:
 - Basic meta tags (title, description, keywords, author)
