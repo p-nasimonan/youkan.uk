@@ -1,80 +1,112 @@
 ---
-// ThemeToggle.astro - ダークモード切り替えコンポーネント
+// ThemeToggle.astro - 天体クリック式ダークモード切り替えコンポーネント
 import { css } from '@styles/css';
 
-const buttonStyles = css({
+const celestialBodyStyles = css({
   position: 'fixed',
-  top: '1rem',
-  right: '1rem',
+  top: '2rem',
+  right: '2rem',
   zIndex: 1000,
-  width: '3rem',
-  height: '3rem',
+  width: '4rem',
+  height: '4rem',
   borderRadius: '50%',
   border: 'none',
   cursor: 'pointer',
-  background: 'linear-gradient(135deg, #ff6b35, #ffa500)',
-  boxShadow: '0 4px 15px rgba(255, 107, 53, 0.3)',
-  transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  fontSize: '1.2rem',
+  fontSize: '2rem',
+  transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+  filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))',
   
-  // モバイル対応
+  // モバイル対応 - サイズを小さく、手前に表示
   '@media (max-width: 768px)': {
-    width: '2.5rem',
-    height: '2.5rem',
-    fontSize: '1rem',
-    top: '0.75rem',
-    right: '0.75rem',
+    width: '2.8rem',
+    height: '2.8rem',
+    fontSize: '1.4rem',
+    top: '1rem',
+    right: '1rem',
+    zIndex: 1100,
   },
   
   // ホバーエフェクト
   _hover: {
-    transform: 'scale(1.1)',
-    boxShadow: '0 6px 20px rgba(255, 107, 53, 0.4)',
+    transform: 'scale(1.15)',
+    filter: 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.2))',
   },
   
-  // ダークモード時のスタイル
-  _dark: {
-    background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
-    boxShadow: '0 4px 15px rgba(79, 70, 229, 0.3)',
-    
-    _hover: {
-      boxShadow: '0 6px 20px rgba(79, 70, 229, 0.4)',
-    }
+  _active: {
+    transform: 'scale(1.05)',
   }
 });
 
-const iconStyles = css({
-  transition: 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-  filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
+// 太陽のスタイル
+const sunStyles = css({
+  background: 'radial-gradient(circle, #ffeb3b 30%, #ff9800 100%)',
+  boxShadow: `
+    0 0 20px rgba(255, 152, 0, 0.4),
+    0 0 40px rgba(255, 152, 0, 0.2),
+    0 0 60px rgba(255, 152, 0, 0.1)
+  `,
+  
+  _hover: {
+    boxShadow: `
+      0 0 25px rgba(255, 152, 0, 0.5),
+      0 0 50px rgba(255, 152, 0, 0.3),
+      0 0 75px rgba(255, 152, 0, 0.15)
+    `,
+  }
 });
 
-const rotateAnimation = css({
-  animation: 'rotate 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+// 月のスタイル
+const moonStyles = css({
+  background: 'radial-gradient(circle, #e8eaf6 30%, #9fa8da 100%)',
+  boxShadow: `
+    0 0 20px rgba(159, 168, 218, 0.4),
+    0 0 40px rgba(159, 168, 218, 0.2),
+    0 0 60px rgba(159, 168, 218, 0.1)
+  `,
+  
+  _hover: {
+    boxShadow: `
+      0 0 25px rgba(159, 168, 218, 0.5),
+      0 0 50px rgba(159, 168, 218, 0.3),
+      0 0 75px rgba(159, 168, 218, 0.15)
+    `,
+  }
 });
 ---
 
-<button 
-  class={buttonStyles} 
-  id="theme-toggle"
-  aria-label="ダークモード切り替え"
-  title="ダークモード切り替え"
+<div 
+  class={`${celestialBodyStyles} ${sunStyles}`}
+  id="sun-toggle"
+  aria-label="ダークモードに切り替え"
+  title="ダークモードに切り替え"
+  style="display: block;"
 >
-  <span class={iconStyles} id="theme-icon">☀️</span>
-</button>
+  ☀️
+</div>
+
+<div 
+  class={`${celestialBodyStyles} ${moonStyles}`}
+  id="moon-toggle"
+  aria-label="ライトモードに切り替え"
+  title="ライトモードに切り替え"
+  style="display: none;"
+>
+  🌙
+</div>
 
 <script>
   // テーマ切り替えの処理
   class ThemeToggle {
-    private button: HTMLButtonElement;
-    private icon: HTMLSpanElement;
+    private sunElement: HTMLDivElement;
+    private moonElement: HTMLDivElement;
     private currentTheme: 'light' | 'dark';
 
     constructor() {
-      this.button = document.getElementById('theme-toggle') as HTMLButtonElement;
-      this.icon = document.getElementById('theme-icon') as HTMLSpanElement;
+      this.sunElement = document.getElementById('sun-toggle') as HTMLDivElement;
+      this.moonElement = document.getElementById('moon-toggle') as HTMLDivElement;
       this.currentTheme = this.getInitialTheme();
       
       this.init();
@@ -100,7 +132,8 @@ const rotateAnimation = css({
       this.applyTheme(this.currentTheme, false);
       
       // クリックイベントリスナーを追加
-      this.button.addEventListener('click', () => this.toggleTheme());
+      this.sunElement.addEventListener('click', () => this.toggleTheme());
+      this.moonElement.addEventListener('click', () => this.toggleTheme());
       
       // システム設定の変更を監視
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
@@ -129,14 +162,14 @@ const rotateAnimation = css({
       
       if (theme === 'dark') {
         html.classList.add('dark');
-        this.icon.textContent = '🌙';
-        this.button.setAttribute('aria-label', 'ライトモードに切り替え');
-        this.button.setAttribute('title', 'ライトモードに切り替え');
+        // ダークモード時は月を表示、太陽を非表示
+        this.moonElement.style.display = 'flex';
+        this.sunElement.style.display = 'none';
       } else {
         html.classList.remove('dark');
-        this.icon.textContent = '☀️';
-        this.button.setAttribute('aria-label', 'ダークモードに切り替え');
-        this.button.setAttribute('title', 'ダークモードに切り替え');
+        // ライトモード時は太陽を表示、月を非表示
+        this.sunElement.style.display = 'flex';
+        this.moonElement.style.display = 'none';
       }
     }
 
@@ -144,11 +177,12 @@ const rotateAnimation = css({
       // 背景アニメーション用の要素を作成
       this.createBackgroundAnimation();
       
-      // ボタンアイコンの回転アニメーション
-      this.icon.style.transform = 'rotate(360deg)';
+      // 現在表示されている天体の回転アニメーション
+      const activeElement = this.currentTheme === 'light' ? this.sunElement : this.moonElement;
+      activeElement.style.transform = 'rotate(360deg) scale(1.2)';
       
       setTimeout(() => {
-        this.icon.style.transform = 'rotate(0deg)';
+        activeElement.style.transform = '';
       }, 600);
     }
 
