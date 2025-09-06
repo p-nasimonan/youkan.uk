@@ -1,5 +1,6 @@
 ---
 import HeadMeta from "@components/meta/HeadMeta.astro";
+import ThemeToggle from "@components/ThemeToggle.astro";
 import type { HeadMetaProps } from "@components/meta/types";
 import { ClientRouter } from 'astro:transitions';
 import { css } from '@styles/css';
@@ -19,6 +20,7 @@ const props = Astro.props;
     <ClientRouter />
   </head>
   <body>
+    <ThemeToggle />
     <slot />
   </body>
 </html>
