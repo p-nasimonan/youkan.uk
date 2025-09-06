@@ -1,0 +1,317 @@
+---
+// ThemeToggle.astro - ダークモード切り替えコンポーネント
+import { css } from '@styles/css';
+
+const buttonStyles = css({
+  position: 'fixed',
+  top: '1rem',
+  right: '1rem',
+  zIndex: 1000,
+  width: '3rem',
+  height: '3rem',
+  borderRadius: '50%',
+  border: 'none',
+  cursor: 'pointer',
+  background: 'linear-gradient(135deg, #ff6b35, #ffa500)',
+  boxShadow: '0 4px 15px rgba(255, 107, 53, 0.3)',
+  transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '1.2rem',
+  
+  // モバイル対応
+  '@media (max-width: 768px)': {
+    width: '2.5rem',
+    height: '2.5rem',
+    fontSize: '1rem',
+    top: '0.75rem',
+    right: '0.75rem',
+  },
+  
+  // ホバーエフェクト
+  _hover: {
+    transform: 'scale(1.1)',
+    boxShadow: '0 6px 20px rgba(255, 107, 53, 0.4)',
+  },
+  
+  // ダークモード時のスタイル
+  _dark: {
+    background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+    boxShadow: '0 4px 15px rgba(79, 70, 229, 0.3)',
+    
+    _hover: {
+      boxShadow: '0 6px 20px rgba(79, 70, 229, 0.4)',
+    }
+  }
+});
+
+const iconStyles = css({
+  transition: 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+  filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
+});
+
+const rotateAnimation = css({
+  animation: 'rotate 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+});
+---
+
+<button 
+  class={buttonStyles} 
+  id="theme-toggle"
+  aria-label="ダークモード切り替え"
+  title="ダークモード切り替え"
+>
+  <span class={iconStyles} id="theme-icon">☀️</span>
+</button>
+
+<script>
+  // テーマ切り替えの処理
+  class ThemeToggle {
+    private button: HTMLButtonElement;
+    private icon: HTMLSpanElement;
+    private currentTheme: 'light' | 'dark';
+
+    constructor() {
+      this.button = document.getElementById('theme-toggle') as HTMLButtonElement;
+      this.icon = document.getElementById('theme-icon') as HTMLSpanElement;
+      this.currentTheme = this.getInitialTheme();
+      
+      this.init();
+    }
+
+    private getInitialTheme(): 'light' | 'dark' {
+      // ローカルストレージから設定を取得
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark' || savedTheme === 'light') {
+        return savedTheme;
+      }
+      
+      // システム設定を確認
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      
+      return 'light';
+    }
+
+    private init() {
+      // 初期テーマを適用
+      this.applyTheme(this.currentTheme, false);
+      
+      // クリックイベントリスナーを追加
+      this.button.addEventListener('click', () => this.toggleTheme());
+      
+      // システム設定の変更を監視
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+          this.currentTheme = e.matches ? 'dark' : 'light';
+          this.applyTheme(this.currentTheme, true);
+        }
+      });
+    }
+
+    private toggleTheme() {
+      this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+      this.applyTheme(this.currentTheme, true);
+      
+      // ローカルストレージに保存
+      localStorage.setItem('theme', this.currentTheme);
+    }
+
+    private applyTheme(theme: 'light' | 'dark', animate: boolean) {
+      const html = document.documentElement;
+      
+      if (animate) {
+        // アニメーション付きで切り替え
+        this.animateTransition();
+      }
+      
+      if (theme === 'dark') {
+        html.classList.add('dark');
+        this.icon.textContent = '🌙';
+        this.button.setAttribute('aria-label', 'ライトモードに切り替え');
+        this.button.setAttribute('title', 'ライトモードに切り替え');
+      } else {
+        html.classList.remove('dark');
+        this.icon.textContent = '☀️';
+        this.button.setAttribute('aria-label', 'ダークモードに切り替え');
+        this.button.setAttribute('title', 'ダークモードに切り替え');
+      }
+    }
+
+    private animateTransition() {
+      // 背景アニメーション用の要素を作成
+      this.createBackgroundAnimation();
+      
+      // ボタンアイコンの回転アニメーション
+      this.icon.style.transform = 'rotate(360deg)';
+      
+      setTimeout(() => {
+        this.icon.style.transform = 'rotate(0deg)';
+      }, 600);
+    }
+
+    private createBackgroundAnimation() {
+      // 既存のアニメーション要素があれば削除
+      const existingAnimation = document.querySelector('.theme-transition-overlay');
+      if (existingAnimation) {
+        existingAnimation.remove();
+      }
+
+      // アニメーション用のオーバーレイを作成
+      const overlay = document.createElement('div');
+      overlay.className = 'theme-transition-overlay';
+      overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 999;
+        overflow: hidden;
+      `;
+
+      // 太陽と月の要素を作成
+      const sun = document.createElement('div');
+      const moon = document.createElement('div');
+      
+      const celestialBodyStyle = `
+        position: absolute;
+        width: 8rem;
+        height: 8rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        top: 20%;
+        transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      `;
+
+      sun.style.cssText = celestialBodyStyle + `
+        background: radial-gradient(circle, #ffeb3b, #ff9800);
+        box-shadow: 0 0 30px rgba(255, 152, 0, 0.6), 0 0 60px rgba(255, 152, 0, 0.4);
+        left: ${this.currentTheme === 'light' ? '100vw' : '-10rem'};
+      `;
+      sun.textContent = '☀️';
+
+      moon.style.cssText = celestialBodyStyle + `
+        background: radial-gradient(circle, #e3f2fd, #90caf9);
+        box-shadow: 0 0 30px rgba(144, 202, 249, 0.6), 0 0 60px rgba(144, 202, 249, 0.4);
+        left: ${this.currentTheme === 'dark' ? '100vw' : '-10rem'};
+      `;
+      moon.textContent = '🌙';
+
+      // 雲の要素を追加
+      const clouds = this.createClouds();
+      
+      overlay.appendChild(sun);
+      overlay.appendChild(moon);
+      clouds.forEach(cloud => overlay.appendChild(cloud));
+      document.body.appendChild(overlay);
+
+      // アニメーション実行
+      setTimeout(() => {
+        if (this.currentTheme === 'dark') {
+          // ライト→ダーク: 太陽が左に去り、月が右から来る
+          sun.style.transform = 'translateX(-120vw)';
+          moon.style.transform = 'translateX(calc(-100vw + 50vw - 4rem))';
+        } else {
+          // ダーク→ライト: 月が左に去り、太陽が右から来る
+          moon.style.transform = 'translateX(-120vw)';
+          sun.style.transform = 'translateX(calc(-100vw + 50vw - 4rem))';
+        }
+
+        // 雲のアニメーション
+        clouds.forEach((cloud, index) => {
+          cloud.style.transform = `translateX(${100 + index * 50}vw)`;
+        });
+      }, 100);
+
+      // アニメーション完了後にオーバーレイを削除
+      setTimeout(() => {
+        overlay.remove();
+      }, 1400);
+    }
+
+    private createClouds() {
+      const clouds = [];
+      const cloudCount = 3;
+      
+      for (let i = 0; i < cloudCount; i++) {
+        const cloud = document.createElement('div');
+        cloud.style.cssText = `
+          position: absolute;
+          font-size: ${1.5 + Math.random() * 1}rem;
+          opacity: 0.7;
+          top: ${10 + Math.random() * 60}%;
+          left: ${-20 - i * 30}vw;
+          transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          transition-delay: ${i * 0.1}s;
+        `;
+        cloud.textContent = '☁️';
+        clouds.push(cloud);
+      }
+      
+      return clouds;
+    }
+  }
+
+  // DOMが読み込まれたら初期化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ThemeToggle());
+  } else {
+    new ThemeToggle();
+  }
+
+  // View Transitions API対応（ページ遷移時の状態維持）
+  document.addEventListener('astro:page-load', () => {
+    new ThemeToggle();
+  });
+</script>
+
+<style>
+  /* アニメーション用のキーフレーム */
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(180deg) scale(1.2);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* ダークモード用のCSS変数 */
+  :global(html.dark) {
+    color-scheme: dark;
+  }
+
+  :global(html.dark body) {
+    background: linear-gradient(135deg, #0f0f23, #1a1a2e);
+    color: #e2e8f0;
+  }
+
+  :global(html:not(.dark) body) {
+    background: linear-gradient(135deg, #fef9e7, #fff5d6);
+    color: #1a1a1a;
+  }
+
+  /* スムーズな背景色の変化 */
+  :global(body) {
+    transition: background 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* 背景グラデーション強化 */
+  :global(html.dark body) {
+    background: linear-gradient(135deg, #0c1445 0%, #1a1a2e 50%, #16213e 100%);
+  }
+
+  :global(html:not(.dark) body) {
+    background: linear-gradient(135deg, #fef9e7 0%, #fff5d6 50%, #f0f8ff 100%);
+  }
+</style>
