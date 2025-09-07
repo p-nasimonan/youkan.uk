@@ -4,8 +4,9 @@ import { css } from '@styles/css';
 
 const celestialBodyStyles = css({
   position: 'fixed',
-  top: '2rem',
-  right: '2rem',
+  bottom: '3rem', // 画面下に配置
+  left: '50%',
+  transform: 'translateX(-50%)', // 中央に配置
   zIndex: 1000,
   width: '4rem',
   height: '4rem',
@@ -24,19 +25,18 @@ const celestialBodyStyles = css({
     width: '2.8rem',
     height: '2.8rem',
     fontSize: '1.4rem',
-    top: '1rem',
-    right: '1rem',
+    bottom: '2rem',
     zIndex: 1100,
   },
   
   // ホバーエフェクト
   _hover: {
-    transform: 'scale(1.15)',
+    transform: 'translateX(-50%) scale(1.15)',
     filter: 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.2))',
   },
   
   _active: {
-    transform: 'scale(1.05)',
+    transform: 'translateX(-50%) scale(1.05)',
   }
 });
 
@@ -174,123 +174,83 @@ const moonStyles = css({
     }
 
     private animateTransition() {
-      // 背景アニメーション用の要素を作成
-      this.createBackgroundAnimation();
-      
-      // 現在表示されている天体の回転アニメーション
-      const activeElement = this.currentTheme === 'light' ? this.sunElement : this.moonElement;
-      activeElement.style.transform = 'rotate(360deg) scale(1.2)';
-      
-      setTimeout(() => {
-        activeElement.style.transform = '';
-      }, 600);
+      // 天体ボタン自体が移動するアニメーション
+      this.animateCelestialBodies();
     }
 
-    private createBackgroundAnimation() {
-      // 既存のアニメーション要素があれば削除
-      const existingAnimation = document.querySelector('.theme-transition-overlay');
-      if (existingAnimation) {
-        existingAnimation.remove();
+    private animateCelestialBodies() {
+      if (this.currentTheme === 'dark') {
+        // ライト→ダーク: 太陽が左に去り、月が右から来る
+        this.animateLightToDark();
+      } else {
+        // ダーク→ライト: 月が左に去り、太陽が右から来る
+        this.animateDarkToLight();
       }
-
-      // アニメーション用のオーバーレイを作成
-      const overlay = document.createElement('div');
-      overlay.className = 'theme-transition-overlay';
-      overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        pointer-events: none;
-        z-index: 999;
-        overflow: hidden;
-      `;
-
-      // 太陽と月の要素を作成
-      const sun = document.createElement('div');
-      const moon = document.createElement('div');
-      
-      const celestialBodyStyle = `
-        position: absolute;
-        width: 8rem;
-        height: 8rem;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 3rem;
-        top: 20%;
-        transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      `;
-
-      sun.style.cssText = celestialBodyStyle + `
-        background: radial-gradient(circle, #ffeb3b, #ff9800);
-        box-shadow: 0 0 30px rgba(255, 152, 0, 0.6), 0 0 60px rgba(255, 152, 0, 0.4);
-        left: ${this.currentTheme === 'light' ? '100vw' : '-10rem'};
-      `;
-      sun.textContent = '☀️';
-
-      moon.style.cssText = celestialBodyStyle + `
-        background: radial-gradient(circle, #e3f2fd, #90caf9);
-        box-shadow: 0 0 30px rgba(144, 202, 249, 0.6), 0 0 60px rgba(144, 202, 249, 0.4);
-        left: ${this.currentTheme === 'dark' ? '100vw' : '-10rem'};
-      `;
-      moon.textContent = '🌙';
-
-      // 雲の要素を追加
-      const clouds = this.createClouds();
-      
-      overlay.appendChild(sun);
-      overlay.appendChild(moon);
-      clouds.forEach(cloud => overlay.appendChild(cloud));
-      document.body.appendChild(overlay);
-
-      // アニメーション実行
-      setTimeout(() => {
-        if (this.currentTheme === 'dark') {
-          // ライト→ダーク: 太陽が左に去り、月が右から来る
-          sun.style.transform = 'translateX(-120vw)';
-          moon.style.transform = 'translateX(calc(-100vw + 50vw - 4rem))';
-        } else {
-          // ダーク→ライト: 月が左に去り、太陽が右から来る
-          moon.style.transform = 'translateX(-120vw)';
-          sun.style.transform = 'translateX(calc(-100vw + 50vw - 4rem))';
-        }
-
-        // 雲のアニメーション
-        clouds.forEach((cloud, index) => {
-          cloud.style.transform = `translateX(${100 + index * 50}vw)`;
-        });
-      }, 100);
-
-      // アニメーション完了後にオーバーレイを削除
-      setTimeout(() => {
-        overlay.remove();
-      }, 1400);
     }
 
-    private createClouds() {
-      const clouds = [];
-      const cloudCount = 3;
+    private animateLightToDark() {
+      // 太陽を右側の画面外に移動
+      this.sunElement.style.transition = 'transform 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      this.sunElement.style.transform = 'translateX(calc(120vw - 50%)) rotate(360deg)';
       
-      for (let i = 0; i < cloudCount; i++) {
-        const cloud = document.createElement('div');
-        cloud.style.cssText = `
-          position: absolute;
-          font-size: ${1.5 + Math.random() * 1}rem;
-          opacity: 0.7;
-          top: ${10 + Math.random() * 60}%;
-          left: ${-20 - i * 30}vw;
-          transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-          transition-delay: ${i * 0.1}s;
-        `;
-        cloud.textContent = '☁️';
-        clouds.push(cloud);
-      }
+      // 太陽のアニメーション完全終了後にのみ非表示にする
+      setTimeout(() => {
+        this.sunElement.style.display = 'none';
+        this.sunElement.style.transform = '';
+        this.sunElement.style.transition = '';
+      }, 1000);
       
-      return clouds;
+      // しばらく経ってから月を左側から出現させる
+      setTimeout(() => {
+        this.moonElement.style.display = 'flex';
+        this.moonElement.style.transform = 'translateX(calc(-120vw - 50%))';
+        this.moonElement.style.transition = 'none';
+        
+        setTimeout(() => {
+          this.moonElement.style.transition = 'transform 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+          this.moonElement.style.transform = 'translateX(-50%)';
+        }, 50);
+      }, 800); // 800ms待ってから月が出現
+      
+      // 月のアニメーション完全終了後にクリーンアップ
+      setTimeout(() => {
+        this.moonElement.style.transform = '';
+        this.moonElement.style.transition = '';
+      }, 1900); // 800ms待機 + 50ms + 1000ms = 1850ms + 余裕
     }
+
+    private animateDarkToLight() {
+      // 月を右側の画面外に移動
+      this.moonElement.style.transition = 'transform 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      this.moonElement.style.transform = 'translateX(calc(120vw - 50%)) rotate(360deg)';
+      
+      // 月のアニメーション完全終了後にのみ非表示にする
+      setTimeout(() => {
+        this.moonElement.style.display = 'none';
+        this.moonElement.style.transform = '';
+        this.moonElement.style.transition = '';
+      }, 1000);
+      
+      // しばらく経ってから太陽を左側から出現させる
+      setTimeout(() => {
+        this.sunElement.style.display = 'flex';
+        this.sunElement.style.transform = 'translateX(calc(-120vw - 50%))';
+        this.sunElement.style.transition = 'none';
+        
+        setTimeout(() => {
+          this.sunElement.style.transition = 'transform 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+          this.sunElement.style.transform = 'translateX(-50%)';
+        }, 50);
+      }, 800); // 800ms待ってから太陽が出現
+      
+      // 太陽のアニメーション完全終了後にクリーンアップ
+      setTimeout(() => {
+        this.sunElement.style.transform = '';
+        this.sunElement.style.transition = '';
+      }, 1900); // 800ms待機 + 50ms + 1000ms = 1850ms + 余裕
+    }
+
+
   }
 
   // DOMが読み込まれたら初期化
