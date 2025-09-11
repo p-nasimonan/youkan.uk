@@ -136,6 +136,7 @@ const skipButton = css({
     private selectionElement: HTMLElement;
     private skipButton: HTMLElement;
     private animationStarted = false;
+    private hasShownIntro = false;
 
     constructor() {
       this.introElement = document.getElementById('intro-animation')!;
@@ -146,6 +147,18 @@ const skipButton = css({
     }
 
     private init() {
+      // セッションストレージでイントロ表示状態をチェック
+      this.hasShownIntro = sessionStorage.getItem('intro-shown') === 'true';
+      
+      if (this.hasShownIntro) {
+        // 既に表示済みの場合は即座にメイン画面を表示
+        this.showMainScreen();
+        return;
+      }
+      
+      // 初回アクセス時のみアニメーションを実行
+      sessionStorage.setItem('intro-shown', 'true');
+      
       // スキップボタンのイベント
       this.skipButton.addEventListener('click', () => this.skipIntro());
       
@@ -164,20 +177,27 @@ const skipButton = css({
     private showMainScreen() {
       this.animationStarted = true;
       
-      // 導入画面をフェードアウト
-      this.introElement.style.opacity = '0';
-      this.introElement.style.transform = 'scale(0.95)';
-      
-      // 選択画面をスムーズにフェードイン
-      setTimeout(() => {
+      if (this.hasShownIntro) {
+        // 2回目以降：即座に表示
+        this.introElement.style.display = 'none';
         this.selectionElement.style.opacity = '1';
         this.selectionElement.style.transform = 'translateY(0)';
-      }, 200);
-      
-      // 導入要素を完全に削除
-      setTimeout(() => {
-        this.introElement.style.display = 'none';
-      }, 600);
+      } else {
+        // 初回：アニメーション付きで遷移
+        this.introElement.style.opacity = '0';
+        this.introElement.style.transform = 'scale(0.95)';
+        
+        // 選択画面をスムーズにフェードイン
+        setTimeout(() => {
+          this.selectionElement.style.opacity = '1';
+          this.selectionElement.style.transform = 'translateY(0)';
+        }, 200);
+        
+        // 導入要素を完全に削除
+        setTimeout(() => {
+          this.introElement.style.display = 'none';
+        }, 600);
+      }
     }
   }
 
