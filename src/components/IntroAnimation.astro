@@ -28,59 +28,45 @@ const introContainer = css({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  background: '#667eea',
   zIndex: 1000,
   opacity: 1,
-  transition: 'opacity 1s ease-out',
-  
-  _dark: {
-    background: 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)'
-  }
+  transition: 'opacity 0.6s ease-out'
 });
 
-const welcomeText = css({
-  fontSize: '4xl',
-  fontWeight: 'bold',
-  color: 'white',
-  textAlign: 'center',
-  marginBottom: '2rem',
-  opacity: 0,
-  transform: 'translateY(30px)',
-  animation: 'fadeInUp 1s ease-out 0.5s forwards',
-  textShadow: '0 4px 8px rgba(0,0,0,0.3)',
-  
-  _dark: {
-    color: '#f7fafc',
-    textShadow: '0 4px 8px rgba(0,0,0,0.6)'
-  }
-});
 
 const itemContainer = css({
   position: 'relative',
-  width: '300px',
+  width: '400px',
   height: '300px',
   margin: '0 auto'
 });
 
-// 中心から飛び出すアイテムのスタイル
+// 中心から飛び出すアイテムのスタイル  
 const floatingItem = css({
   position: 'absolute',
-  fontSize: '4rem',
+  fontSize: '5rem',
   opacity: 0,
   transform: 'scale(0) translate(-50%, -50%)',
   left: '50%',
   top: '50%',
   transformOrigin: 'center',
-  filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))',
+  filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))',
+  cursor: 'pointer',
+  transition: 'transform 0.3s ease',
   
   '&.avatar': {
-    animation: 'popOut 1.2s ease-out 1.8s forwards, float 3s ease-in-out 3s infinite'
+    animation: 'popOut 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s forwards, floatGentle 2s ease-in-out 1s infinite'
   },
   '&.tea': {
-    animation: 'popOut 1.2s ease-out 2.1s forwards, float 3s ease-in-out 3.3s infinite'
+    animation: 'popOut 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.4s forwards, floatGentle 2s ease-in-out 1.2s infinite'
   },
   '&.youkan': {
-    animation: 'popOut 1.2s ease-out 2.4s forwards, float 3s ease-in-out 3.6s infinite'
+    animation: 'popOut 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s forwards, floatGentle 2s ease-in-out 1.4s infinite'
+  },
+  
+  _hover: {
+    transform: 'scale(1.05) translate(-50%, -50%)'
   }
 });
 
@@ -88,18 +74,18 @@ const skipButton = css({
   position: 'fixed',
   bottom: '2rem',
   right: '2rem',
-  padding: '0.75rem 1.5rem',
+  padding: '0.5rem 1rem',
   backgroundColor: 'rgba(255,255,255,0.1)',
   backdropFilter: 'blur(10px)',
   border: '1px solid rgba(255,255,255,0.2)',
   borderRadius: '999px',
   color: 'white',
-  fontSize: 'sm',
+  fontSize: 'xs',
   fontWeight: 'medium',
   cursor: 'pointer',
   opacity: 0,
-  animation: 'fadeIn 0.5s ease-out 1s forwards',
-  transition: 'all 0.3s ease',
+  animation: 'fastFadeIn 0.3s ease-out 0.5s forwards',
+  transition: 'all 0.2s ease',
   
   _hover: {
     backgroundColor: 'rgba(255,255,255,0.2)',
@@ -117,24 +103,19 @@ const skipButton = css({
 ---
 
 <div id="intro-animation" class={introContainer}>
-  <h1 class={welcomeText}>
-    ようこそ！<br/>
-    <span style="font-size: 0.8em; font-weight: normal;">あなたはどのようかんに興味がありますか？</span>
-  </h1>
-  
   <div class={itemContainer}>
     <!-- アバター -->
-    <div class={`${floatingItem} avatar`} style="left: 20%; top: 30%;">
+    <div class={`${floatingItem} avatar`} style="left: 25%; top: 35%;">
       👤
     </div>
     
     <!-- 紅茶 -->
-    <div class={`${floatingItem} tea`} style="left: 80%; top: 40%;">
+    <div class={`${floatingItem} tea`} style="left: 75%; top: 35%;">
       🫖
     </div>
     
     <!-- ようかん -->
-    <div class={`${floatingItem} youkan`} style="left: 50%; top: 70%;">
+    <div class={`${floatingItem} youkan`} style="left: 50%; top: 65%;">
       🍠
     </div>
   </div>
@@ -145,7 +126,7 @@ const skipButton = css({
 </div>
 
 <!-- メインの選択画面（初期は非表示） -->
-<div id="selection-screen" style="opacity: 0; transform: translateY(100vh); transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);">
+<div id="selection-screen" style="opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);">
   <SelectionScreen options={options} />
 </div>
 
@@ -168,12 +149,12 @@ const skipButton = css({
       // スキップボタンのイベント
       this.skipButton.addEventListener('click', () => this.skipIntro());
       
-      // 自動的にメイン画面に遷移（4秒後）
+      // 自動的にメイン画面に遷移（2秒後）
       setTimeout(() => {
         if (!this.animationStarted) {
           this.showMainScreen();
         }
-      }, 4000);
+      }, 2000);
     }
 
     private skipIntro() {
@@ -187,16 +168,16 @@ const skipButton = css({
       this.introElement.style.opacity = '0';
       this.introElement.style.transform = 'scale(0.95)';
       
-      // 選択画面を下から上にスライドイン
+      // 選択画面をスムーズにフェードイン
       setTimeout(() => {
         this.selectionElement.style.opacity = '1';
         this.selectionElement.style.transform = 'translateY(0)';
-      }, 300);
+      }, 200);
       
       // 導入要素を完全に削除
       setTimeout(() => {
         this.introElement.style.display = 'none';
-      }, 1000);
+      }, 600);
     }
   }
 
@@ -214,64 +195,14 @@ const skipButton = css({
 </script>
 
 <style>
-  /* アニメーションキーフレーム */
-  @keyframes fadeInUp {
-    0% {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-
-  @keyframes popOut {
-    0% {
-      opacity: 0;
-      transform: scale(0) translate(-50%, -50%);
-    }
-    60% {
-      opacity: 1;
-      transform: scale(1.2) translate(-50%, -50%);
-    }
-    100% {
-      opacity: 1;
-      transform: scale(1) translate(-50%, -50%);
-    }
-  }
-
-  @keyframes float {
-    0%, 100% {
-      transform: scale(1) translate(-50%, -50%);
-    }
-    50% {
-      transform: scale(1) translate(-50%, -58%);
-    }
-  }
-
   /* レスポンシブ対応 */
   @media (max-width: 768px) {
-    .intro-container h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1.5rem;
-    }
-    
     .floating-item {
-      font-size: 3rem;
+      font-size: 4rem;
     }
     
     .item-container {
-      width: 250px;
+      width: 300px;
       height: 250px;
     }
   }

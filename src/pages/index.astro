@@ -2,31 +2,23 @@
 import Layout from '@layouts/Layout.astro';
 import IntroAnimation from '@components/IntroAnimation.astro';
 
-// 背景画像をインポート（最適化あり）
-import vrcBg from '@assets/images/backgrounds/vrc-bg.svg';
-import engineerBg from '@assets/images/backgrounds/engineer-bg.svg';
-import aircraftBg from '@assets/images/backgrounds/aircraft-bg.svg';
-
 const options = [
   {
     id: 'vrc',
     title: 'VRChat',
     description: 'VRChatでの活動や交流について',
-    backgroundImage: vrcBg.src,
     href: './vrc/'
   },
   {
     id: 'engineer',
     title: 'エンジニア',
     description: '技術スキル、開発経験について',
-    backgroundImage: engineerBg.src,
     href: './engineer/'
   },
   {
     id: 'aircraft',
     title: '飛行機',
     description: '飛行ロボコンについて',
-    backgroundImage: aircraftBg.src,
     href: './aircraft/'
   }
 ];

@@ -103,6 +103,47 @@ export default defineConfig({
       '100%': {
         transform: 'scale(1)'
       }
+    },
+    // 新しいアニメーション - 導入アニメーション用
+    '@keyframes popOut': {
+      '0%': {
+        opacity: '0',
+        transform: 'scale(0) translate(-50%, -50%)'
+      },
+      '60%': {
+        opacity: '1',
+        transform: 'scale(1.15) translate(-50%, -50%)'
+      },
+      '100%': {
+        opacity: '1',
+        transform: 'scale(1) translate(-50%, -50%)'
+      }
+    },
+    '@keyframes floatGentle': {
+      '0%, 100%': {
+        transform: 'scale(1) translate(-50%, -50%)'
+      },
+      '50%': {
+        transform: 'scale(1) translate(-50%, -58%)'
+      }
+    },
+    '@keyframes slideUpCards': {
+      '0%': {
+        opacity: '0',
+        transform: 'translateY(40px) scale(0.95)'
+      },
+      '100%': {
+        opacity: '1',
+        transform: 'translateY(0) scale(1)'
+      }
+    },
+    '@keyframes fastFadeIn': {
+      '0%': {
+        opacity: '0'
+      },
+      '100%': {
+        opacity: '1'
+      }
     }
   },
 
@@ -114,8 +155,10 @@ export default defineConfig({
     },
     tokens: {
       durations: {
+        '200': { value: '200ms' },
         '400': { value: '400ms' },
-        '600': { value: '600ms' }
+        '600': { value: '600ms' },
+        '800': { value: '800ms' }
       },
       easings: {
         'bounce': { value: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' },
