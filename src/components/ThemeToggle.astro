@@ -155,21 +155,24 @@ const moonStyles = css({
     private applyTheme(theme: 'light' | 'dark', animate: boolean) {
       const html = document.documentElement;
       
+      if (theme === 'dark') {
+        html.classList.add('dark');
+      } else {
+        html.classList.remove('dark');
+      }
+      
       if (animate) {
         // アニメーション付きで切り替え
         this.animateTransition();
-      }
-      
-      if (theme === 'dark') {
-        html.classList.add('dark');
-        // ダークモード時は月を表示、太陽を非表示
-        this.moonElement.style.display = 'flex';
-        this.sunElement.style.display = 'none';
       } else {
-        html.classList.remove('dark');
-        // ライトモード時は太陽を表示、月を非表示
-        this.sunElement.style.display = 'flex';
-        this.moonElement.style.display = 'none';
+        // アニメーションなしの場合のみ即座に表示状態を変更
+        if (theme === 'dark') {
+          this.moonElement.style.display = 'flex';
+          this.sunElement.style.display = 'none';
+        } else {
+          this.sunElement.style.display = 'flex';
+          this.moonElement.style.display = 'none';
+        }
       }
     }
 
@@ -189,65 +192,73 @@ const moonStyles = css({
     }
 
     private animateLightToDark() {
-      // 太陽を右側の画面外に移動
-      this.sunElement.style.transition = 'transform 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-      this.sunElement.style.transform = 'translateX(calc(120vw - 50%)) rotate(360deg)';
+      // 太陽を弧を描いて右上に移動（回転軸: 画面中心から下に10vh）
+      this.sunElement.style.transition = 'transform 1s ease-out';
+      this.sunElement.style.transformOrigin = '50vw 60vh'; // 画面中心の下を回転軸に
+      this.sunElement.style.transform = 'translateX(-50%) rotate(180deg) scale(0.8)';
       
-      // 太陽のアニメーション完全終了後にのみ非表示にする
+      // アニメーション終了後に非表示
       setTimeout(() => {
         this.sunElement.style.display = 'none';
         this.sunElement.style.transform = '';
+        this.sunElement.style.transformOrigin = '';
         this.sunElement.style.transition = '';
       }, 1000);
       
-      // しばらく経ってから月を左側から出現させる
+      // 月を左から弧を描いて出現
       setTimeout(() => {
         this.moonElement.style.display = 'flex';
-        this.moonElement.style.transform = 'translateX(calc(-120vw - 50%))';
+        this.moonElement.style.transformOrigin = '50vw 60vh';
+        this.moonElement.style.transform = 'translateX(-50%) rotate(-180deg) scale(0.6)';
         this.moonElement.style.transition = 'none';
         
-        setTimeout(() => {
-          this.moonElement.style.transition = 'transform 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-          this.moonElement.style.transform = 'translateX(-50%)';
-        }, 50);
-      }, 800); // 800ms待ってから月が出現
+        requestAnimationFrame(() => {
+          this.moonElement.style.transition = 'transform 1s ease-out';
+          this.moonElement.style.transform = 'translateX(-50%) rotate(0deg) scale(1)';
+        });
+      }, 500);
       
-      // 月のアニメーション完全終了後にクリーンアップ
+      // クリーンアップ
       setTimeout(() => {
         this.moonElement.style.transform = '';
+        this.moonElement.style.transformOrigin = '';
         this.moonElement.style.transition = '';
-      }, 1900); // 800ms待機 + 50ms + 1000ms = 1850ms + 余裕
+      }, 1600);
     }
 
     private animateDarkToLight() {
-      // 月を右側の画面外に移動
-      this.moonElement.style.transition = 'transform 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-      this.moonElement.style.transform = 'translateX(calc(120vw - 50%)) rotate(360deg)';
+      // 月を弧を描いて右上に移動（回転軸: 画面中心から下に10vh）
+      this.moonElement.style.transition = 'transform 1s ease-out';
+      this.moonElement.style.transformOrigin = '50vw 60vh'; // 画面中心の下を回転軸に
+      this.moonElement.style.transform = 'translateX(-50%) rotate(180deg) scale(0.8)';
       
-      // 月のアニメーション完全終了後にのみ非表示にする
+      // アニメーション終了後に非表示
       setTimeout(() => {
         this.moonElement.style.display = 'none';
         this.moonElement.style.transform = '';
+        this.moonElement.style.transformOrigin = '';
         this.moonElement.style.transition = '';
       }, 1000);
       
-      // しばらく経ってから太陽を左側から出現させる
+      // 太陽を左から弧を描いて出現
       setTimeout(() => {
         this.sunElement.style.display = 'flex';
-        this.sunElement.style.transform = 'translateX(calc(-120vw - 50%))';
+        this.sunElement.style.transformOrigin = '50vw 60vh';
+        this.sunElement.style.transform = 'translateX(-50%) rotate(-180deg) scale(0.6)';
         this.sunElement.style.transition = 'none';
         
-        setTimeout(() => {
-          this.sunElement.style.transition = 'transform 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-          this.sunElement.style.transform = 'translateX(-50%)';
-        }, 50);
-      }, 800); // 800ms待ってから太陽が出現
+        requestAnimationFrame(() => {
+          this.sunElement.style.transition = 'transform 1s ease-out';
+          this.sunElement.style.transform = 'translateX(-50%) rotate(0deg) scale(1)';
+        });
+      }, 500);
       
-      // 太陽のアニメーション完全終了後にクリーンアップ
+      // クリーンアップ
       setTimeout(() => {
         this.sunElement.style.transform = '';
+        this.sunElement.style.transformOrigin = '';
         this.sunElement.style.transition = '';
-      }, 1900); // 800ms待機 + 50ms + 1000ms = 1850ms + 余裕
+      }, 1600);
     }
 
 
@@ -267,17 +278,10 @@ const moonStyles = css({
 </script>
 
 <style>
-  /* アニメーション用のキーフレーム */
-  @keyframes rotate {
-    0% {
-      transform: rotate(0deg);
-    }
-    50% {
-      transform: rotate(180deg) scale(1.2);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
+  /* 星のきらめきアニメーション（軽量化版） */
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.05; }
+    50% { opacity: 0.12; }
   }
 
   /* ダークモード用のCSS変数 */
@@ -295,17 +299,54 @@ const moonStyles = css({
     color: #1a1a1a;
   }
 
-  /* スムーズな背景色の変化 */
+  /* より滑らかで自然な背景色の変化 */
   :global(body) {
-    transition: background 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: 
+      background 2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      color 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow-x: hidden;
   }
 
-  /* 背景グラデーション強化 */
+  /* 夜空のグラデーション - より深みのある色合い */
   :global(html.dark body) {
-    background: linear-gradient(135deg, #0c1445 0%, #1a1a2e 50%, #16213e 100%);
+    background: 
+      radial-gradient(ellipse at top, #1e3a8a 0%, transparent 50%),
+      radial-gradient(ellipse at bottom, #0f172a 0%, transparent 50%),
+      linear-gradient(180deg, #0c1445 0%, #1a1a2e 30%, #16213e 70%, #0f0f23 100%);
   }
 
+  /* 昼空のグラデーション - より温かみのある色合い */
   :global(html:not(.dark) body) {
-    background: linear-gradient(135deg, #fef9e7 0%, #fff5d6 50%, #f0f8ff 100%);
+    background: 
+      radial-gradient(ellipse at top, #fef3c7 0%, transparent 50%),
+      radial-gradient(ellipse at bottom, #ddd6fe 0%, transparent 50%),
+      linear-gradient(180deg, #fef9e7 0%, #fff5d6 30%, #f0f8ff 70%, #e0f2fe 100%);
+  }
+
+  /* 背景にアニメーション効果を追加 */
+  :global(body::before) {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: -1;
+    transition: opacity 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0;
+  }
+
+  /* ダークモード時の星空エフェクト（軽量化版） */
+  :global(html.dark body::before) {
+    background: 
+      radial-gradient(1px 1px at 25px 40px, #fff, transparent),
+      radial-gradient(1px 1px at 80px 20px, #fff, transparent),
+      radial-gradient(1px 1px at 150px 70px, #fff, transparent);
+    background-repeat: repeat;
+    background-size: 180px 90px;
+    opacity: 0.08;
+    animation: twinkle 6s linear infinite;
   }
 </style>
