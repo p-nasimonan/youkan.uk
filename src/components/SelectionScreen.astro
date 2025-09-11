@@ -6,7 +6,6 @@ export interface SelectionOption {
   id: string;
   title: string;
   description: string;
-  backgroundImage: string;
   href: string;
 }
 
@@ -20,10 +19,10 @@ const cardContainer = css({
   position: 'relative',
   cursor: 'pointer',
   opacity: 0,
-  transform: 'translateY(20px)',
-  animation: 'fadeInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+  transform: 'translateY(40px) scale(0.95)',
+  animation: 'slideUpCards 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
   transitionProperty: 'transform, box-shadow',
-  transitionDuration: '300ms',
+  transitionDuration: '400ms',
   transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
   _hover: {
     transform: 'translateY(-8px) scale(1.02)',
@@ -32,10 +31,6 @@ const cardContainer = css({
       opacity: 1,
       transform: 'translate(-50%, -50%)'
     },
-    '& .bg-image': {
-      opacity: 0.7,
-      transform: 'scale(1.05)'
-    }
   }
 });
 
@@ -57,19 +52,14 @@ const avatarContainer = css({
   justifyContent: 'center',
   minHeight: '100vh',
   padding: '2rem',
-  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  fontFamily: 'system-ui, -apple-system, sans-serif',
-  overflow: 'hidden',
-  _dark: {
-    background: 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)',
-  }
+  fontFamily: 'system-ui, -apple-system, sans-serif'
 })}>
   <h1 class={css({
     fontSize: '3xl',
     fontWeight: 'bold',
     marginBottom: '1rem',
-    color: 'white',
-    textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+    color: '#1a1a1a',
+    textShadow: '0 4px 8px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.4)',
     _dark: {
       color: '#f7fafc',
       textShadow: '0 2px 4px rgba(0,0,0,0.6)'
@@ -80,11 +70,13 @@ const avatarContainer = css({
   
   <p class={css({
     fontSize: 'lg',
-    color: 'rgba(255,255,255,0.9)',
+    color: '#4a5568',
     marginBottom: '3rem',
     textAlign: 'center',
+    textShadow: '0 2px 4px rgba(255,255,255,0.6)',
     _dark: {
-      color: 'rgba(247, 250, 252, 0.8)'
+      color: 'rgba(247, 250, 252, 0.8)',
+      textShadow: 'none'
     }
   })}>
     あなたの興味のある分野を選択してください(開発中なのでほぼモック)
@@ -104,7 +96,7 @@ const avatarContainer = css({
     {options.map((option, index) => (
       <div
         class={`group ${cardContainer}`}
-        style={`animation-delay: ${index * 150}ms`}
+        style={`animation-delay: ${index * 100}ms`}
         transition:name={`card-${option.id}`}
       >
         <!-- アバターコンテナ（背景に配置） -->
@@ -134,10 +126,11 @@ const avatarContainer = css({
             width: '280px',
             height: '180px',
             padding: '1.5rem',
-            backgroundColor: 'rgba(255,255,255,0.1)',
-            backdropFilter: 'blur(10px)',
+            backgroundColor: 'rgba(255,255,255,0.25)',
+            backdropFilter: 'blur(16px) saturate(180%)',
             borderRadius: '24px',
-            border: '1px solid rgba(255,255,255,0.2)',
+            border: '1px solid rgba(255,255,255,0.4)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.6), 0 8px 32px rgba(0,0,0,0.1)',
             textDecoration: 'none',
             position: 'relative',
             overflow: 'hidden',
@@ -146,9 +139,9 @@ const avatarContainer = css({
             transitionDuration: '300ms',
             transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
             _hover: {
-              backgroundColor: 'rgba(255,255,255,0.15)',
+              backgroundColor: 'rgba(255,255,255,0.35)',
               transform: 'scale(1.02)',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.8), 0 12px 40px rgba(0,0,0,0.15)'
             },
             _dark: {
               backgroundColor: 'rgba(255,255,255,0.08)',
@@ -161,29 +154,13 @@ const avatarContainer = css({
           })}
           transition:name={`button-${option.id}`}
         >
-          <div class={`bg-image ${css({
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            borderRadius: '24px',
-            opacity: 0,
-            zIndex: -1,
-            transitionProperty: 'opacity, transform',
-            transitionDuration: '300ms',
-            transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-          })}`} style={`background-image: url(${option.backgroundImage})`}></div>
-          
           <h2 class={css({
             fontSize: 'xl',
             fontWeight: 'bold',
             marginBottom: '0.5rem',
-            color: 'white',
+            color: '#1a202c',
             textAlign: 'center',
-            textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+            textShadow: '0 2px 4px rgba(255,255,255,0.8), 0 0 8px rgba(255,255,255,0.4)',
             transitionProperty: 'transform, text-shadow',
             transitionDuration: '300ms',
             transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
@@ -196,9 +173,9 @@ const avatarContainer = css({
           </h2>
           
           <p class={css({
-            color: 'rgba(255,255,255,0.9)',
+            color: '#4a5568',
             textAlign: 'center',
-            textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+            textShadow: '0 1px 2px rgba(255,255,255,0.6)',
             fontSize: 'sm',
             transitionProperty: 'color, text-shadow',
             transitionDuration: '300ms',

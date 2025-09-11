@@ -109,17 +109,9 @@ async function markdownToHtml(markdown: string): Promise<string> {
 const { content, meta } = parseMarkdownFile('./src/content/github-profile.md');
 const htmlContent = await markdownToHtml(content);
 ---
-
 <section class={`${css({
   padding: '2rem',
-  backgroundColor: 'blue.50',
-  borderRadius: 'lg',
-  border: '2px solid',
-  borderColor: 'blue.200',
-  _dark: {
-    backgroundColor: 'gray.900',
-    borderColor: 'gray.700'
-  }
+  borderRadius: 'lg'
 })} ${className || ''}`}>
   <div class={css({
     display: 'flex',
@@ -130,9 +122,9 @@ const htmlContent = await markdownToHtml(content);
     <h2 class={css({
       fontSize: '2xl',
       fontWeight: 'bold',
-      color: 'blue.800',
+      color: '#1a1a1a',
       _dark: {
-        color: 'blue.200'
+        color: '#f7fafc'
       }
     })}>
       📖 {meta.title}
@@ -140,58 +132,215 @@ const htmlContent = await markdownToHtml(content);
     
     <div class={css({
       fontSize: 'sm',
-      color: 'blue.600',
+      color: '#4a5568',
       _dark: {
-        color: 'blue.400'
+        color: 'rgba(247, 250, 252, 0.8)'
       }
     })}>
       最終更新: {new Date(meta.updatedAt).toLocaleDateString('ja-JP')}
     </div>
   </div>
 
-  <!-- GitHub Markdown CSS スタイルを適用 -->
-  <div class="markdown-body">
-    <div 
-      class={css({
-        fontSize: '14px',
-        lineHeight: '1.6',
-        '& img': {
-          maxWidth: '100%',
-          height: 'auto',
-          borderRadius: 'md',
-          display: 'block',
-          margin: '1rem auto'
-        },
-        '& .markdown-body': {
-          boxSizing: 'border-box',
-          minWidth: '200px',
-          maxWidth: '980px',
-          margin: '0 auto'
+  <!-- カスタムマークダウンスタイル -->
+  <div 
+    class={css({
+      fontSize: '14px',
+      lineHeight: '1.7',
+      color: '#24292f',
+      
+      _dark: {
+        color: '#e6edf3'
+      },
+      
+      // 見出しスタイル
+      '& h1': {
+        fontSize: '2xl',
+        fontWeight: 'bold',
+        marginTop: '1.5rem',
+        marginBottom: '1rem',
+        paddingBottom: '0.5rem',
+        borderBottom: '1px solid #d8dee4',
+        color: '#1a1a1a',
+        _dark: {
+          borderBottomColor: '#30363d',
+          color: '#f0f6fc'
         }
-      })}
-      set:html={htmlContent}
-    />
-  </div>
+      },
+      
+      '& h2': {
+        fontSize: 'xl',
+        fontWeight: 'bold',
+        marginTop: '1.5rem',
+        marginBottom: '1rem',
+        paddingBottom: '0.3rem',
+        borderBottom: '1px solid #d8dee4',
+        color: '#1a1a1a',
+        _dark: {
+          borderBottomColor: '#30363d',
+          color: '#f0f6fc'
+        }
+      },
+      
+      '& h3': {
+        fontSize: 'lg',
+        fontWeight: 'bold',
+        marginTop: '1.25rem',
+        marginBottom: '0.75rem',
+        color: '#1a1a1a',
+        _dark: {
+          color: '#f0f6fc'
+        }
+      },
+      
+      '& h4': {
+        fontSize: 'md',
+        fontWeight: 'bold',
+        marginTop: '1rem',
+        marginBottom: '0.5rem',
+        color: '#1a1a1a',
+        _dark: {
+          color: '#f0f6fc'
+        }
+      },
+      
+      // パラグラフとテキスト
+      '& p': {
+        marginTop: '1rem',
+        marginBottom: '1rem'
+      },
+      
+      // リンク
+      '& a': {
+        color: '#0969da',
+        textDecoration: 'underline',
+        _hover: {
+          textDecoration: 'none'
+        },
+        _dark: {
+          color: '#58a6ff'
+        }
+      },
+      
+      // リスト
+      '& ul, & ol': {
+        marginTop: '1rem',
+        marginBottom: '1rem',
+        paddingLeft: '2rem'
+      },
+      
+      '& li': {
+        marginTop: '0.25rem',
+        marginBottom: '0.25rem'
+      },
+      
+      // 画像
+      '& img': {
+        maxWidth: '100%',
+        height: 'auto',
+        borderRadius: 'md',
+        display: 'block',
+        margin: '1rem auto',
+        backgroundColor: 'rgba(255,255,255,0.1)',
+        padding: '0.5rem',
+        border: '1px solid rgba(255,255,255,0.2)',
+        _dark: {
+          backgroundColor: 'rgba(255,255,255,0.05)',
+          border: '1px solid rgba(255,255,255,0.1)'
+        }
+      },
+      
+      // コードブロック
+      '& pre': {
+        backgroundColor: '#f6f8fa',
+        borderRadius: 'md',
+        padding: '1rem',
+        overflow: 'auto',
+        fontSize: 'sm',
+        lineHeight: '1.45',
+        margin: '1rem 0',
+        _dark: {
+          backgroundColor: '#161b22'
+        }
+      },
+      
+      '& code': {
+        backgroundColor: '#f6f8fa',
+        padding: '0.2em 0.4em',
+        borderRadius: 'sm',
+        fontSize: '0.85em',
+        _dark: {
+          backgroundColor: '#161b22'
+        }
+      },
+      
+      '& pre code': {
+        backgroundColor: 'transparent',
+        padding: '0',
+        borderRadius: '0'
+      },
+      
+      // 引用
+      '& blockquote': {
+        paddingLeft: '1rem',
+        borderLeft: '4px solid #d8dee4',
+        color: '#656d76',
+        fontStyle: 'italic',
+        margin: '1rem 0',
+        _dark: {
+          borderLeftColor: '#30363d',
+          color: '#8b949e'
+        }
+      },
+      
+      // テーブル
+      '& table': {
+        borderCollapse: 'collapse',
+        width: '100%',
+        margin: '1rem 0'
+      },
+      
+      '& th, & td': {
+        padding: '0.75rem',
+        textAlign: 'left',
+        borderBottom: '1px solid #d8dee4',
+        _dark: {
+          borderBottomColor: '#30363d'
+        }
+      },
+      
+      '& th': {
+        fontWeight: 'bold',
+        backgroundColor: '#f6f8fa',
+        _dark: {
+          backgroundColor: '#161b22'
+        }
+      }
+    })}
+    set:html={htmlContent}
+  />
   
   {meta.source !== 'fallback' && (
     <div class={css({
       marginTop: '1rem',
       padding: '1rem',
-      backgroundColor: 'blue.100',
       borderRadius: 'md',
       fontSize: 'sm',
-      color: 'blue.600',
+      color: '#4a5568',
+      backgroundColor: 'rgba(255,255,255,0.1)',
+      backdropFilter: 'blur(8px)',
+      border: '1px solid rgba(255,255,255,0.2)',
       _dark: {
-        backgroundColor: 'gray.800',
-        color: 'blue.400'
+        color: 'rgba(247, 250, 252, 0.8)',
+        backgroundColor: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.1)'
       }
     })}>
       <p>
         🔗 <a href="https://github.com/p-nasimonan/p-nasimonan" target="_blank" rel="noopener noreferrer" class={css({ 
-          color: 'blue.600', 
+          color: '#1a1a1a', 
           textDecoration: 'underline',
           _dark: {
-            color: 'blue.400'
+            color: '#f7fafc'
           }
         })}>
           GitHubプロフィール
