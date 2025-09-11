@@ -28,3 +28,8 @@ styles
 
 ## mcp
 .mcp*
+
+# test results and reports
+playwright-report/
+test-results/
+tests/
