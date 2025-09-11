@@ -109,17 +109,9 @@ async function markdownToHtml(markdown: string): Promise<string> {
 const { content, meta } = parseMarkdownFile('./src/content/github-profile.md');
 const htmlContent = await markdownToHtml(content);
 ---
-
 <section class={`${css({
   padding: '2rem',
-  backgroundColor: 'blue.50',
-  borderRadius: 'lg',
-  border: '2px solid',
-  borderColor: 'blue.200',
-  _dark: {
-    backgroundColor: 'gray.900',
-    borderColor: 'gray.700'
-  }
+  borderRadius: 'lg'
 })} ${className || ''}`}>
   <div class={css({
     display: 'flex',
@@ -130,9 +122,9 @@ const htmlContent = await markdownToHtml(content);
     <h2 class={css({
       fontSize: '2xl',
       fontWeight: 'bold',
-      color: 'blue.800',
+      color: '#1a1a1a',
       _dark: {
-        color: 'blue.200'
+        color: '#f7fafc'
       }
     })}>
       📖 {meta.title}
@@ -140,9 +132,9 @@ const htmlContent = await markdownToHtml(content);
     
     <div class={css({
       fontSize: 'sm',
-      color: 'blue.600',
+      color: '#4a5568',
       _dark: {
-        color: 'blue.400'
+        color: 'rgba(247, 250, 252, 0.8)'
       }
     })}>
       最終更新: {new Date(meta.updatedAt).toLocaleDateString('ja-JP')}
@@ -177,21 +169,24 @@ const htmlContent = await markdownToHtml(content);
     <div class={css({
       marginTop: '1rem',
       padding: '1rem',
-      backgroundColor: 'blue.100',
       borderRadius: 'md',
       fontSize: 'sm',
-      color: 'blue.600',
+      color: '#4a5568',
+      backgroundColor: 'rgba(255,255,255,0.1)',
+      backdropFilter: 'blur(8px)',
+      border: '1px solid rgba(255,255,255,0.2)',
       _dark: {
-        backgroundColor: 'gray.800',
-        color: 'blue.400'
+        color: 'rgba(247, 250, 252, 0.8)',
+        backgroundColor: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.1)'
       }
     })}>
       <p>
         🔗 <a href="https://github.com/p-nasimonan/p-nasimonan" target="_blank" rel="noopener noreferrer" class={css({ 
-          color: 'blue.600', 
+          color: '#1a1a1a', 
           textDecoration: 'underline',
           _dark: {
-            color: 'blue.400'
+            color: '#f7fafc'
           }
         })}>
           GitHubプロフィール
