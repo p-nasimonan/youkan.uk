@@ -12,8 +12,8 @@ export default defineConfig({
 
   // ダークモード設定
   conditions: {
-    dark: '@media (prefers-color-scheme: dark)',
-    light: '@media (prefers-color-scheme: light)',
+    dark: '.dark &, [data-theme="dark"] &',
+    light: '.light &, [data-theme="light"] &',
   },
 
   // Global CSS styles

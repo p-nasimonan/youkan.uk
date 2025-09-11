@@ -8,6 +8,9 @@ export default defineConfig({
   site: 'https://youkan.uk',
   base: '/',
   trailingSlash: 'always',
+  devToolbar: {
+    enabled: false
+  },
   markdown: {
     remarkPlugins: [remarkGfm],
     rehypePlugins: [rehypeHighlight],
