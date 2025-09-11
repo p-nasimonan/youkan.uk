@@ -1,6 +1,6 @@
 ---
 import Layout from '@layouts/Layout.astro';
-import SelectionScreen from '@components/SelectionScreen.astro';
+import IntroAnimation from '@components/IntroAnimation.astro';
 
 // 背景画像をインポート（最適化あり）
 import vrcBg from '@assets/images/backgrounds/vrc-bg.svg';
@@ -46,5 +46,5 @@ const metaProps = {
 ---
 
 <Layout {...metaProps}>
-  <SelectionScreen options={options} />
+  <IntroAnimation options={options} />
 </Layout>
