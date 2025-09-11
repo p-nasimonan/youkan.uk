@@ -147,17 +147,17 @@ const skipButton = css({
     }
 
     private init() {
-      // セッションストレージでイントロ表示状態をチェック
-      this.hasShownIntro = sessionStorage.getItem('intro-shown') === 'true';
+      // ブラウザバック検出：navigation timing APIを使用
+      const shouldSkipIntro = this.shouldSkipIntroAnimation();
       
-      if (this.hasShownIntro) {
-        // 既に表示済みの場合は即座にメイン画面を表示
+      if (shouldSkipIntro) {
+        // ブラウザバック時は即座にメイン画面を表示
         this.showMainScreen();
         return;
       }
       
-      // 初回アクセス時のみアニメーションを実行
-      sessionStorage.setItem('intro-shown', 'true');
+      // 初回またはページ間遷移時はアニメーションを実行
+      this.hasShownIntro = false;
       
       // スキップボタンのイベント
       this.skipButton.addEventListener('click', () => this.skipIntro());
@@ -168,6 +168,37 @@ const skipButton = css({
           this.showMainScreen();
         }
       }, 2000);
+    }
+
+    private shouldSkipIntroAnimation(): boolean {
+      const currentTime = Date.now();
+      const lastVisit = sessionStorage.getItem('last-intro-visit');
+      const visitCount = sessionStorage.getItem('intro-visit-count') || '0';
+      
+      // ブラウザバック検出：短時間での再訪問かつ訪問回数が1以上
+      if (lastVisit && parseInt(visitCount) > 0) {
+        const timeDiff = currentTime - parseInt(lastVisit);
+        
+        // 30秒以内の再訪問はブラウザバック扱い
+        if (timeDiff < 30000) {
+          return true;
+        }
+      }
+      
+      // ページ表示のエントリポイント検出
+      if (document.referrer && document.referrer.includes(window.location.origin)) {
+        // 同じサイト内からの遷移（ブラウザバックの可能性が高い）
+        const timeSinceLastVisit = lastVisit ? currentTime - parseInt(lastVisit) : Infinity;
+        if (timeSinceLastVisit < 60000) { // 1分以内
+          return true;
+        }
+      }
+      
+      // 訪問情報を更新
+      sessionStorage.setItem('last-intro-visit', currentTime.toString());
+      sessionStorage.setItem('intro-visit-count', (parseInt(visitCount) + 1).toString());
+      
+      return false;
     }
 
     private skipIntro() {
