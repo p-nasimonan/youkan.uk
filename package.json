@@ -22,7 +22,7 @@
     "@playwright/mcp": "^0.0.36",
     "@react-spring/web": "^10.0.1",
     "@types/node": "^24.3.0",
-    "astro": "^5.13.2",
+    "astro": "^5.14.1",
     "framer-motion": "^12.23.12",
     "github-markdown-css": "^5.8.1",
     "playwright": "^1.55.0",
