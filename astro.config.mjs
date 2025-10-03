@@ -16,6 +16,9 @@ export default defineConfig({
   site: 'https://youkan.uk',
   base: '/',
   trailingSlash: 'always',
+  experimental: {
+    clientPrerender: true,
+  },
   devToolbar: {
     enabled: false
   },
