@@ -1,0 +1,20 @@
+---
+// Google Analytics コンポーネント
+// 本番環境（import.meta.env.PROD === true）でのみ読み込まれます
+
+const GA_MEASUREMENT_ID = 'G-FPKJWBG70J';
+const isProd = import.meta.env.PROD;
+---
+
+{isProd && (
+  <>
+    <!-- Google tag (gtag.js) - Partytown経由で読み込み -->
+    <script type="text/partytown" src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}></script>
+    <script type="text/partytown">
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{GA_MEASUREMENT_ID}');
+    </script>
+  </>
+)}

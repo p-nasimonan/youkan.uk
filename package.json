@@ -19,6 +19,7 @@
     "panda": "panda codegen"
   },
   "dependencies": {
+    "@astrojs/partytown": "^2.1.4",
     "@playwright/mcp": "^0.0.36",
     "@react-spring/web": "^10.0.1",
     "@types/node": "^24.3.0",

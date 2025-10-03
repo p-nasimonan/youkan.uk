@@ -7,8 +7,7 @@ import FaviconMeta from "./internals/FaviconMeta.astro";
 import GtmMeta from "./internals/GtmMeta.astro";
 import OgpMeta from "./internals/OgpMeta.astro";
 import SecurityMeta from "./internals/SecurityMeta.astro";
-
-import { ViewTransitions } from "astro:transitions";
+import GoogleAnalytics from "./GoogleAnalytics.astro";
 
 import type { HeadMetaProps } from "./types";
 
@@ -31,6 +30,7 @@ const isProduction = import.meta.env.MODE === "production";
   ogp={props.ogp}
 />
 <GtmMeta />
+<GoogleAnalytics />
 <FaviconMeta />
 {isProduction ? <SecurityMeta /> : null}
 

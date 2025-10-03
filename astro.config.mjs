@@ -2,9 +2,17 @@
 import { defineConfig } from 'astro/config';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
+import partytown from '@astrojs/partytown';
 
 // https://astro.build/config
 export default defineConfig({
+  integrations: [
+    partytown({
+      config: {
+        forward: ['dataLayer.push'],
+      },
+    }),
+  ],
   site: 'https://youkan.uk',
   base: '/',
   trailingSlash: 'always',
