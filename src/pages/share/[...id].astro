@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import { getFileById } from "../../consts/files";
 
 export const prerender = false;
 
@@ -10,14 +11,19 @@ if (!id) {
 }
 
 const fileId = id;
-const fileUrl = `https://s3.youkan.uk/misskey/${fileId}`;
+// Find if we have a local definition for this ID
+const localFile = getFileById(fileId);
 
-// Simple heuristic to guess if it might be an image (not perfect without extension)
-// But purely based on the user's request, we just show the download options.
-// We can try to display it as an image with onerror fallback to hide it.
+// If local definition exists, use its path. Otherwise fallback to S3 (legacy support or unlisted files)
+const fileUrl = localFile
+    ? localFile.filePath
+    : `https://s3.youkan.uk/misskey/${fileId}`;
+
+const title = localFile ? localFile.title : "Shared File";
+const isLocal = !!localFile;
 ---
 
-<Layout title="Shared File | youkan.uk">
+<Layout title={`${title} | youkan.uk`}>
     <main>
         <div class="glass-panel content-card">
             <div class="icon-wrapper">
@@ -39,15 +45,19 @@ const fileUrl = `https://s3.youkan.uk/misskey/${fileId}`;
                 </svg>
             </div>
 
-            <h1>File Shared</h1>
+            <h1>{title}</h1>
             <p class="file-id">ID: {fileId}</p>
 
             <div class="preview-container">
+                {/* Only show preview if it's an image or we aren't sure */}
                 <img
                     src={fileUrl}
                     alt="File Preview"
                     class="file-preview"
                     onerror="this.style.display='none'"
+                    style={localFile && !localFile.isImage
+                        ? "display: none;"
+                        : ""}
                 />
             </div>
 
@@ -97,7 +107,12 @@ const fileUrl = `https://s3.youkan.uk/misskey/${fileId}`;
     const copyBtn = document.getElementById("copy-btn");
     if (copyBtn) {
         copyBtn.addEventListener("click", () => {
-            const url = copyBtn.dataset.url;
+            // If data-url is relative, make it absolute for copying
+            let url = copyBtn.dataset.url;
+            if (url && url.startsWith("/")) {
+                url = window.location.origin + url;
+            }
+
             if (url) {
                 navigator.clipboard.writeText(url).then(() => {
                     const originalText = copyBtn.innerHTML;

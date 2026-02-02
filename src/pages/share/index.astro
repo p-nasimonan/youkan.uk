@@ -1,15 +1,8 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import { sharedFiles } from "../../consts/files";
 
-// Hardcoded list of shared files for now
-const files = [
-    {
-        id: "740b82cf-000f-4c56-8e35-2472160b1b69",
-        title: "Mac EXIF Extractor",
-        description: "Macで画像のEXIFを取り出すものでzipです",
-        date: "2026-01-30",
-    },
-];
+const files = sharedFiles;
 ---
 
 <Layout title="Shared Files | youkan.uk">
