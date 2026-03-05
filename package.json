@@ -3,8 +3,8 @@
 	"type": "module",
 	"version": "0.0.1",
 	"scripts": {
-		"dev": "astro dev",
-		"build": "astro build",
+		"dev": "panda codegen --watch & astro dev",
+		"build": "panda codegen && astro build",
 		"preview": "astro preview",
 		"astro": "astro",
 		"lint": "biome check --write ."
