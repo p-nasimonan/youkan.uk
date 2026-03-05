@@ -1,0 +1,40 @@
+---
+import { css } from "../../styled-system/css";
+---
+
+<div
+    class={css({
+        position: "fixed",
+        top: "5%",
+        right: "5%",
+        width: "100px",
+        height: "100px",
+        borderRadius: "50%",
+        backgroundColor: "#fdf6e3", // Moon color
+        boxShadow: "0 0 20px 5px rgba(253, 246, 227, 0.4)",
+        animation: "float 6s ease-in-out infinite",
+        zIndex: 0,
+        pointerEvents: "none",
+        _before: {
+            content: '""',
+            position: "absolute",
+            top: "20px",
+            left: "20px",
+            width: "15px",
+            height: "15px",
+            borderRadius: "50%",
+            backgroundColor: "rgba(230, 230, 230, 0.3)",
+        },
+        _after: {
+            content: '""',
+            position: "absolute",
+            top: "40px",
+            left: "50px",
+            width: "10px",
+            height: "10px",
+            borderRadius: "50%",
+            backgroundColor: "rgba(230, 230, 230, 0.3)",
+        },
+    })}
+>
+</div>

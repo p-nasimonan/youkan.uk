@@ -1,0 +1,173 @@
+---
+import { css } from "../../styled-system/css";
+
+const sectionStyles = css({
+	minHeight: "100vh",
+	padding: "4rem 2rem",
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "center",
+	position: "relative",
+	zIndex: 1,
+});
+
+const containerGrid = css({
+	display: "grid",
+	gridTemplateColumns: "1fr",
+	gap: "4rem",
+	maxWidth: "1000px",
+	width: "100%",
+	alignItems: "center",
+	md: {
+		gridTemplateColumns: "1fr 1fr",
+	},
+});
+
+const polaroidStyles = css({
+	backgroundColor: "white",
+	padding: "1rem 1rem 3rem 1rem",
+	boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
+	transform: "rotate(-3deg)",
+	transition: "transform 0.3s ease",
+	_hover: {
+		transform: "rotate(0deg) scale(1.02)",
+		boxShadow: "0 8px 25px rgba(0,0,0,0.15)",
+	},
+});
+
+const polaroidImage = css({
+	width: "100%",
+	aspectRatio: "3/4",
+	backgroundColor: "#ddd",
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "center",
+	color: "#888",
+	fontSize: "1.2rem",
+	marginBottom: "1rem",
+});
+
+const infoStyles = css({
+	display: "flex",
+	flexDirection: "column",
+	gap: "1.5rem",
+});
+
+const bioStyles = css({
+	fontSize: "1.2rem",
+	lineHeight: "1.8",
+	transform: "rotate(1deg)",
+	backgroundColor: "white",
+	padding: "2rem",
+	borderRadius: "20px", // Sticker effect
+	boxShadow: "2px 2px 0px rgba(0,0,0,0.05)",
+	border: "2px dashed #e0e0e0",
+});
+
+const audioPlayerStyles = css({
+	backgroundColor: "#1a1a2e",
+	color: "white",
+	padding: "1.5rem",
+	borderRadius: "10px",
+	display: "flex",
+	alignItems: "center",
+	gap: "1rem",
+	boxShadow: "0 5px 15px rgba(0,0,0,0.2)",
+	marginTop: "1rem",
+});
+
+const playBtn = css({
+	width: "40px",
+	height: "40px",
+	borderRadius: "50%",
+	backgroundColor: "#ff6b6b",
+	border: "none",
+	cursor: "alias", // using custom cursor
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "center",
+	transition: "transform 0.2s",
+	_active: {
+		transform: "scale(0.9)",
+	},
+});
+---
+
+<section class={sectionStyles}>
+    <div class={containerGrid}>
+        <!-- Left: Polaroid -->
+        <div class={polaroidStyles}>
+            <div class={polaroidImage}>Image Placeholder</div>
+            <div
+                class={css({
+                    textAlign: "center",
+                    fontFamily: '"Zen Maru Gothic", sans-serif',
+                    fontWeight: "bold",
+                })}
+            >
+                #家猫ようかん #VTuber
+            </div>
+        </div>
+
+        <!-- Right: Info -->
+        <div class={infoStyles}>
+            <h2
+                class={css({
+                    fontSize: "2.5rem",
+                    marginBottom: "1rem",
+                    color: "#4a4a4a",
+                })}
+            >
+                Who Am I?
+            </h2>
+
+            <div class={bioStyles}>
+                <p>ようかんです。</p>
+                <p>猫</p>
+                <p>おうちです</p>
+            </div>
+
+            <!-- Voice Player -->
+            <div class={audioPlayerStyles}>
+                <button class={playBtn} aria-label="Play Voice">▶</button>
+                <div>
+                    <div class={css({ fontSize: "0.9rem", opacity: 0.8 })}>
+                        00:00 / 00:15
+                    </div>
+                    <div class={css({ fontWeight: "bold" })}>
+                        Click to Listen! 🎧
+                    </div>
+                </div>
+                <!-- Decorative Tape Wheels -->
+                <div
+                    class={css({
+                        display: "flex",
+                        gap: "5px",
+                        marginLeft: "auto",
+                    })}
+                >
+                    <div
+                        class={css({
+                            width: "20px",
+                            height: "20px",
+                            borderRadius: "50%",
+                            border: "2px solid #555",
+                            animation: "spin 2s linear infinite paused",
+                        })}
+                    >
+                    </div>
+                    <div
+                        class={css({
+                            width: "20px",
+                            height: "20px",
+                            borderRadius: "50%",
+                            border: "2px solid #555",
+                            animation: "spin 2s linear infinite paused",
+                        })}
+                    >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

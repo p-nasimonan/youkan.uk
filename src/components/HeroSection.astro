@@ -1,0 +1,80 @@
+---
+import { css } from "../../styled-system/css";
+
+const heroStyles = css({
+	height: "100vh",
+	position: "relative",
+	overflow: "hidden",
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "center",
+	flexDirection: "column",
+	textAlign: "center",
+});
+
+const videoStyles = css({
+	position: "absolute",
+	top: 0,
+	left: 0,
+	width: "100%",
+	height: "100%",
+	objectFit: "cover",
+	zIndex: 0,
+});
+
+const overlayStyles = css({
+	position: "absolute",
+	top: 0,
+	left: 0,
+	width: "100%",
+	height: "100%",
+	background: "rgba(255,255,255,0.35)",
+	zIndex: 1,
+});
+
+const contentStyles = css({
+	position: "relative",
+	zIndex: 2,
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "center",
+	flexDirection: "column",
+});
+
+const titleStyles = css({
+	fontSize: "4rem",
+	fontWeight: "bold",
+	color: "#4a4a4a",
+	marginBottom: "1rem",
+	textShadow: "2px 2px 0px rgba(0,0,0,0.1)",
+});
+
+const subtitleStyles = css({
+	fontSize: "1.5rem",
+	color: "#555",
+	marginBottom: "2rem",
+	letterSpacing: "0.1em",
+});
+---
+
+<section class={heroStyles}>
+    <video
+        class={videoStyles}
+        src="/hero.webm"
+        autoplay
+        loop
+        muted
+        playsinline
+    >
+    </video>
+    <div class={overlayStyles}></div>
+
+    <div class={contentStyles}>
+        <h1 class={titleStyles}>ようかん</h1>
+        <p class={subtitleStyles}>Dev & VTuber / House Cat</p>
+
+        <div class={css({ marginTop: "2rem", fontSize: "1.2rem", color: "#666" })}>
+            Scroll Down ↓
+        </div>
+    </div>
+</section>

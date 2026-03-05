@@ -1,13 +1,13 @@
 ---
-import Layout from "../../layouts/Layout.astro";
 import { getFileById } from "../../consts/files";
+import Layout from "../../layouts/Layout.astro";
 
 export const prerender = false;
 
 const { id } = Astro.params;
 
 if (!id) {
-    return Astro.redirect("/");
+	return Astro.redirect("/");
 }
 
 const fileId = id;
@@ -16,8 +16,8 @@ const localFile = getFileById(fileId);
 
 // If local definition exists, use its path. Otherwise fallback to S3 (legacy support or unlisted files)
 const fileUrl = localFile
-    ? localFile.filePath
-    : `https://s3.youkan.uk/misskey/${fileId}`;
+	? localFile.filePath
+	: `https://s3.youkan.uk/misskey/${fileId}`;
 
 const title = localFile ? localFile.title : "Shared File";
 const isLocal = !!localFile;
