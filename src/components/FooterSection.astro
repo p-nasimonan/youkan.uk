@@ -1,5 +1,6 @@
 ---
 import { css } from "../../styled-system/css";
+import { socialLinks } from "../consts/links";
 
 const footerStyles = css({
 	padding: "4rem 2rem",
@@ -66,34 +67,17 @@ const copyrightStyles = css({
     </h2>
 
     <div class={stickersContainer}>
-        <a
-            href="#"
-            class={stickerLink}
-            style="transform: rotate(-10deg); background-color: #1da1f2; color: white;"
-        >
-            Twitter
-        </a>
-        <a
-            href="#"
-            class={stickerLink}
-            style="transform: rotate(5deg); background-color: #333; color: white;"
-        >
-            GitHub
-        </a>
-        <a
-            href="#"
-            class={stickerLink}
-            style="transform: rotate(-5deg); background-color: #55acee; color: white;"
-        >
-            Bluesky
-        </a>
-        <a
-            href="#"
-            class={stickerLink}
-            style="transform: rotate(15deg); background-color: #9146ff; color: white;"
-        >
-            Misskey
-        </a>
+        {socialLinks.map((link) => (
+            <a
+                href={link.url}
+                class={stickerLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={`transform: rotate(${link.rotate}); background-color: ${link.color}; color: white;`}
+            >
+                {link.label}
+            </a>
+        ))}
     </div>
 
     <div class={copyrightStyles}>
