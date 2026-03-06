@@ -1,14 +1,17 @@
 ---
-import { css } from "../../styled-system/css";
+import { css } from "@styled/css";
+import WaveDivider from "../WaveDivider.astro";
 
 const sectionStyles = css({
 	minHeight: "100vh",
-	padding: "4rem 2rem",
+	padding: "9rem 2rem 8rem",  // extra padding for the big waves (128px each side)
 	display: "flex",
 	alignItems: "center",
 	justifyContent: "center",
 	position: "relative",
 	zIndex: 1,
+	overflow: "hidden",
+	// transparent: video shows through
 });
 
 const containerGrid = css({
@@ -59,7 +62,7 @@ const bioStyles = css({
 	transform: "rotate(1deg)",
 	backgroundColor: "white",
 	padding: "2rem",
-	borderRadius: "20px", // Sticker effect
+	borderRadius: "20px",
 	boxShadow: "2px 2px 0px rgba(0,0,0,0.05)",
 	border: "2px dashed #e0e0e0",
 });
@@ -82,7 +85,7 @@ const playBtn = css({
 	borderRadius: "50%",
 	backgroundColor: "#ff6b6b",
 	border: "none",
-	cursor: "alias", // using custom cursor
+	cursor: "alias",
 	display: "flex",
 	alignItems: "center",
 	justifyContent: "center",
@@ -93,7 +96,11 @@ const playBtn = css({
 });
 ---
 
-<section class={sectionStyles}>
+<!-- data-animate on section: the entire section (including wave) slides in together -->
+<section id="about" class={sectionStyles} data-animate>
+	<!-- Big wave from LinksSection (white) framing this transparent section -->
+	<WaveDivider fill="white" big />
+
     <div class={containerGrid}>
         <!-- Left: Polaroid -->
         <div class={polaroidStyles}>
@@ -105,7 +112,7 @@ const playBtn = css({
                     fontWeight: "bold",
                 })}
             >
-                #家猫ようかん #VTuber
+                #家猫ようかん #ぷぷりえ
             </div>
         </div>
 
@@ -118,56 +125,34 @@ const playBtn = css({
                     color: "#4a4a4a",
                 })}
             >
-                Who Am I?
+                About me
             </h2>
 
             <div class={bioStyles}>
                 <p>ようかんです。</p>
-                <p>猫</p>
-                <p>おうちです</p>
-            </div>
-
-            <!-- Voice Player -->
-            <div class={audioPlayerStyles}>
-                <button class={playBtn} aria-label="Play Voice">▶</button>
-                <div>
-                    <div class={css({ fontSize: "0.9rem", opacity: 0.8 })}>
-                        00:00 / 00:15
-                    </div>
-                    <div class={css({ fontWeight: "bold" })}>
-                        Click to Listen! 🎧
-                    </div>
-                </div>
-                <!-- Decorative Tape Wheels -->
-                <div
-                    class={css({
-                        display: "flex",
-                        gap: "5px",
-                        marginLeft: "auto",
-                    })}
-                >
-                    <div
-                        class={css({
-                            width: "20px",
-                            height: "20px",
-                            borderRadius: "50%",
-                            border: "2px solid #555",
-                            animation: "spin 2s linear infinite paused",
-                        })}
-                    >
-                    </div>
-                    <div
-                        class={css({
-                            width: "20px",
-                            height: "20px",
-                            borderRadius: "50%",
-                            border: "2px solid #555",
-                            animation: "spin 2s linear infinite paused",
-                        })}
-                    >
-                    </div>
-                </div>
+                <p>にゃんにゃん</p>
+                <p>なんでもやさんです！</p>
             </div>
         </div>
     </div>
+
+	<!-- Big wave into WorksSection (white) -->
+	<div class="wave-wrapper wave-wrapper--bottom wave-wrapper--big" style="animation: waveScroll 13s linear infinite reverse;">
+		<svg class="wave-svg" viewBox="0 0 2880 128" preserveAspectRatio="none">
+			<path
+				d="M0,0 L0,52 C30,115 90,8 150,73 C190,118 240,28 310,83 C370,106 420,20 490,78 C530,123 580,15 650,65 C700,110 760,20 830,68 C870,115 930,28 1000,72 C1050,118 1110,12 1180,68 C1220,112 1280,30 1440,52 C1470,115 1530,8 1590,73 C1630,118 1680,28 1750,83 C1810,106 1860,20 1930,78 C1970,123 2020,15 2090,65 C2140,110 2200,20 2270,68 C2310,115 2370,28 2440,72 C2490,118 2550,12 2620,68 C2660,112 2720,30 2880,52 L2880,128 L0,128 Z"
+				fill="white"
+			></path>
+		</svg>
+	</div>
+	<div class="wave-wrapper wave-wrapper--bottom wave-wrapper--big wave-frill-line" style="animation: waveScroll 16s linear infinite reverse;">
+		<svg class="wave-svg" viewBox="0 0 2880 128" preserveAspectRatio="none">
+			<path
+				d="M0,52 C30,115 90,8 150,73 C190,118 240,28 310,83 C370,106 420,20 490,78 C530,123 580,15 650,65 C700,110 760,20 830,68 C870,115 930,28 1000,72 C1050,118 1110,12 1180,68 C1220,112 1280,30 1440,52 C1470,115 1530,8 1590,73 C1630,118 1680,28 1750,83 C1810,106 1860,20 1930,78 C1970,123 2020,15 2090,65 C2140,110 2200,20 2270,68 C2310,115 2370,28 2440,72 C2490,118 2550,12 2620,68 C2660,112 2720,30 2880,52"
+				fill="none"
+				stroke="rgba(255,255,255,0.6)"
+				stroke-width="1.5"
+			></path>
+		</svg>
+	</div>
 </section>

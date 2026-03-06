@@ -1,0 +1,257 @@
+---
+import { css } from "@styled/css";
+import { socialLinks } from "@consts/links";
+import LinkIcon from "../LinkIcon.astro";
+import WaveDivider from "../WaveDivider.astro";
+
+// -- OGP image fetch (SSR) --
+function extractOgImage(html: string): string | null {
+	let m = html.match(
+		/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i,
+	);
+	if (m?.[1]) return m[1];
+	m = html.match(
+		/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i,
+	);
+	return m?.[1] ?? null;
+}
+
+const ogpImages: Record<string, string | null> = {};
+await Promise.all(
+	socialLinks
+		.filter((l) => l.icon === "ogp")
+		.map(async (link) => {
+			try {
+				const controller = new AbortController();
+				const tid = setTimeout(() => controller.abort(), 3000);
+				const res = await fetch(link.url, {
+					signal: controller.signal,
+					headers: { "User-Agent": "facebookexternalhit/1.1" },
+				});
+				clearTimeout(tid);
+				ogpImages[link.url] = extractOgImage(await res.text());
+			} catch {
+				ogpImages[link.url] = null;
+			}
+		}),
+);
+
+const featured = socialLinks.filter((l) => l.isHomeServer);
+const others = socialLinks.filter((l) => !l.isHomeServer);
+
+// -- Styles --
+const sectionStyles = css({
+	padding: "5rem 2rem 4rem",
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "center",
+	position: "relative",
+	zIndex: 1,
+	overflow: "hidden",
+	backgroundColor: "white",
+});
+
+const containerStyles = css({
+	maxWidth: "900px",
+	width: "100%",
+});
+
+const titleStyles = css({
+	fontSize: "2.5rem",
+	fontWeight: "bold",
+	textAlign: "center",
+	marginBottom: "3rem",
+	color: "#4a4a4a",
+	fontFamily: '"Zen Maru Gothic", sans-serif',
+});
+
+const featuredCardStyles = css({
+	display: "block",
+	textDecoration: "none",
+	backgroundColor: "rgba(255, 255, 255, 0.85)",
+	backdropFilter: "blur(16px)",
+	borderRadius: "24px",
+	padding: "2rem 2.5rem",
+	marginBottom: "1.5rem",
+	border: "2px solid rgba(145, 70, 255, 0.25)",
+	boxShadow: "0 6px 24px rgba(145, 70, 255, 0.12), 0 2px 8px rgba(0,0,0,0.06)",
+	color: "#333",
+	transition: "transform 0.3s ease, box-shadow 0.3s ease",
+	_hover: {
+		transform: "translateY(-4px)",
+		boxShadow:
+			"0 12px 36px rgba(145, 70, 255, 0.2), 0 4px 16px rgba(0,0,0,0.08)",
+	},
+});
+
+const gridStyles = css({
+	display: "grid",
+	gridTemplateColumns: "repeat(2, 1fr)",
+	gap: "1rem",
+	sm: { gridTemplateColumns: "repeat(3, 1fr)" },
+	md: { gridTemplateColumns: "repeat(4, 1fr)" },
+});
+
+const cardStyles = css({
+	display: "flex",
+	flexDirection: "column",
+	alignItems: "center",
+	gap: "0.6rem",
+	textDecoration: "none",
+	backgroundColor: "rgba(255, 255, 255, 0.85)",
+	backdropFilter: "blur(16px)",
+	borderRadius: "18px",
+	padding: "1.5rem 1rem",
+	color: "#333",
+	boxShadow: "0 3px 16px rgba(0,0,0,0.07)",
+	border: "1.5px solid rgba(255,255,255,0.9)",
+	transition:
+		"transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease",
+	_hover: {
+		transform: "translateY(-4px) scale(1.03)",
+		boxShadow: "0 8px 28px rgba(0,0,0,0.11)",
+	},
+});
+
+const ogpCardStyles = css({
+	position: "relative",
+	overflow: "hidden",
+	borderRadius: "18px",
+	minHeight: "130px",
+	textDecoration: "none",
+	boxShadow: "0 3px 16px rgba(0,0,0,0.1)",
+	transition: "transform 0.25s ease, box-shadow 0.25s ease",
+	_hover: {
+		transform: "translateY(-4px) scale(1.03)",
+		boxShadow: "0 8px 28px rgba(0,0,0,0.18)",
+	},
+});
+---
+
+<section id="links" class={sectionStyles} data-animate>
+	<!-- Wave from HeroSection (white) -->
+	<WaveDivider fill="white" />
+
+	<div class={containerStyles}>
+		<h2 class={titleStyles}>リンク</h2>
+
+		<!-- Featured cards (isHomeServer) — links.ts で isHomeServer: true にするだけで追加可能 -->
+		{
+			featured.map((link) => (
+				<a
+					href={link.url}
+					class={featuredCardStyles}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<div
+						style={`display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;`}
+					>
+						<div
+							style={`width: 56px; height: 56px; border-radius: 14px; background: ${link.color}; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden;`}
+						>
+							<LinkIcon icon={link.icon} color="white" size={32} ogpSrc={null} />
+						</div>
+						<div style="flex: 1;">
+							<div
+								style={`display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.25rem;`}
+							>
+								<span
+									style={`font-size: 1.3rem; font-weight: bold; color: ${link.color}; font-family: 'Zen Maru Gothic', sans-serif;`}
+								>
+									{link.label}
+								</span>
+								{link.isHomeServer && (
+									<span
+										style={`font-size: 0.72rem; font-weight: bold; background: ${link.color}; color: white; padding: 0.15rem 0.5rem; border-radius: 20px; letter-spacing: 0.04em;`}
+									>
+										自宅サーバー
+									</span>
+								)}
+							</div>
+							{link.description && (
+								<div style="font-size: 0.9rem; color: #666;">
+									{link.description}
+								</div>
+							)}
+						</div>
+					</div>
+				</a>
+			))
+		}
+
+		<!-- Grid links — links.ts にエントリを追加するだけで自動反映 -->
+		<div class={gridStyles}>
+			{
+				others.map((link) => {
+					const ogp = link.icon === "ogp" ? ogpImages[link.url] : null;
+					if (ogp) {
+						return (
+							<a href={link.url} class={ogpCardStyles} target="_blank" rel="noopener noreferrer">
+								<img
+									src={ogp}
+									alt={link.label}
+									style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"
+								/>
+								<span style="position:absolute;bottom:0;left:0;right:0;padding:0.4rem 0.6rem 0.6rem;font-size:0.85rem;font-weight:bold;color:white;background:linear-gradient(transparent,rgba(0,0,0,0.55));text-align:center;font-family:'Zen Maru Gothic',sans-serif;">
+									{link.label}
+								</span>
+							</a>
+						);
+					}
+					return (
+						<a
+							href={link.url}
+							class={cardStyles}
+							target="_blank"
+							rel="noopener noreferrer"
+							style={`--card-color: ${link.color}`}
+						>
+							<div
+								style={`width: 48px; height: 48px; border-radius: 12px; background: ${link.color}; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;`}
+							>
+								<LinkIcon icon={link.icon} color="white" size={28} ogpSrc={null} />
+							</div>
+							<span
+								style={`font-size: 0.95rem; font-weight: bold; color: #4a4a4a; font-family: 'Zen Maru Gothic', sans-serif; text-align: center;`}
+							>
+								{link.label}
+							</span>
+							{link.description && (
+								<span style="font-size: 0.75rem; color: #888; text-align: center;">
+									{link.description}
+								</span>
+							)}
+						</a>
+					);
+				})
+			}
+		</div>
+	</div>
+
+	<!-- Big irregular wave into transparent AboutSection -->
+	<div class="wave-wrapper wave-wrapper--bottom wave-wrapper--big" style="animation: waveScroll 11s linear infinite;">
+		<svg class="wave-svg" viewBox="0 0 2880 128" preserveAspectRatio="none">
+			<path
+				d="M0,0 L0,52 C30,115 90,8 150,73 C190,118 240,28 310,83 C370,106 420,20 490,78 C530,123 580,15 650,65 C700,110 760,20 830,68 C870,115 930,28 1000,72 C1050,118 1110,12 1180,68 C1220,112 1280,30 1440,52 C1470,115 1530,8 1590,73 C1630,118 1680,28 1750,83 C1810,106 1860,20 1930,78 C1970,123 2020,15 2090,65 C2140,110 2200,20 2270,68 C2310,115 2370,28 2440,72 C2490,118 2550,12 2620,68 C2660,112 2720,30 2880,52 L2880,128 L0,128 Z"
+				fill="white"
+			></path>
+		</svg>
+	</div>
+	<div class="wave-wrapper wave-wrapper--bottom wave-wrapper--big wave-frill-line" style="animation: waveScroll 14s linear infinite;">
+		<svg class="wave-svg" viewBox="0 0 2880 128" preserveAspectRatio="none">
+			<path
+				d="M0,52 C30,115 90,8 150,73 C190,118 240,28 310,83 C370,106 420,20 490,78 C530,123 580,15 650,65 C700,110 760,20 830,68 C870,115 930,28 1000,72 C1050,118 1110,12 1180,68 C1220,112 1280,30 1440,52 C1470,115 1530,8 1590,73 C1630,118 1680,28 1750,83 C1810,106 1860,20 1930,78 C1970,123 2020,15 2090,65 C2140,110 2200,20 2270,68 C2310,115 2370,28 2440,72 C2490,118 2550,12 2620,68 C2660,112 2720,30 2880,52"
+				fill="none"
+				stroke="rgba(255,255,255,0.6)"
+				stroke-width="1.5"
+			></path>
+		</svg>
+	</div>
+</section>
+
+<style>
+	a:hover {
+		border-color: var(--card-color, rgba(200, 200, 200, 0.5)) !important;
+	}
+</style>

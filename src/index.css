@@ -2,13 +2,11 @@
 
 html,
 body {
-	background-color: token(colors.bg.cream);
-	color: token(colors.bg.night);
+	background-color: transparent;
+	color: #3a3a3a;
 	font-family: "Zen Maru Gothic", system-ui, sans-serif;
-	/* Placeholder for cute font */
 	min-height: 100vh;
 	margin: 0;
 	overflow-x: hidden;
 	cursor: none;
-	/* For custom cursor implementation later */
 }

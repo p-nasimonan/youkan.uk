@@ -1,5 +1,6 @@
 ---
-import { css } from "../../styled-system/css";
+import { css } from "@styled/css";
+import WaveDivider from "../WaveDivider.astro";
 
 const sectionStyles = css({
 	minHeight: "100vh",
@@ -106,7 +107,10 @@ const ramPos = css({ top: "40%", right: "30%" });
 const osPos = css({ bottom: "20%", left: "40%" });
 ---
 
-<section class={sectionStyles}>
+<section id="server" class={sectionStyles} data-animate>
+	<!-- Wave from WorksSection (white → this section's dark bg) -->
+	<WaveDivider fill="#1a1a1a" />
+
     <div class={backgroundOverlay}></div>
     <!-- Placeholder text for background image suggestion -->
     <div
@@ -122,8 +126,8 @@ const osPos = css({ bottom: "20%", left: "40%" });
         SERVER ROOM
     </div>
 
-    <div class={container}>
-        <h2 class={titleStyles}>My Secret Base</h2>
+    <div class={container} data-animate>
+        <h2 class={titleStyles}>サーバー</h2>
         <p
             class={css({
                 marginBottom: "2rem",
@@ -135,24 +139,6 @@ const osPos = css({ bottom: "20%", left: "40%" });
         </p>
 
         <div class={serverRackStyles}>
-            <!-- CPU Trigger -->
-            <div class={`${tooltipTrigger} ${cpuPos}`}>
-                <div class={`${tooltipStyles} tooltip`}>
-                    🔥 CPU: Ryzen 9 5950X
-                </div>
-            </div>
-
-            <!-- RAM Trigger -->
-            <div class={`${tooltipTrigger} ${ramPos}`}>
-                <div class={`${tooltipStyles} tooltip`}>🧠 RAM: 64GB DDR4</div>
-            </div>
-
-            <!-- OS Trigger -->
-            <div class={`${tooltipTrigger} ${osPos}`}>
-                <div class={`${tooltipStyles} tooltip`}>
-                    🐧 OS: Ubuntu 22.04 LTS<br />Kernel: 5.15.0
-                </div>
-            </div>
 
             <!-- Handwritten style arrows (CSS shapes for simplicity) -->
             <div

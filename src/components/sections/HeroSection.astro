@@ -1,0 +1,104 @@
+---
+import { css } from "@styled/css";
+
+const heroStyles = css({
+	height: "100vh",
+	position: "relative",
+	overflow: "hidden",
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "center",
+	flexDirection: "column",
+	textAlign: "center",
+});
+
+const overlayStyles = css({
+	position: "absolute",
+	top: 0,
+	left: 0,
+	width: "100%",
+	height: "100%",
+	// Slightly stronger overlay so text is readable while video still shows through
+	background: "rgba(255,255,255,0.35)",
+	zIndex: 0,
+});
+
+const contentStyles = css({
+	position: "relative",
+	zIndex: 1,
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "center",
+	flexDirection: "column",
+});
+
+const titleStyles = css({
+	fontSize: "4rem",
+	fontWeight: "bold",
+	color: "#4a4a4a",
+	marginBottom: "1rem",
+	textShadow: "2px 2px 0px rgba(0,0,0,0.1)",
+});
+
+const subtitleStyles = css({
+	fontSize: "1.5rem",
+	color: "#555",
+	marginBottom: "2rem",
+	letterSpacing: "0.1em",
+});
+---
+
+<section id="hero" class={heroStyles}>
+	<div class={overlayStyles}></div>
+
+	<div class={contentStyles}>
+		<h1 class={titleStyles}>ようかん</h1>
+		<p class={subtitleStyles}>Dev & VTuber / House Cat</p>
+
+		<!-- Minimal voice player -->
+		<div id="voice-player" style="margin-top: 2rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+			<span style="font-size: 0.8rem; letter-spacing: 0.12em; color: #888; font-family: 'Zen Maru Gothic', sans-serif;">サンプルボイス</span>
+			<button
+				id="voice-play-btn"
+				aria-label="Play Voice Sample"
+				style="background: none; border: 1px solid rgba(100,100,120,0.35); border-radius: 50%; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #666; transition: border-color 0.2s, color 0.2s;"
+			>
+				<svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor">
+					<path d="M0 0 L12 7 L0 14 Z" />
+				</svg>
+			</button>
+			<audio id="voice-audio" src="/voice/sample.mp3" preload="none"></audio>
+		</div>
+	</div>
+
+	<script>
+		const btn = document.getElementById("voice-play-btn");
+		const audio = document.getElementById("voice-audio") as HTMLAudioElement | null;
+		const playIcon = `<svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor"><path d="M0 0 L12 7 L0 14 Z" /></svg>`;
+		const pauseIcon = `<svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><rect x="0" y="0" width="3" height="14"/><rect x="7" y="0" width="3" height="14"/></svg>`;
+		if (btn && audio) {
+			btn.addEventListener("click", () => {
+				if (audio.paused) {
+					audio.play();
+					btn.innerHTML = pauseIcon;
+				} else {
+					audio.pause();
+					btn.innerHTML = playIcon;
+				}
+			});
+			audio.addEventListener("ended", () => {
+				btn.innerHTML = playIcon;
+			});
+		}
+	</script>
+
+	<!-- Frill wave pours into LinksSection (white) -->
+	<div class="wave-wrapper wave-wrapper--bottom" style="animation: waveScroll 10s linear infinite;">
+		<svg class="wave-svg" viewBox="0 0 2880 64" preserveAspectRatio="none">
+			<path
+				d="M0,0 L0,26 C60,56 120,0 180,26 C240,56 300,0 360,26 C420,56 480,0 540,26 C600,56 660,0 720,26 C780,56 840,0 900,26 C960,56 1020,0 1080,26 C1140,56 1200,0 1260,26 C1320,56 1380,0 1440,26 C1500,56 1560,0 1620,26 C1680,56 1740,0 1800,26 C1860,56 1920,0 1980,26 C2040,56 2100,0 2160,26 C2220,56 2280,0 2340,26 C2400,56 2460,0 2520,26 C2580,56 2640,0 2700,26 C2760,56 2820,0 2880,26 L2880,64 L0,64 Z"
+				fill="white"
+			></path>
+		</svg>
+	</div>
+</section>

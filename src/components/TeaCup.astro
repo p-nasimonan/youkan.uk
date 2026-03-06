@@ -1,58 +1,148 @@
 ---
-import { css } from "../../styled-system/css";
+import { css } from "@styled/css";
+
+const menuItems = [
+	{ href: "#hero", label: "Top" },
+	{ href: "#about", label: "About" },
+	{ href: "#links", label: "Links" },
+	{ href: "#works", label: "Works" },
+	{ href: "#server", label: "Server" },
+];
 ---
 
-<div
-    class={css({
-        position: "fixed",
-        bottom: "5%",
-        left: "5%",
-        width: "60px",
-        height: "40px",
-        backgroundColor: "white",
-        borderRadius: "0 0 30px 30px",
-        border: "2px solid #e0e0e0",
-        zIndex: 10,
-        _before: {
-            // Handle
-            content: '""',
-            position: "absolute",
-            top: "5px",
-            right: "-15px",
-            width: "20px",
-            height: "20px",
-            borderRadius: "50%",
-            border: "3px solid white",
-        },
-    })}
->
-    <!-- Steam -->
-    <div
-        class={css({
-            position: "absolute",
-            top: "-30px",
-            left: "10px",
-            width: "8px",
-            height: "30px",
-            backgroundColor: "rgba(255, 255, 255, 0.5)",
-            borderRadius: "10px",
-            filter: "blur(3px)",
-            animation: "steam 2s infinite ease-out",
-        })}
-    >
-    </div>
-    <div
-        class={css({
-            position: "absolute",
-            top: "-20px",
-            left: "30px",
-            width: "8px",
-            height: "25px",
-            backgroundColor: "rgba(255, 255, 255, 0.5)",
-            borderRadius: "10px",
-            filter: "blur(3px)",
-            animation: "steam 2.5s infinite ease-out 0.5s",
-        })}
-    >
-    </div>
+<div id="teacup-root" style="position: fixed; bottom: 5%; left: 5%; z-index: 100;">
+	<!-- Navigation menu (hidden by default) -->
+	<nav
+		id="teacup-menu"
+		style="
+			position: absolute;
+			bottom: 70px;
+			left: 0;
+			background: rgba(255,255,255,0.92);
+			backdrop-filter: blur(12px);
+			border: 1px solid rgba(180,140,220,0.3);
+			border-radius: 18px;
+			padding: 0.6rem 0.4rem;
+			display: flex;
+			flex-direction: column;
+			gap: 0.15rem;
+			box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+			opacity: 0;
+			pointer-events: none;
+			transform: translateY(8px);
+			transition: opacity 0.25s ease, transform 0.25s ease;
+			min-width: 120px;
+		"
+	>
+		{menuItems.map((item) => (
+			<a
+				href={item.href}
+				style="
+					display: block;
+					padding: 0.45rem 1rem;
+					font-size: 0.85rem;
+					font-family: 'Zen Maru Gothic', sans-serif;
+					color: #5a4a6a;
+					text-decoration: none;
+					border-radius: 12px;
+					transition: background 0.15s;
+					white-space: nowrap;
+				"
+				class="teacup-menu-link"
+			>
+				{item.label}
+			</a>
+		))}
+	</nav>
+
+	<!-- Tea cup button -->
+	<button
+		id="teacup-btn"
+		aria-label="Navigation menu"
+		aria-expanded="false"
+		style="
+			position: relative;
+			width: 60px;
+			height: 40px;
+			background: white;
+			border: 2px solid #e0e0e0;
+			border-radius: 0 0 30px 30px;
+			cursor: pointer;
+			outline: none;
+			transition: border-color 0.2s;
+		"
+	>
+		<!-- Steam 1 -->
+		<div style="
+			position: absolute;
+			top: -30px;
+			left: 10px;
+			width: 8px;
+			height: 30px;
+			background: rgba(255,255,255,0.5);
+			border-radius: 10px;
+			filter: blur(3px);
+			animation: steam 2s infinite ease-out;
+			pointer-events: none;
+		"></div>
+		<!-- Steam 2 -->
+		<div style="
+			position: absolute;
+			top: -20px;
+			left: 30px;
+			width: 8px;
+			height: 25px;
+			background: rgba(255,255,255,0.5);
+			border-radius: 10px;
+			filter: blur(3px);
+			animation: steam 2.5s infinite ease-out 0.5s;
+			pointer-events: none;
+		"></div>
+		<!-- Handle -->
+		<div style="
+			position: absolute;
+			top: 5px;
+			right: -15px;
+			width: 20px;
+			height: 20px;
+			border-radius: 50%;
+			border: 3px solid white;
+			pointer-events: none;
+		"></div>
+	</button>
 </div>
+
+<style>
+	.teacup-menu-link:hover {
+		background: rgba(180, 140, 220, 0.12);
+	}
+</style>
+
+<script>
+	const btn = document.getElementById("teacup-btn");
+	const menu = document.getElementById("teacup-menu");
+	let open = false;
+
+	function setOpen(value: boolean) {
+		open = value;
+		if (menu) {
+			menu.style.opacity = open ? "1" : "0";
+			menu.style.pointerEvents = open ? "auto" : "none";
+			menu.style.transform = open ? "translateY(0)" : "translateY(8px)";
+		}
+		if (btn) btn.setAttribute("aria-expanded", String(open));
+	}
+
+	btn?.addEventListener("click", (e) => {
+		e.stopPropagation();
+		setOpen(!open);
+	});
+
+	// Close on outside click
+	document.addEventListener("click", () => setOpen(false));
+
+	// Close on nav link click (smooth scroll handled by browser #hash)
+	document.querySelectorAll(".teacup-menu-link").forEach((link) => {
+		link.addEventListener("click", () => setOpen(false));
+	});
+</script>

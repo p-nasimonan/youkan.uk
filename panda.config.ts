@@ -23,6 +23,14 @@ export default defineConfig({
 						night: { value: "#1a1a2e" },
 					},
 				},
+				animations: {
+					// Wave divider: wrapper is 200% wide, translateX(-50%) = 1 full loop
+					slowWave: { value: "waveScroll 10s linear infinite" },
+					// Section entrance triggered by IntersectionObserver (.is-visible)
+					sectionEnter: {
+						value: "sectionEnter 0.9s cubic-bezier(0.22, 1, 0.36, 1) both",
+					},
+				},
 			},
 			keyframes: {
 				float: {
@@ -37,6 +45,14 @@ export default defineConfig({
 					"0%": { transform: "scale(1)" },
 					"50%": { transform: "scale(1.2)" },
 					"100%": { transform: "scale(1)" },
+				},
+				waveScroll: {
+					"0%": { transform: "translateX(0)" },
+					"100%": { transform: "translateX(-50%)" },
+				},
+				sectionEnter: {
+					"0%": { opacity: "0", transform: "translateY(60px)" },
+					"100%": { opacity: "1", transform: "translateY(0)" },
 				},
 			},
 		},

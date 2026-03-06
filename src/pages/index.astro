@@ -1,11 +1,13 @@
 ---
-import AboutSection from "../components/AboutSection.astro";
-import FooterSection from "../components/FooterSection.astro";
+import AboutSection from "../components/sections/AboutSection.astro";
+import FooterSection from "../components/sections/FooterSection.astro";
 import GlobalLayout from "../components/GlobalLayout.astro";
-import HeroSection from "../components/HeroSection.astro";
+import HeroSection from "../components/sections/HeroSection.astro";
+import LinksSection from "../components/sections/LinksSection.astro";
+import WorksSection from "../components/sections/WorksSection.astro";
 import Moon from "../components/Moon.astro";
 import MouseStalker from "../components/MouseStalker.astro";
-import ServerSection from "../components/ServerSection.astro";
+import ServerSection from "../components/sections/ServerSection.astro";
 import TeaCup from "../components/TeaCup.astro";
 ---
 
@@ -16,7 +18,9 @@ import TeaCup from "../components/TeaCup.astro";
 
 	<main>
 		<HeroSection />
+		<LinksSection />
 		<AboutSection />
+		<WorksSection />
 		<ServerSection />
 	</main>
 
