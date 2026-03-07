@@ -55,7 +55,7 @@ const subtitleStyles = css({
 		<h1 class={titleStyles}>ようかん</h1>
 		<p class={subtitleStyles}>Dev & VTuber / House Cat</p>
 
-		<!-- Minimal voice player -->
+		<!-- サンプルボイス再生プレーヤー（シンプルデザイン） -->
 		<div id="voice-player" style="margin-top: 2rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
 			<span style="font-size: 0.8rem; letter-spacing: 0.12em; color: #888; font-family: 'Zen Maru Gothic', sans-serif;">サンプルボイス</span>
 			<button
@@ -72,6 +72,7 @@ const subtitleStyles = css({
 	</div>
 
 	<script>
+		// 再生ボタンのトグル処理
 		const btn = document.getElementById("voice-play-btn");
 		const audio = document.getElementById("voice-audio") as HTMLAudioElement | null;
 		const playIcon = `<svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor"><path d="M0 0 L12 7 L0 14 Z" /></svg>`;
@@ -92,13 +93,5 @@ const subtitleStyles = css({
 		}
 	</script>
 
-	<!-- Frill wave pours into LinksSection (white) -->
-	<div class="wave-wrapper wave-wrapper--bottom" style="animation: waveScroll 10s linear infinite;">
-		<svg class="wave-svg" viewBox="0 0 2880 64" preserveAspectRatio="none">
-			<path
-				d="M0,0 L0,26 C60,56 120,0 180,26 C240,56 300,0 360,26 C420,56 480,0 540,26 C600,56 660,0 720,26 C780,56 840,0 900,26 C960,56 1020,0 1080,26 C1140,56 1200,0 1260,26 C1320,56 1380,0 1440,26 C1500,56 1560,0 1620,26 C1680,56 1740,0 1800,26 C1860,56 1920,0 1980,26 C2040,56 2100,0 2160,26 C2220,56 2280,0 2340,26 C2400,56 2460,0 2520,26 C2580,56 2640,0 2700,26 C2760,56 2820,0 2880,26 L2880,64 L0,64 Z"
-				fill="white"
-			></path>
-		</svg>
-	</div>
+	<!-- Hero→Links の境界フリルは LinksSection の上波が担当するため下波不要 -->
 </section>

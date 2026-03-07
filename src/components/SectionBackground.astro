@@ -1,0 +1,133 @@
+---
+/**
+ * SectionBackground — セクションの背景色と上下のフリル波を管理するラッパーコンポーネント。
+ *
+ * 上波: フリルが上向きに突き出て、直前のセクションへ重なる
+ *       ベースラインをセクション上端に揃え、ピークが前セクションへ飛び出す
+ * 下波: フリルが下向きに垂れ下がって、直後のセクションへ重なる
+ *       ベースラインをセクション下端に揃え、谷が次セクションへ飛び出す
+ *
+ * overflow-x: clip を使い、横方向のみクリップ（縦は波が飛び出せる）
+ *
+ * 使い方:
+ *   <SectionBackground fill="white" id="links" bigBottom>
+ *     <div>...コンテンツ...</div>
+ *   </SectionBackground>
+ */
+import { css, cx } from "@styled/css";
+
+interface Props {
+	fill: string;
+	id?: string;
+	animate?: boolean;    // スクロールフェードイン（デフォルト: true）
+	bigTop?: boolean;     // 大きい上波（Aboutセクション隣接用、デフォルト: false）
+	bigBottom?: boolean;  // 大きい下波（Aboutセクション隣接用、デフォルト: false）
+	hasBottom?: boolean;  // 下波を描画するか（デフォルト: true）
+}
+
+const { fill, id, animate = true, bigTop = false, bigBottom = false, hasBottom = true } = Astro.props;
+
+// ===== PandaCSS: 波ラッパースタイル =====
+// 共通ベース
+const waveBase = css({
+	position: "absolute",
+	left: 0,
+	width: "200%",
+	pointerEvents: "none",
+	zIndex: 5,
+	lineHeight: 0,
+});
+
+// 上波（通常）: 64px、ベースy=42 → top=-42px でベースをセクション上端に揃える
+// ピーク(y=6)はセクション上端より36px上に飛び出す
+const topNormal = css({ top: "-42px", height: "64px" });
+
+// 上波（大）: 128px、ベースy=90 → top=-90px
+// ピーク(y=8)はセクション上端より82px上に飛び出す
+const topBig = css({ top: "-90px", height: "128px" });
+
+// 下波（通常）: 64px、ベースy=22（SVG上端から22px）→ bottom=-(64-22)=-42px
+// 谷(y=58)はセクション下端より36px下に飛び出す
+const botNormal = css({ bottom: "-42px", height: "64px" });
+
+// 下波（大）: 128px、ベースy=38 → bottom=-(128-38)=-90px
+// 谷(y=120)はセクション下端より82px下に飛び出す
+const botBig = css({ bottom: "-90px", height: "128px" });
+
+// SVG自体のスタイル
+const waveSvgClass = css({ display: "block", width: "100%", height: "100%" });
+
+// セクション本体
+const sectionClass = css({ position: "relative", overflowX: "clip" });
+
+const topClass = cx(waveBase, bigTop ? topBig : topNormal);
+const botClass = cx(waveBase, bigBottom ? botBig : botNormal);
+
+// ===== 上波パス（フリルが上に突き出る） =====
+// 制御点を両方ともピーク側に揃えることで、きれいな上向きアーチを描く。
+// 通常版: 64px、ベースy=42、ピークy=6、アーチ幅240px（12個）
+const TOP_FILL =
+	"M0,64 L0,42 C80,6 160,6 240,42 C320,6 400,6 480,42 C560,6 640,6 720,42 C800,6 880,6 960,42 C1040,6 1120,6 1200,42 C1280,6 1360,6 1440,42 C1520,6 1600,6 1680,42 C1760,6 1840,6 1920,42 C2000,6 2080,6 2160,42 C2240,6 2320,6 2400,42 C2480,6 2560,6 2640,42 C2720,6 2800,6 2880,42 L2880,64 Z";
+const TOP_STROKE =
+	"M0,42 C80,6 160,6 240,42 C320,6 400,6 480,42 C560,6 640,6 720,42 C800,6 880,6 960,42 C1040,6 1120,6 1200,42 C1280,6 1360,6 1440,42 C1520,6 1600,6 1680,42 C1760,6 1840,6 1920,42 C2000,6 2080,6 2160,42 C2240,6 2320,6 2400,42 C2480,6 2560,6 2640,42 C2720,6 2800,6 2880,42";
+
+// 大版: 128px、ベースy=90、ピークy=8、アーチ幅360px（8個）
+const BIG_TOP_FILL =
+	"M0,128 L0,90 C120,8 240,8 360,90 C480,8 600,8 720,90 C840,8 960,8 1080,90 C1200,8 1320,8 1440,90 C1560,8 1680,8 1800,90 C1920,8 2040,8 2160,90 C2280,8 2400,8 2520,90 C2640,8 2760,8 2880,90 L2880,128 Z";
+const BIG_TOP_STROKE =
+	"M0,90 C120,8 240,8 360,90 C480,8 600,8 720,90 C840,8 960,8 1080,90 C1200,8 1320,8 1440,90 C1560,8 1680,8 1800,90 C1920,8 2040,8 2160,90 C2280,8 2400,8 2520,90 C2640,8 2760,8 2880,90";
+
+// ===== 下波パス（フリルが下に垂れ下がる） =====
+// 制御点を両方とも谷側に揃えることで、きれいな下向きスカラップを描く。
+// fill を y=0 側で閉じることで「垂れ下がり」を表現。SVG反転不要。
+// 通常版: 64px、ベースy=22、谷y=58、アーチ幅240px（12個）
+const BOT_FILL =
+	"M0,0 L0,22 C80,58 160,58 240,22 C320,58 400,58 480,22 C560,58 640,58 720,22 C800,58 880,58 960,22 C1040,58 1120,58 1200,22 C1280,58 1360,58 1440,22 C1520,58 1600,58 1680,22 C1760,58 1840,58 1920,22 C2000,58 2080,58 2160,22 C2240,58 2320,58 2400,22 C2480,58 2560,58 2640,22 C2720,58 2800,58 2880,22 L2880,0 Z";
+const BOT_STROKE =
+	"M0,22 C80,58 160,58 240,22 C320,58 400,58 480,22 C560,58 640,58 720,22 C800,58 880,58 960,22 C1040,58 1120,58 1200,22 C1280,58 1360,58 1440,22 C1520,58 1600,58 1680,22 C1760,58 1840,58 1920,22 C2000,58 2080,58 2160,22 C2240,58 2320,58 2400,22 C2480,58 2560,58 2640,22 C2720,58 2800,58 2880,22";
+
+// 大版: 128px、ベースy=38、谷y=120、アーチ幅360px（8個）
+const BIG_BOT_FILL =
+	"M0,0 L0,38 C120,120 240,120 360,38 C480,120 600,120 720,38 C840,120 960,120 1080,38 C1200,120 1320,120 1440,38 C1560,120 1680,120 1800,38 C1920,120 2040,120 2160,38 C2280,120 2400,120 2520,38 C2640,120 2760,120 2880,38 L2880,0 Z";
+const BIG_BOT_STROKE =
+	"M0,38 C120,120 240,120 360,38 C480,120 600,120 720,38 C840,120 960,120 1080,38 C1200,120 1320,120 1440,38 C1560,120 1680,120 1800,38 C1920,120 2040,120 2160,38 C2280,120 2400,120 2520,38 C2640,120 2760,120 2880,38";
+
+// 使用するパスをビッグ版と通常版で切り替え
+const topFillPath   = bigTop    ? BIG_TOP_FILL   : TOP_FILL;
+const topStrokePath = bigTop    ? BIG_TOP_STROKE : TOP_STROKE;
+const topViewBox    = bigTop    ? "0 0 2880 128" : "0 0 2880 64";
+const topSpeed      = bigTop    ? "12s" : "10s";
+
+const botFillPath   = bigBottom ? BIG_BOT_FILL   : BOT_FILL;
+const botStrokePath = bigBottom ? BIG_BOT_STROKE : BOT_STROKE;
+const botViewBox    = bigBottom ? "0 0 2880 128" : "0 0 2880 64";
+const botSpeed      = bigBottom ? "13s" : "11s";
+---
+
+<section
+	id={id}
+	class={sectionClass}
+	style={`background: ${fill};`}
+	data-animate={animate ? "" : undefined}
+>
+	<!-- 上向きフリル波: このセクションの色が前のセクションへ突き出る -->
+	<div class={topClass} style={`animation: waveScroll ${topSpeed} linear infinite;`} aria-hidden="true">
+		<svg class={waveSvgClass} viewBox={topViewBox} preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+			<path d={topFillPath} fill={fill} />
+			<!-- 水色の水玉フリル線（塗りパスと同じSVG内で常に一致） -->
+			<path d={topStrokePath} fill="none" stroke="rgba(125,211,252,0.85)" stroke-width="4" stroke-linecap="round" stroke-dasharray="0 18" />
+		</svg>
+	</div>
+
+	<slot />
+
+	<!-- 下向きフリル波: このセクションの色が次のセクションへ垂れ下がる -->
+	{hasBottom && (
+		<div class={botClass} style={`animation: waveScroll ${botSpeed} linear infinite reverse;`} aria-hidden="true">
+			<svg class={waveSvgClass} viewBox={botViewBox} preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+				<path d={botFillPath} fill={fill} />
+				<path d={botStrokePath} fill="none" stroke="rgba(125,211,252,0.85)" stroke-width="4" stroke-linecap="round" stroke-dasharray="0 18" />
+			</svg>
+		</div>
+	)}
+</section>

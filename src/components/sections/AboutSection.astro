@@ -1,17 +1,18 @@
 ---
 import { css } from "@styled/css";
-import WaveDivider from "../WaveDivider.astro";
+
+// このセクションは背景なし（透過）で動画が見える。
+// 上下の大きいフリル波は隣接する LinksSection・WorksSection が担当する。
 
 const sectionStyles = css({
 	minHeight: "100vh",
-	padding: "9rem 2rem 8rem",  // extra padding for the big waves (128px each side)
+	padding: "5rem 2rem 5rem",
 	display: "flex",
 	alignItems: "center",
 	justifyContent: "center",
 	position: "relative",
 	zIndex: 1,
-	overflow: "hidden",
-	// transparent: video shows through
+	// background なし: 動画がそのまま透けて見える
 });
 
 const containerGrid = css({
@@ -26,6 +27,7 @@ const containerGrid = css({
 	},
 });
 
+// ポラロイド風写真カード
 const polaroidStyles = css({
 	backgroundColor: "white",
 	padding: "1rem 1rem 3rem 1rem",
@@ -56,6 +58,7 @@ const infoStyles = css({
 	gap: "1.5rem",
 });
 
+// 少し傾けた自己紹介カード
 const bioStyles = css({
 	fontSize: "1.2rem",
 	lineHeight: "1.8",
@@ -66,93 +69,43 @@ const bioStyles = css({
 	boxShadow: "2px 2px 0px rgba(0,0,0,0.05)",
 	border: "2px dashed #e0e0e0",
 });
-
-const audioPlayerStyles = css({
-	backgroundColor: "#1a1a2e",
-	color: "white",
-	padding: "1.5rem",
-	borderRadius: "10px",
-	display: "flex",
-	alignItems: "center",
-	gap: "1rem",
-	boxShadow: "0 5px 15px rgba(0,0,0,0.2)",
-	marginTop: "1rem",
-});
-
-const playBtn = css({
-	width: "40px",
-	height: "40px",
-	borderRadius: "50%",
-	backgroundColor: "#ff6b6b",
-	border: "none",
-	cursor: "alias",
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "center",
-	transition: "transform 0.2s",
-	_active: {
-		transform: "scale(0.9)",
-	},
-});
 ---
 
-<!-- data-animate on section: the entire section (including wave) slides in together -->
+<!-- data-animate: セクション全体がスクロール時にフェードイン -->
 <section id="about" class={sectionStyles} data-animate>
-	<!-- Big wave from LinksSection (white) framing this transparent section -->
-	<WaveDivider fill="white" big />
+	<div class={containerGrid}>
+		<!-- 左: ポラロイド写真 -->
+		<div class={polaroidStyles}>
+			<div class={polaroidImage}>Image Placeholder</div>
+			<div
+				class={css({
+					textAlign: "center",
+					fontFamily: '"Zen Maru Gothic", sans-serif',
+					fontWeight: "bold",
+				})}
+			>
+				#家猫ようかん #ぷぷりえ
+			</div>
+		</div>
 
-    <div class={containerGrid}>
-        <!-- Left: Polaroid -->
-        <div class={polaroidStyles}>
-            <div class={polaroidImage}>Image Placeholder</div>
-            <div
-                class={css({
-                    textAlign: "center",
-                    fontFamily: '"Zen Maru Gothic", sans-serif',
-                    fontWeight: "bold",
-                })}
-            >
-                #家猫ようかん #ぷぷりえ
-            </div>
-        </div>
+		<!-- 右: 自己紹介 -->
+		<div class={infoStyles}>
+			<h2
+				class={css({
+					fontSize: "2.5rem",
+					marginBottom: "1rem",
+					color: "#4a4a4a",
+					fontFamily: '"Zen Maru Gothic", sans-serif',
+				})}
+			>
+				About me
+			</h2>
 
-        <!-- Right: Info -->
-        <div class={infoStyles}>
-            <h2
-                class={css({
-                    fontSize: "2.5rem",
-                    marginBottom: "1rem",
-                    color: "#4a4a4a",
-                })}
-            >
-                About me
-            </h2>
-
-            <div class={bioStyles}>
-                <p>ようかんです。</p>
-                <p>にゃんにゃん</p>
-                <p>なんでもやさんです！</p>
-            </div>
-        </div>
-    </div>
-
-	<!-- Big wave into WorksSection (white) -->
-	<div class="wave-wrapper wave-wrapper--bottom wave-wrapper--big" style="animation: waveScroll 13s linear infinite reverse;">
-		<svg class="wave-svg" viewBox="0 0 2880 128" preserveAspectRatio="none">
-			<path
-				d="M0,0 L0,52 C30,115 90,8 150,73 C190,118 240,28 310,83 C370,106 420,20 490,78 C530,123 580,15 650,65 C700,110 760,20 830,68 C870,115 930,28 1000,72 C1050,118 1110,12 1180,68 C1220,112 1280,30 1440,52 C1470,115 1530,8 1590,73 C1630,118 1680,28 1750,83 C1810,106 1860,20 1930,78 C1970,123 2020,15 2090,65 C2140,110 2200,20 2270,68 C2310,115 2370,28 2440,72 C2490,118 2550,12 2620,68 C2660,112 2720,30 2880,52 L2880,128 L0,128 Z"
-				fill="white"
-			></path>
-		</svg>
-	</div>
-	<div class="wave-wrapper wave-wrapper--bottom wave-wrapper--big wave-frill-line" style="animation: waveScroll 16s linear infinite reverse;">
-		<svg class="wave-svg" viewBox="0 0 2880 128" preserveAspectRatio="none">
-			<path
-				d="M0,52 C30,115 90,8 150,73 C190,118 240,28 310,83 C370,106 420,20 490,78 C530,123 580,15 650,65 C700,110 760,20 830,68 C870,115 930,28 1000,72 C1050,118 1110,12 1180,68 C1220,112 1280,30 1440,52 C1470,115 1530,8 1590,73 C1630,118 1680,28 1750,83 C1810,106 1860,20 1930,78 C1970,123 2020,15 2090,65 C2140,110 2200,20 2270,68 C2310,115 2370,28 2440,72 C2490,118 2550,12 2620,68 C2660,112 2720,30 2880,52"
-				fill="none"
-				stroke="rgba(255,255,255,0.6)"
-				stroke-width="1.5"
-			></path>
-		</svg>
+			<div class={bioStyles}>
+				<p>ようかんです。</p>
+				<p>にゃんにゃん</p>
+				<p>なんでもやさんです！</p>
+			</div>
+		</div>
 	</div>
 </section>

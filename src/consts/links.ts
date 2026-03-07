@@ -30,7 +30,7 @@ export const socialLinks: SocialLink[] = [
 	{
 		label: "Misskey",
 		url: "https://mi.youkan.uk/@youkan",
-		color: "#9146ff",
+		color: "#54b468",
 		rotate: "5deg",
 		description: "@youkan@mi.youkan.uk",
 		isHomeServer: true,

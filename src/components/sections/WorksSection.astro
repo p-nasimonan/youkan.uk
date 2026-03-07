@@ -1,21 +1,19 @@
 ---
 import { css } from "@styled/css";
-import WaveDivider from "../WaveDivider.astro";
+import SectionBackground from "../SectionBackground.astro";
 
 // 将来的にここにコンテンツを追加する
 // type Work = { title: string; description: string; url?: string; tags: string[]; image?: string; };
 // const works: Work[] = [];
 
-const sectionStyles = css({
+// SectionBackground が position/overflow/backgroundColor を担当するためここでは不要
+const innerStyles = css({
 	minHeight: "60vh",
-	padding: "9rem 2rem 4rem",  // extra top padding for the big wave (128px)
+	padding: "9rem 2rem 4rem",  // 上波（128px）分の余白を確保
 	display: "flex",
 	alignItems: "center",
 	justifyContent: "center",
-	position: "relative",
 	zIndex: 1,
-	overflow: "hidden",
-	backgroundColor: "white",
 });
 
 const containerStyles = css({
@@ -43,24 +41,15 @@ const placeholderStyles = css({
 });
 ---
 
-<section id="works" class={sectionStyles} data-animate>
-	<!-- Big wave from transparent AboutSection (white) -->
-	<WaveDivider fill="white" big />
-
-	<div class={containerStyles}>
-		<h2 class={titleStyles}>作品</h2>
-		<div class={placeholderStyles}>
-			<p>準備中</p>
+<!-- bigTop: 上波を大きくしてAboutセクション（透過）との境界を強調 -->
+<!-- hasBottom={false}: 下波は ServerSection の上波が担当するため不要 -->
+<SectionBackground fill="white" id="works" bigTop hasBottom={false}>
+	<div class={innerStyles}>
+		<div class={containerStyles}>
+			<h2 class={titleStyles}>作品</h2>
+			<div class={placeholderStyles}>
+				<p>準備中</p>
+			</div>
 		</div>
 	</div>
-
-	<!-- Wave into ServerSection (#1a1a1a) -->
-	<div class="wave-wrapper wave-wrapper--bottom" style="animation: waveScroll 9s linear infinite reverse;">
-		<svg class="wave-svg" viewBox="0 0 2880 64" preserveAspectRatio="none">
-			<path
-				d="M0,0 L0,26 C60,56 120,0 180,26 C240,56 300,0 360,26 C420,56 480,0 540,26 C600,56 660,0 720,26 C780,56 840,0 900,26 C960,56 1020,0 1080,26 C1140,56 1200,0 1260,26 C1320,56 1380,0 1440,26 C1500,56 1560,0 1620,26 C1680,56 1740,0 1800,26 C1860,56 1920,0 1980,26 C2040,56 2100,0 2160,26 C2220,56 2280,0 2340,26 C2400,56 2460,0 2520,26 C2580,56 2640,0 2700,26 C2760,56 2820,0 2880,26 L2880,64 L0,64 Z"
-				fill="#1a1a1a"
-			></path>
-		</svg>
-	</div>
-</section>
+</SectionBackground>
