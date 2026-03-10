@@ -49,42 +49,108 @@ const wrapperStyles = css({
 </html>
 
 <script>
-	// スクロールアニメーション: [data-animate] 要素が画面内に入ったらフェードイン
+	// ===== スクロールフェードイン =====
+	// [data-animate] 要素が画面内に入ったら is-visible を付与（1回のみ）
 	const observer = new IntersectionObserver(
 		(entries) => {
 			for (const entry of entries) {
 				if (entry.isIntersecting) {
 					entry.target.classList.add("is-visible");
+					observer.unobserve(entry.target);
 				}
 			}
 		},
-		{ threshold: 0.05 },
+		{ threshold: 0.08 },
 	);
+	document.querySelectorAll("[data-animate]").forEach((el) => observer.observe(el));
 
-	document.querySelectorAll("[data-animate]").forEach((el) => {
-		observer.observe(el);
+	// ===== カスタムカーソル（水紋トレイル） =====
+	// cursor: none（index.css）に合わせて、ドット＋水紋を JS で管理する
+	const dot = document.createElement("div");
+	dot.id = "cursor-dot";
+	document.body.appendChild(dot);
+
+	// 最後の水紋生成時刻（スロットル用）
+	let lastRipple = 0;
+
+	function spawnRipple(x: number, y: number) {
+		const now = Date.now();
+		if (now - lastRipple < 65) return; // 約15fps でスポーン
+		lastRipple = now;
+		const el = document.createElement("div");
+		el.className = "cursor-ripple";
+		el.style.left = `${x}px`;
+		el.style.top  = `${y}px`;
+		document.body.appendChild(el);
+		// アニメーション終了後に削除
+		el.addEventListener("animationend", () => el.remove(), { once: true });
+	}
+
+	document.addEventListener("mousemove", (e) => {
+		dot.style.translate = `${e.clientX}px ${e.clientY}px`;
+		spawnRipple(e.clientX, e.clientY);
 	});
 </script>
 
 <!-- グローバルアニメーションスタイル（Astro のスコープを避けるため is:global） -->
 <style is:global>
-	/* ===== セクションスクロールアニメーション =====
-	   波はセクション内部の absolute 要素なので translateY と一緒に動き、分離しない */
+	/* ===== セクションコンテンツのフロートイン =====
+	   波は <section> 要素側（アニメーションなし）に固定されるため分離しない。
+	   [data-animate] はセクション内部の <div> に付与する。 */
 	[data-animate] {
 		opacity: 0;
-		transform: translateY(48px);
+		transform: translateY(52px);
+		will-change: transform, opacity;
 		transition:
-			opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1),
-			transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+			opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1),
+			transform 1.3s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 	[data-animate].is-visible {
 		opacity: 1;
 		transform: translateY(0);
 	}
 
-	/* ===== フリル波アニメーション（SectionBackground.astro から参照） ===== */
-	@keyframes waveScroll {
-		0%   { transform: translateX(0); }
-		100% { transform: translateX(-50%); }
+	/* ===== フリル波アニメーション =====
+	   background-position-x を1アーチ分シフトしてシームレスループ。
+	   通常アーチ: 240px、大アーチ: 360px */
+	@keyframes waveNorm {
+		from { background-position-x: 0; }
+		to   { background-position-x: -240px; }
+	}
+	@keyframes waveBig {
+		from { background-position-x: 0; }
+		to   { background-position-x: -360px; }
+	}
+
+	/* ===== カスタムカーソル ===== */
+	#cursor-dot {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: rgba(125, 211, 252, 0.9);
+		transform: translate(-50%, -50%);
+		pointer-events: none;
+		z-index: 9999;
+		mix-blend-mode: multiply;
+	}
+
+	/* 水紋トレイル: mousemove のたびに JS で生成・削除 */
+	.cursor-ripple {
+		position: fixed;
+		pointer-events: none;
+		z-index: 9997;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: rgba(125, 211, 252, 0.55);
+		animation: waterDrop 0.75s ease-out forwards;
+	}
+
+	@keyframes waterDrop {
+		0%   { transform: translate(-50%, -50%) scale(0.2); opacity: 0.6; }
+		100% { transform: translate(-50%, -50%) scale(4.0); opacity: 0;   }
 	}
 </style>
