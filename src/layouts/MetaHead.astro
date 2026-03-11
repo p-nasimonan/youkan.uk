@@ -2,18 +2,20 @@
 interface Props {
 	title?: string;
 	description?: string;
+	keywords?: string;
 	ogImage?: string;
 }
 
 const {
-	title       = "Ieneko Youkan's Room",
+	title = "ようかんのホームページ",
 	description = "家猫ようかんのホームページ。自宅サーバー・リンク・作品置き場。",
-	ogImage     = "/hero/videomock.png",
+	keywords = "ようかん, youkan, VRChat, ぷぷりえ",
+	ogImage = "/hero/videomock.png",
 } = Astro.props;
 
-const origin      = Astro.url.origin;
+const origin = Astro.url.origin;
 const canonicalUrl = `${origin}${Astro.url.pathname}`;
-const ogImageUrl   = `${origin}${ogImage}`;
+const ogImageUrl = `${origin}${ogImage}`;
 ---
 
 <meta charset="utf-8" />
@@ -27,20 +29,21 @@ const ogImageUrl   = `${origin}${ogImage}`;
 <link rel="canonical" href={canonicalUrl} />
 
 <!-- Open Graph -->
-<meta property="og:type"        content="website" />
-<meta property="og:locale"      content="ja_JP" />
-<meta property="og:site_name"   content="Ieneko Youkan's Room" />
-<meta property="og:title"       content={title} />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="ja_JP" />
+<meta property="og:site_name" content="ようかんのホームページ" />
+<meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:url"         content={canonicalUrl} />
-<meta property="og:image"       content={ogImageUrl} />
-<meta property="og:image:width"  content="1280" />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:width" content="1280" />
 <meta property="og:image:height" content="720" />
-<meta property="og:image:alt"    content={title} />
+<meta property="og:image:alt" content={title} />
+<meta property="og:keywords" content={keywords} />
 
 <!-- Twitter Card -->
-<meta name="twitter:card"        content="summary_large_image" />
-<meta name="twitter:site"        content="@youkan0124" />
-<meta name="twitter:title"       content={title} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@youkan0124" />
+<meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image"       content={ogImageUrl} />
+<meta name="twitter:image" content={ogImageUrl} />
