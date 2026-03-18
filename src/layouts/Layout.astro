@@ -111,81 +111,24 @@ const wrapperStyles = css({
 		burst.addEventListener("animationend", () => burst.remove(), { once: true });
 	});
 
-	// ===== スムーズスクロール（LERP ベース） =====
-	// ライブラリ不要・セクション側の変更なし・Layout.astro に完全集約
-	// SCROLL_EASE: 小さいほど遅くてなめらか (0.05〜0.15 推奨)
-	const SCROLL_EASE = 0.08;
+	// ===== スムーズスクロール（Lenis） =====
+	// Layout.astro に完全集約 — セクション側の変更不要
+	// duration: 大きいほどゆっくり (0.8〜1.6 推奨)
+	import Lenis from "lenis";
 
-	let scrollTarget  = window.scrollY;
-	let scrollCurrent = window.scrollY;
-	let rafRunning    = false;
-
-	function maxScroll() {
-		return document.documentElement.scrollHeight - window.innerHeight;
-	}
-
-	function clamp(v: number) {
-		return Math.max(0, Math.min(v, maxScroll()));
-	}
-
-	function smoothTick() {
-		const diff = scrollTarget - scrollCurrent;
-		if (Math.abs(diff) < 0.4) {
-			scrollCurrent = scrollTarget;
-			window.scrollTo(0, scrollCurrent);
-			rafRunning = false;
-			return;
-		}
-		scrollCurrent += diff * SCROLL_EASE;
-		window.scrollTo(0, scrollCurrent);
-		requestAnimationFrame(smoothTick);
-	}
-
-	function startRAF() {
-		if (!rafRunning) {
-			rafRunning = true;
-			requestAnimationFrame(smoothTick);
-		}
-	}
-
-	// マウスホイール
-	window.addEventListener("wheel", (e) => {
-		e.preventDefault();
-		scrollTarget = clamp(scrollTarget + e.deltaY);
-		startRAF();
-	}, { passive: false });
-
-	// キーボード (↑↓ / PageUp/Down / Space / Home / End)
-	window.addEventListener("keydown", (e) => {
-		const h   = window.innerHeight;
-		const map: Record<string, number> = {
-			ArrowDown: 80,
-			ArrowUp:  -80,
-			PageDown:  h * 0.85,
-			PageUp:   -h * 0.85,
-			End:       maxScroll(),
-			Home:     -maxScroll(),
-		};
-		let delta = e.key === " " ? (e.shiftKey ? -h * 0.85 : h * 0.85) : map[e.key];
-		if (delta === undefined) return;
-		if (e.key === "Home" || e.key === "End") {
-			scrollTarget = clamp(delta);
-		} else {
-			scrollTarget = clamp(scrollTarget + delta);
-		}
-		e.preventDefault();
-		startRAF();
+	const lenis = new Lenis({
+		duration: 1.2,
+		easing: (t: number) => Math.min(1, 1.001 - 2 ** (-10 * t)), // expo 的な減衰
+		touchMultiplier: 2,
 	});
 
-	// スクロールバー操作との同期
-	window.addEventListener("scroll", () => {
-		if (Math.abs(window.scrollY - scrollCurrent) > 8) {
-			scrollCurrent = window.scrollY;
-			scrollTarget  = window.scrollY;
-		}
-	}, { passive: true });
+	function raf(time: number) {
+		lenis.raf(time);
+		requestAnimationFrame(raf);
+	}
+	requestAnimationFrame(raf);
 
-	// ハッシュリンク（/#links など）→ scrollTarget に委譲
+	// ハッシュリンク（/#links など）→ Lenis に委譲
 	document.addEventListener("click", (e) => {
 		const a = (e.target as Element).closest("a");
 		if (!a) return;
@@ -197,8 +140,7 @@ const wrapperStyles = css({
 		const el = document.getElementById(hash);
 		if (!el) return;
 		e.preventDefault();
-		scrollTarget = clamp(el.getBoundingClientRect().top + window.scrollY);
-		startRAF();
+		lenis.scrollTo(el, { offset: 0 });
 	});
 </script>
 

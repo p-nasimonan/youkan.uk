@@ -48,5 +48,22 @@ export default defineConfig({
 		},
 	},
 
+	// スクロールバーをサイトの雰囲気（ピンク〜水色）に合わせる
+	globalCss: {
+		"::-webkit-scrollbar": {
+			width: "6px",
+		},
+		"::-webkit-scrollbar-track": {
+			background: "transparent",
+		},
+		"::-webkit-scrollbar-thumb": {
+			background: "linear-gradient(180deg, rgba(255,182,213,0.8), rgba(180,220,255,0.8))",
+			borderRadius: "999px",
+		},
+		"::-webkit-scrollbar-thumb:hover": {
+			background: "linear-gradient(180deg, rgba(255,150,190,1), rgba(140,200,255,1))",
+		},
+	},
+
 	outdir: "styled-system",
 });
