@@ -1,108 +1,80 @@
 ---
+import { getImage } from "astro:assets";
+import { css } from "@styled/css";
+import defaultSrc from "../assets/cusor/default.png";
+import pointerSrc from "../assets/cusor/pointer.png";
 
+const defaultImg = await getImage({ src: defaultSrc, format: "webp", width: 48, height: 48 });
+const pointerImg = await getImage({ src: pointerSrc, format: "webp", width: 48, height: 48 });
+
+const cursorClass = css({
+	position: "fixed",
+	top: 0,
+	left: 0,
+	width: "48px",
+	height: "48px",
+	pointerEvents: "none",
+	zIndex: 10000,
+	marginTop: "-24px",
+	marginLeft: "-24px",
+	userSelect: "none",
+});
 ---
 
-<img id="cursor-image" src="/cusor/default.png" alt="cursor" class="cursor-image" />
+<img
+	id="cursor-image"
+	src={defaultImg.src}
+	alt=""
+	class={cursorClass}
+	data-default={defaultImg.src}
+	data-pointer={pointerImg.src}
+/>
 
 <script>
-    const cursorImg = document.getElementById("cursor-image") as HTMLImageElement;
+	const cursorImg = document.getElementById("cursor-image") as HTMLImageElement;
+	if (!cursorImg) throw new Error("cursor-image not found");
 
-    if (cursorImg) {
-        let mouseX = 0;
-        let mouseY = 0;
-        let cursorX = 0;
-        let cursorY = 0;
+	const defaultSrc = cursorImg.dataset.default!;
+	const pointerSrc = cursorImg.dataset.pointer!;
 
-        // Hide default cursor
-        document.body.style.cursor = "none";
+	let mouseX = 0;
+	let mouseY = 0;
+	let cursorX = 0;
+	let cursorY = 0;
+	let isHover = false;
 
-        document.addEventListener("mousemove", (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
+	document.addEventListener("mousemove", (e) => {
+		mouseX = e.clientX;
+		mouseY = e.clientY;
+	});
 
-        // Smooth follow animation
-        function animate() {
-            cursorX += (mouseX - cursorX) * 0.9;
-            cursorY += (mouseY - cursorY) * 0.9;
-            cursorImg.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
-            requestAnimationFrame(animate);
-        }
-        animate();
+	(function animate() {
+		cursorX += (mouseX - cursorX) * 0.9;
+		cursorY += (mouseY - cursorY) * 0.9;
+		const scale = isHover ? 1.2 : 1;
+		cursorImg.style.transform = `translate(${cursorX}px, ${cursorY}px) scale(${scale})`;
+		requestAnimationFrame(animate);
+	})();
 
-        // Click burst
-        document.addEventListener("click", (e) => {
-            const burst = document.createElement("div");
-            burst.classList.add("star-burst");
-            burst.style.left = `${e.clientX}px`;
-            burst.style.top = `${e.clientY}px`;
-            document.body.appendChild(burst);
-            setTimeout(() => burst.remove(), 500);
-        });
+	document.addEventListener("click", (e) => {
+		const burst = document.createElement("div");
+		burst.className = "star-burst";
+		burst.style.left = `${e.clientX}px`;
+		burst.style.top = `${e.clientY}px`;
+		document.body.appendChild(burst);
+		burst.addEventListener("animationend", () => burst.remove(), { once: true });
+	});
 
-        // Hover on links/buttons: change to pointer image
-        document.addEventListener("mouseover", (e) => {
-            if (
-                e.target instanceof Element &&
-                (e.target.closest("a") || e.target.closest("button"))
-            ) {
-                cursorImg.src = "/cusor/pointer.png";
-                cursorImg.classList.add("hover");
-            }
-        });
-        document.addEventListener("mouseout", (e) => {
-            if (
-                e.target instanceof Element &&
-                (e.target.closest("a") || e.target.closest("button"))
-            ) {
-                cursorImg.src = "/cusor/default.png";
-                cursorImg.classList.remove("hover");
-            }
-        });
-    }
+	document.addEventListener("mouseover", (e) => {
+		if (e.target instanceof Element && (e.target.closest("a") || e.target.closest("button"))) {
+			cursorImg.src = pointerSrc;
+			isHover = true;
+		}
+	});
+	document.addEventListener("mouseout", (e) => {
+		if (e.target instanceof Element && (e.target.closest("a") || e.target.closest("button"))) {
+			cursorImg.src = defaultSrc;
+			isHover = false;
+		}
+	});
 </script>
-
-<style>
-    .cursor-image {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 48px;
-        height: 48px;
-        pointer-events: none;
-        z-index: 10000;
-        margin-top: -24px;
-        margin-left: -24px;
-        transition: transform 0.1s ease;
-    }
-
-    .cursor-image.hover {
-        transform: scale(1.2);
-    }
-
-    :global(.star-burst) {
-        position: fixed;
-        width: 40px;
-        height: 40px;
-        background: radial-gradient(
-            circle,
-            rgba(255, 107, 107, 1) 0%,
-            rgba(255, 255, 255, 0) 70%
-        );
-        transform: translate(-50%, -50%);
-        pointer-events: none;
-        animation: pop 0.5s ease-out forwards;
-        z-index: 9998;
-    }
-
-    @keyframes pop {
-        0% {
-            transform: translate(-50%, -50%) scale(0.5);
-            opacity: 1;
-        }
-        100% {
-            transform: translate(-50%, -50%) scale(2);
-            opacity: 0;
-        }
-    }
-</style>

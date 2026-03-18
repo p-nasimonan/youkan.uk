@@ -1,55 +1,119 @@
 ---
 import { css } from "@styled/css";
+import { getCollection, type CollectionEntry } from "astro:content";
 import SectionBackground from "../SectionBackground.astro";
+import WorkCard from "../works/WorkCard.astro";
 
-// 将来的にここにコンテンツを追加する
-// type Work = { title: string; description: string; url?: string; tags: string[]; image?: string; };
-// const works: Work[] = [];
+const allWorks = (await getCollection("works")).sort(
+	(a: CollectionEntry<"works">, b: CollectionEntry<"works">) => a.data.order - b.data.order,
+);
+// オーバービューとして最大4件表示
+const previewWorks = allWorks.slice(0, 4);
 
-// SectionBackground が position/overflow/backgroundColor を担当するためここでは不要
 const innerStyles = css({
-	minHeight: "60vh",
-	padding: "9rem 2rem 4rem",  // 上波（128px）分の余白を確保
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "center",
+	padding: "9rem 0 6rem",
 	zIndex: 1,
 });
 
-const containerStyles = css({
-	maxWidth: "900px",
-	width: "100%",
+const headerStyles = css({
 	textAlign: "center",
+	marginBottom: "3rem",
+	padding: "0 2rem",
 });
 
 const titleStyles = css({
 	fontSize: "2.5rem",
 	fontWeight: "bold",
-	marginBottom: "3rem",
 	color: "#4a4a4a",
+	fontFamily: '"Zen Maru Gothic", sans-serif',
+	marginBottom: "0.5rem",
+});
+
+const subtitleStyles = css({
+	fontSize: "1rem",
+	color: "#888",
 	fontFamily: '"Zen Maru Gothic", sans-serif',
 });
 
-const placeholderStyles = css({
-	backgroundColor: "white",
-	borderRadius: "24px",
-	padding: "4rem 2rem",
-	border: "2px dashed rgba(0, 0, 0, 0.1)",
-	color: "#888",
-	fontSize: "1.1rem",
+// 左右ピーク用ラッパー（overflow-x: clip でセクション外へのはみ出しを制御）
+const peekWrapperStyles = css({
+	overflowX: "clip",
+	display: "flex",
+	flexDirection: "column",
+	gap: "2.5rem",
+	paddingBottom: "0.5rem",
+});
+
+// カード行 — 右に寄せ（右端がはみ出す）
+const rowRightStyles = css({
+	width: "82%",
+	marginLeft: "auto",
+	marginRight: "-3%",
+	maxWidth: "900px",
+});
+
+// カード行 — 左に寄せ（左端がはみ出す）
+const rowLeftStyles = css({
+	width: "82%",
+	marginRight: "auto",
+	marginLeft: "-3%",
+	maxWidth: "900px",
+});
+
+const moreButtonStyles = css({
+	display: "inline-flex",
+	alignItems: "center",
+	gap: "0.5rem",
+	marginTop: "3rem",
+	padding: "0.75rem 2.5rem",
+	borderRadius: "999px",
+	background: "linear-gradient(135deg, rgba(255,182,213,0.9), rgba(180,220,255,0.9))",
+	color: "#5a3a5a",
+	fontWeight: "bold",
 	fontFamily: '"Zen Maru Gothic", sans-serif',
+	fontSize: "1rem",
+	textDecoration: "none",
+	boxShadow: "0 4px 16px rgba(200,150,200,0.25)",
+	transition: "transform 0.2s ease, box-shadow 0.2s ease",
+	_hover: {
+		transform: "translateY(-2px)",
+		boxShadow: "0 8px 24px rgba(200,150,200,0.4)",
+	},
+});
+
+const footerStyles = css({
+	textAlign: "center",
+	padding: "0 2rem",
+	marginTop: "0.5rem",
 });
 ---
 
-<!-- bigTop: 上波を大きくしてAboutセクション（透過）との境界を強調 -->
-<!-- hasBottom={false}: 下波は ServerSection の上波が担当するため不要 -->
 <SectionBackground id="works" bigTop hasBottom={false}>
 	<div class={innerStyles}>
-		<div class={containerStyles}>
+		<div class={headerStyles}>
 			<h2 class={titleStyles}>作品</h2>
-			<div class={placeholderStyles}>
-				<p>準備中</p>
-			</div>
+			<p class={subtitleStyles}>つくったもの</p>
+		</div>
+
+		<div class={peekWrapperStyles}>
+			{previewWorks.map((work: CollectionEntry<"works">, i: number) => (
+				<div class={i % 2 === 0 ? rowRightStyles : rowLeftStyles}>
+					<WorkCard
+						slug={work.slug}
+						title={work.data.title}
+						description={work.data.description}
+						image={work.data.image}
+						tags={work.data.tags}
+						peekRight={i % 2 === 0}
+					/>
+				</div>
+			))}
+		</div>
+
+		<div class={footerStyles}>
+			<a href="/works" class={moreButtonStyles}>
+				もっと見る →
+			</a>
 		</div>
 	</div>
 </SectionBackground>

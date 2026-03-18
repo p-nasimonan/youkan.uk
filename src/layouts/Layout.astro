@@ -1,7 +1,11 @@
 ---
 import "../index.css";
 import { css } from "@styled/css";
+import { getImage } from "astro:assets";
+import videomockSrc from "../assets/hero/videomock.png";
 import MetaHead from "./MetaHead.astro";
+
+const poster = await getImage({ src: videomockSrc, format: "webp", quality: 85 });
 
 interface Props {
 	title?: string;
@@ -10,6 +14,8 @@ interface Props {
 }
 
 const { title, description, ogImage } = Astro.props;
+// OGP 未指定時は処理済みアセット URL を使用（public/ 不要）
+const defaultOgImage = Astro.url.origin + poster.src;
 
 const videoBgStyles = css({
 	position: "fixed",
@@ -25,13 +31,12 @@ const videoBgStyles = css({
 const wrapperStyles = css({
 	position: "relative",
 	minHeight: "100vh",
-	overflow: "hidden",
 });
 ---
 
 <html lang="ja">
 	<head>
-		<MetaHead title={title} description={description} ogImage={ogImage} />
+		<MetaHead title={title} description={description} ogImage={ogImage ?? defaultOgImage} />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<!-- フォント: JS でノンブロッキング挿入（レンダリングブロック解消）-->
@@ -44,7 +49,7 @@ const wrapperStyles = css({
 	</head>
 	<body>
 		<!-- 固定動画背景（全セクション共通） -->
-		<video class={videoBgStyles} autoplay loop muted playsinline poster="/hero/videomock.png">
+		<video class={videoBgStyles} autoplay loop muted playsinline poster={poster.src}>
 			<source src="/hero.webm" type="video/webm" />
 		</video>
 		<div class={wrapperStyles}>
@@ -105,6 +110,96 @@ const wrapperStyles = css({
 		document.body.appendChild(burst);
 		burst.addEventListener("animationend", () => burst.remove(), { once: true });
 	});
+
+	// ===== スムーズスクロール（LERP ベース） =====
+	// ライブラリ不要・セクション側の変更なし・Layout.astro に完全集約
+	// SCROLL_EASE: 小さいほど遅くてなめらか (0.05〜0.15 推奨)
+	const SCROLL_EASE = 0.08;
+
+	let scrollTarget  = window.scrollY;
+	let scrollCurrent = window.scrollY;
+	let rafRunning    = false;
+
+	function maxScroll() {
+		return document.documentElement.scrollHeight - window.innerHeight;
+	}
+
+	function clamp(v: number) {
+		return Math.max(0, Math.min(v, maxScroll()));
+	}
+
+	function smoothTick() {
+		const diff = scrollTarget - scrollCurrent;
+		if (Math.abs(diff) < 0.4) {
+			scrollCurrent = scrollTarget;
+			window.scrollTo(0, scrollCurrent);
+			rafRunning = false;
+			return;
+		}
+		scrollCurrent += diff * SCROLL_EASE;
+		window.scrollTo(0, scrollCurrent);
+		requestAnimationFrame(smoothTick);
+	}
+
+	function startRAF() {
+		if (!rafRunning) {
+			rafRunning = true;
+			requestAnimationFrame(smoothTick);
+		}
+	}
+
+	// マウスホイール
+	window.addEventListener("wheel", (e) => {
+		e.preventDefault();
+		scrollTarget = clamp(scrollTarget + e.deltaY);
+		startRAF();
+	}, { passive: false });
+
+	// キーボード (↑↓ / PageUp/Down / Space / Home / End)
+	window.addEventListener("keydown", (e) => {
+		const h   = window.innerHeight;
+		const map: Record<string, number> = {
+			ArrowDown: 80,
+			ArrowUp:  -80,
+			PageDown:  h * 0.85,
+			PageUp:   -h * 0.85,
+			End:       maxScroll(),
+			Home:     -maxScroll(),
+		};
+		let delta = e.key === " " ? (e.shiftKey ? -h * 0.85 : h * 0.85) : map[e.key];
+		if (delta === undefined) return;
+		if (e.key === "Home" || e.key === "End") {
+			scrollTarget = clamp(delta);
+		} else {
+			scrollTarget = clamp(scrollTarget + delta);
+		}
+		e.preventDefault();
+		startRAF();
+	});
+
+	// スクロールバー操作との同期
+	window.addEventListener("scroll", () => {
+		if (Math.abs(window.scrollY - scrollCurrent) > 8) {
+			scrollCurrent = window.scrollY;
+			scrollTarget  = window.scrollY;
+		}
+	}, { passive: true });
+
+	// ハッシュリンク（/#links など）→ scrollTarget に委譲
+	document.addEventListener("click", (e) => {
+		const a = (e.target as Element).closest("a");
+		if (!a) return;
+		const href = a.getAttribute("href") ?? "";
+		const hash = href.startsWith("/#") ? href.slice(2)
+			       : href.startsWith("#")  ? href.slice(1)
+			       : null;
+		if (!hash) return;
+		const el = document.getElementById(hash);
+		if (!el) return;
+		e.preventDefault();
+		scrollTarget = clamp(el.getBoundingClientRect().top + window.scrollY);
+		startRAF();
+	});
 </script>
 
 <!-- グローバルアニメーションスタイル（Astro のスコープを避けるため is:global） -->
@@ -129,12 +224,12 @@ const wrapperStyles = css({
 	   background-position-x を1アーチ分シフトしてシームレスループ。
 	   通常アーチ: 240px、大アーチ: 360px */
 	@keyframes waveNorm {
-		from { background-position-x: 0; }
-		to   { background-position-x: -240px; }
+		from { background-position: 0 0; }
+		to   { background-position: -240px 0; }
 	}
 	@keyframes waveBig {
-		from { background-position-x: 0; }
-		to   { background-position-x: -360px; }
+		from { background-position: 0 0; }
+		to   { background-position: -360px 0; }
 	}
 
 	/* ===== カスタムカーソル ===== */
@@ -183,5 +278,21 @@ const wrapperStyles = css({
 	@keyframes burstOut {
 		0%   { transform: translate(-50%, -50%) scale(0.2); opacity: 1; }
 		100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+	}
+
+	/* MouseStalker クリックバースト */
+	.star-burst {
+		position: fixed;
+		width: 40px;
+		height: 40px;
+		background: radial-gradient(circle, rgba(255, 107, 107, 1) 0%, rgba(255, 255, 255, 0) 70%);
+		transform: translate(-50%, -50%);
+		pointer-events: none;
+		z-index: 9998;
+		animation: starPop 0.5s ease-out forwards;
+	}
+	@keyframes starPop {
+		0%   { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+		100% { transform: translate(-50%, -50%) scale(2);   opacity: 0; }
 	}
 </style>

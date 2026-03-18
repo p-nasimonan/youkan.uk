@@ -10,12 +10,15 @@ const {
 	title = "ようかんのホームページ",
 	description = "家猫ようかんのホームページ。自宅サーバー・リンク・作品置き場。",
 	keywords = "ようかん, youkan, VRChat, ぷぷりえ",
-	ogImage = "/hero/videomock.png",
+	ogImage,
 } = Astro.props;
 
 const origin = Astro.url.origin;
 const canonicalUrl = `${origin}${Astro.url.pathname}`;
-const ogImageUrl = `${origin}${ogImage}`;
+// Layout から絶対 URL で渡される場合はそのまま、相対パスの場合は origin を付加
+const ogImageUrl = ogImage
+	? ogImage.startsWith("http") ? ogImage : `${origin}${ogImage}`
+	: `${origin}/hero/videomock.png`;
 ---
 
 <meta charset="utf-8" />

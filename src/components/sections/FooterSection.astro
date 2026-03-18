@@ -1,86 +1,44 @@
 ---
 import { css } from "@styled/css";
-import { socialLinks } from "@consts/links";
 
 const footerStyles = css({
-	padding: "4rem 2rem",
-	backgroundColor: "#3e3e3e", // Desk color
-	color: "white",
+	padding: "3rem 2rem",
 	textAlign: "center",
+	background: "linear-gradient(180deg, #2a1a2e 0%, #1a1a2e 100%)",
+	color: "white",
 	position: "relative",
-	overflow: "hidden",
-	backgroundImage: "radial-gradient(#4a4a4a 15%, transparent 16%)",
-	backgroundSize: "20px 20px",
 });
 
-const stickersContainer = css({
+const navStyles = css({
 	display: "flex",
 	justifyContent: "center",
-	gap: "3rem",
+	gap: "2rem",
 	flexWrap: "wrap",
-	marginBottom: "4rem",
-	maxWidth: "800px",
-	margin: "0 auto 4rem auto",
+	marginBottom: "2rem",
 });
 
-const stickerLink = css({
-	width: "100px",
-	height: "100px",
-	backgroundColor: "white",
-	color: "#333",
-	borderRadius: "10px",
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "center",
-	fontSize: "1.2rem",
-	fontWeight: "bold",
+const navLinkStyles = css({
+	color: "rgba(255,255,255,0.7)",
 	textDecoration: "none",
-	boxShadow: "0 5px 10px rgba(0,0,0,0.3)",
-	transition: "transform 0.2s ease",
-	border: "4px solid white",
-	_hover: {
-		transform: "scale(1.1) rotate(0deg) !important", // Reset rotation on hover
-		zIndex: 10,
-	},
+	fontFamily: '"Zen Maru Gothic", sans-serif',
+	fontSize: "0.95rem",
+	transition: "color 0.2s ease",
+	_hover: { color: "rgba(255,200,220,1)" },
 });
 
 const copyrightStyles = css({
-	fontSize: "0.9rem",
-	opacity: 0.7,
-	marginTop: "2rem",
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "center",
-	gap: "0.5rem",
+	fontSize: "0.85rem",
+	color: "rgba(255,255,255,0.4)",
+	fontFamily: '"Zen Maru Gothic", sans-serif',
 });
 ---
 
 <footer class={footerStyles}>
-    <h2
-        class={css({
-            fontSize: "2rem",
-            marginBottom: "3rem",
-            fontFamily: '"Zen Maru Gothic"',
-        })}
-    >
-        Links
-    </h2>
-
-    <div class={stickersContainer}>
-        {socialLinks.map((link) => (
-            <a
-                href={link.url}
-                class={stickerLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={`transform: rotate(${link.rotate}); background-color: ${link.color}; color: white;`}
-            >
-                {link.label}
-            </a>
-        ))}
-    </div>
-
-    <div class={copyrightStyles}>
-        <span>&copy; 2026 Youkan</span>
-    </div>
+	<nav class={navStyles}>
+		<a href="/#links"  class={navLinkStyles}>リンク</a>
+		<a href="/#works"  class={navLinkStyles}>作品</a>
+		<a href="/#server" class={navLinkStyles}>サーバー</a>
+		<a href="/works"   class={navLinkStyles}>作品一覧</a>
+	</nav>
+	<p class={copyrightStyles}>&copy; 2026 Youkan</p>
 </footer>

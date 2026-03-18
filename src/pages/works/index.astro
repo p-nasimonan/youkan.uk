@@ -1,0 +1,68 @@
+---
+import { css } from "@styled/css";
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import WorkCard from "../../components/works/WorkCard.astro";
+
+const works = (await getCollection("works")).sort(
+	(a: CollectionEntry<"works">, b: CollectionEntry<"works">) => a.data.order - b.data.order,
+);
+
+const pageStyles = css({
+	minHeight: "100vh",
+	padding: "6rem 2rem 8rem",
+	maxWidth: "1200px",
+	margin: "0 auto",
+});
+
+const headerStyles = css({
+	textAlign: "center",
+	marginBottom: "4rem",
+});
+
+const titleStyles = css({
+	fontSize: "3rem",
+	fontWeight: "bold",
+	fontFamily: '"Zen Maru Gothic", sans-serif',
+	color: "#4a4a4a",
+	marginBottom: "0.5rem",
+});
+
+const backStyles = css({
+	display: "inline-flex",
+	alignItems: "center",
+	gap: "0.3rem",
+	color: "#a07090",
+	textDecoration: "none",
+	fontFamily: '"Zen Maru Gothic", sans-serif',
+	fontSize: "0.95rem",
+	marginBottom: "2rem",
+	_hover: { textDecoration: "underline" },
+});
+
+const gridStyles = css({
+	display: "grid",
+	gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+	gap: "2rem",
+});
+---
+
+<Layout title="作品一覧 — ようかんのホームページ">
+	<div class={pageStyles}>
+		<a href="/" class={backStyles}>← ホームに戻る</a>
+		<div class={headerStyles}>
+			<h1 class={titleStyles}>作品一覧</h1>
+		</div>
+		<div class={gridStyles}>
+			{works.map((work: CollectionEntry<"works">) => (
+				<WorkCard
+					slug={work.slug}
+					title={work.data.title}
+					description={work.data.description}
+					image={work.data.image}
+					tags={work.data.tags}
+				/>
+			))}
+		</div>
+	</div>
+</Layout>

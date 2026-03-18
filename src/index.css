@@ -1,5 +1,6 @@
 @layer reset, base, tokens, recipes, utilities;
 
+
 html,
 body {
 	background-color: transparent;
@@ -7,6 +8,9 @@ body {
 	font-family: "Zen Maru Gothic", system-ui, sans-serif;
 	min-height: 100vh;
 	margin: 0;
-	overflow-x: hidden;
 	cursor: none;
+}
+
+body {
+	overflow-x: clip;
 }
