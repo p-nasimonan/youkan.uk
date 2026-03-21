@@ -5,7 +5,9 @@
 	"packageManager": "pnpm@10.29.3",
 	"scripts": {
 		"dev": "concurrently \"panda codegen --watch\" \"astro dev\"",
+		"prebuild": "node scripts/generate-misskey-icons.mjs",
 		"build": "panda codegen && astro build",
+		"prepare": "node scripts/generate-misskey-icons.mjs",
 		"preview": "astro preview",
 		"astro": "astro",
 		"lint": "biome check --write ."
@@ -20,6 +22,7 @@
 		"@biomejs/biome": "^2.4.6",
 		"@pandacss/dev": "^1.8.2",
 		"concurrently": "^9.2.1",
+		"sharp": "^0.34.5",
 		"typescript": "^5.9.3"
 	},
 	"volta": {

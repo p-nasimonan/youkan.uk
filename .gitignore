@@ -26,3 +26,7 @@ pnpm-debug.log*
 ## Panda
 styled-system
 styled-system-studio
+
+# auto-generated misskey icons
+public/misskey/assets/icon-192.png
+public/misskey/assets/icon-512.png
