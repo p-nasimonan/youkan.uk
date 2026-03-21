@@ -1,0 +1,35 @@
+---
+import MisskeyLayout from "../../components/misskey/MisskeyLayout.astro";
+import errorImg from "../../../src/assets/error/みすきー500.png";
+---
+
+<MisskeyLayout
+	title="500 Internal Server Error"
+	description="問題が発生しました。"
+	hideNavLinks={true}
+>
+	<div style="text-align: center; padding: 1rem 0;">
+		<img
+			src={errorImg.src}
+			alt="500 Error"
+			style="max-width: 100%; max-height: 400px; height: auto; border-radius: 16px; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1);"
+		/>
+		<h2>問題が発生しました。</h2>
+		<p style="font-size: 1.1rem; margin-top: 1rem;">
+			申し訳ありません、サーバー内部で予期せぬエラーが発生しました。<br />
+			しばらく時間をおいてから、再度お試しください。
+		</p>
+
+		<div style="margin-top: 3rem;">
+			<a href="https://mi.youkan.uk/" class="button-link"
+				>Misskeyタイムラインへ戻る</a
+			>
+			<a
+				href="/misskey"
+				class="button-link"
+				style="background:#f8fafc; color:#64748b; border:1px solid #e2e8f0; margin-left: 1rem;"
+				>サーバー紹介へ</a
+			>
+		</div>
+	</div>
+</MisskeyLayout>

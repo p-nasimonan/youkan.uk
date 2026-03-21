@@ -101,6 +101,35 @@ const serverRackStyles = css({
 					Fast! →
 				</div>
 			</div>
+
+			<div class={css({ marginTop: "4rem" })}>
+				<a href="/misskey" class={css({
+					display: "inline-flex",
+					alignItems: "center",
+					gap: "1rem",
+					padding: "1rem 2rem",
+					backgroundColor: "rgba(255, 255, 255, 0.05)",
+					border: "1px solid rgba(255, 255, 255, 0.15)",
+					borderRadius: "16px",
+					color: "white",
+					textDecoration: "none !important",
+					fontSize: "1.2rem",
+					fontWeight: "bold",
+					fontFamily: '"Zen Maru Gothic", sans-serif',
+					backdropFilter: "blur(10px)",
+					transition: "all 0.3s ease",
+					boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
+					_hover: {
+						backgroundColor: "rgba(255, 255, 255, 0.15)",
+						transform: "translateY(-4px)",
+						boxShadow: "0 8px 25px rgba(0,0,0,0.4)",
+						borderColor: "rgba(255, 255, 255, 0.3)",
+					}
+				})}>
+					<img src="/misskey/assets/icon.png" alt="Misskey Icon" class={css({ width: "36px", height: "36px", borderRadius: "8px", objectFit: "cover" })} />
+					ようかんのみすきー を見る
+				</a>
+			</div>
 		</div>
 	</div>
 </SectionBackground>
