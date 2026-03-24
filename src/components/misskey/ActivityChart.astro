@@ -1,0 +1,103 @@
+---
+import { css } from "@styled/css";
+
+interface Props {
+	data: number[];
+	label: string;
+	unit?: string;
+	color?: "pink" | "blue" | "green";
+	spanLabel?: string;
+}
+
+const { data, label, unit = "", color = "blue", spanLabel = "日" } = Astro.props;
+
+const VIEWBOX_W = 560;
+const VIEWBOX_H = 80;
+const n         = data.length;
+const gap       = 3;
+const barW      = (VIEWBOX_W - gap * (n - 1)) / n;
+const maxVal    = Math.max(...data, 1);
+const total     = data.reduce((s, v) => s + v, 0);
+
+const bars = data.map((v, i) => {
+	const h = Math.max((v / maxVal) * VIEWBOX_H, v > 0 ? 2 : 0);
+	const x = i * (barW + gap);
+	const y = VIEWBOX_H - h;
+	return { x, y, w: barW, h, v };
+});
+
+const palettes = {
+	pink:  "#f9a8d4",
+	blue:  "#7dd3fc",
+	green: "#86efac",
+};
+const fill = palettes[color];
+
+// Y軸ラベル用数値フォーマット
+const fmt = (n: number) => {
+	if (n >= 10000) return `${Math.round(n / 1000)}k`;
+	if (n >= 1000)  return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}k`;
+	return String(Math.round(n));
+};
+
+// フォーマット後に重複する値を除いてユニークなTickだけ残す
+const yTicks = [maxVal, maxVal / 2, 0].filter((v, i, arr) =>
+	arr.findIndex(u => fmt(u) === fmt(v)) === i,
+);
+
+const wrapStyle    = css({ marginBottom: "1.8rem" });
+const headerStyle  = css({ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.4rem" });
+const labelStyle   = css({ fontSize: "0.85rem", fontWeight: "bold", color: "#555" });
+const totalStyle   = css({ fontSize: "0.8rem", color: "#888" });
+const chartRowStyle = css({ display: "flex", gap: "4px", alignItems: "stretch" });
+const yAxisStyle   = css({
+	width: "32px",
+	flexShrink: 0,
+	display: "flex",
+	flexDirection: "column",
+	justifyContent: "space-between",
+	paddingBottom: "18px", // x軸ラベル分の余白
+	alignItems: "flex-end",
+});
+const yTickStyle   = css({ fontSize: "0.6rem", color: "#bbb", lineHeight: 1 });
+const svgWrapStyle = css({ flex: 1, overflow: "hidden", borderRadius: "6px", background: "rgba(0,0,0,0.02)" });
+const xAxisStyle   = css({ display: "flex", justifyContent: "space-between", fontSize: "0.6rem", color: "#bbb", padding: "2px 0" });
+---
+
+<div class={wrapStyle}>
+	<div class={headerStyle}>
+		<span class={labelStyle}>{label}</span>
+		<span class={totalStyle}>合計 {total.toLocaleString()}{unit} / {n}{spanLabel}</span>
+	</div>
+	<div class={chartRowStyle}>
+		<!-- Y軸ラベル -->
+		<div class={yAxisStyle}>
+			{yTicks.map(v => <span class={yTickStyle}>{fmt(v)}</span>)}
+		</div>
+		<!-- グラフ本体 -->
+		<div class={svgWrapStyle}>
+			<svg
+				viewBox={`0 0 ${VIEWBOX_W} ${VIEWBOX_H}`}
+				preserveAspectRatio="none"
+				width="100%"
+				height="60"
+				aria-label={label}
+				role="img"
+			>
+				<!-- グリッド線 (y=0 上端, y=40 中段) -->
+				<line x1="0" y1="0"  x2={VIEWBOX_W} y2="0"  stroke="#e5e7eb" stroke-width="1" />
+				<line x1="0" y1="40" x2={VIEWBOX_W} y2="40" stroke="#e5e7eb" stroke-width="1" />
+
+				{bars.map(({ x, y, w, h, v }) => (
+					<rect x={x} y={y} width={w} height={h} rx="2" fill={fill} opacity="0.9">
+						<title>{v}{unit}</title>
+					</rect>
+				))}
+			</svg>
+			<div class={xAxisStyle}>
+				<span>{n}{spanLabel}前</span>
+				<span>今</span>
+			</div>
+		</div>
+	</div>
+</div>
