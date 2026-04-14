@@ -1,5 +1,5 @@
-import sharp from 'sharp';
 import fs from 'fs';
+import sharp from 'sharp';
 
 const input = 'public/misskey/assets/icon.png';
 const output192 = 'public/misskey/assets/icon-192.png';

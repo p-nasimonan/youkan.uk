@@ -1,15 +1,17 @@
 ---
-import { css, cx } from "@styled/css";
 import { getEntry } from "astro:content";
+import { css, cx } from "@styled/css";
 import Layout from "../../layouts/Layout.astro";
+import { fetchOgpImage } from "../../lib/ogp";
 
 const { slug } = Astro.params;
 const work = await getEntry("works", slug!);
 if (!work) return Astro.redirect("/works");
 
-const { title, description, url, githubUrl, image, tags } = work.data;
+const { title, description, content, url, githubUrl, image, tags } = work.data;
+const ogpImage = (!image && url) ? await fetchOgpImage(url) : undefined;
 const fallbackImage = "/hero/videomock.png";
-const imgSrc = image ?? fallbackImage;
+const imgSrc = image ?? ogpImage ?? fallbackImage;
 
 const pageStyles = css({
 	minHeight: "100vh",
@@ -131,6 +133,8 @@ const linkGhStyles = css({
 		)}
 
 		<p class={descStyles}>{description}</p>
+
+		{content && <p class={descStyles} style="white-space: pre-wrap;">{content}</p>}
 
 		<div class={linksStyles}>
 			{url && (

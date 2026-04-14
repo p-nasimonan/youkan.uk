@@ -1,7 +1,7 @@
 ---
 import "../index.css";
-import { css } from "@styled/css";
 import { getImage } from "astro:assets";
+import { css } from "@styled/css";
 import videomockSrc from "../assets/hero/videomock.png";
 import MetaHead from "./MetaHead.astro";
 
@@ -151,15 +151,27 @@ const wrapperStyles = css({
 	   [data-animate] はセクション内部の <div> に付与する。 */
 	[data-animate] {
 		opacity: 0;
-		transform: translateY(52px);
 		will-change: transform, opacity;
 		transition:
 			opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1),
 			transform 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+		transition-delay: var(--stagger, 0s);
+	}
+	/* デフォルト: 下から */
+	[data-animate]:not([data-dir]) {
+		transform: translateY(52px);
+	}
+	/* 左から */
+	[data-animate][data-dir="left"] {
+		transform: translateX(-80px);
+	}
+	/* 右から */
+	[data-animate][data-dir="right"] {
+		transform: translateX(80px);
 	}
 	[data-animate].is-visible {
 		opacity: 1;
-		transform: translateY(0);
+		transform: none;
 	}
 
 	/* ===== フリル波アニメーション =====

@@ -1,4 +1,10 @@
 ---
+import {
+	SECTION_DARK_BG,
+	SECTION_LIGHT_BG,
+	SECTION_LIGHT_BOT,
+	SECTION_LIGHT_TOP,
+} from "@consts/theme";
 /**
  * SectionBackground — セクションの背景色と上下フリル波を管理するコンポーネント。
  *
@@ -14,12 +20,6 @@
  *   矩形の境界線が見えなくなる。グラデーションは 180deg（真上→真下）限定。
  */
 import { css, cx } from "@styled/css";
-import {
-	SECTION_LIGHT_BG,
-	SECTION_LIGHT_TOP,
-	SECTION_LIGHT_BOT,
-	SECTION_DARK_BG,
-} from "@consts/theme";
 
 interface Props {
 	id?: string;

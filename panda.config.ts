@@ -1,12 +1,12 @@
 import { defineConfig } from "@pandacss/dev";
 import {
-	SECTION_LIGHT_BG,
-	SECTION_LIGHT_TOP,
-	SECTION_LIGHT_BOT,
 	SECTION_DARK_BG,
-	WAVE_DOT,
+	SECTION_LIGHT_BG,
+	SECTION_LIGHT_BOT,
+	SECTION_LIGHT_TOP,
 	TEXT_PRIMARY,
 	TEXT_SECONDARY,
+	WAVE_DOT,
 } from "./src/consts/theme";
 
 export default defineConfig({

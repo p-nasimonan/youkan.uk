@@ -1,9 +1,9 @@
 // @ts-check
 
-import cloudflare from "@astrojs/cloudflare";
-import { defineConfig } from "astro/config";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import cloudflare from "@astrojs/cloudflare";
+import { defineConfig } from "astro/config";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

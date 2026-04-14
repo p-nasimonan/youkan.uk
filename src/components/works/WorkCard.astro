@@ -1,22 +1,24 @@
 ---
-import { css, cx } from "@styled/css";
 import { getImage } from "astro:assets";
+import { css } from "@styled/css";
 import videomockSrc from "../../assets/hero/videomock.png";
+import { fetchOgpImage } from "../../lib/ogp";
 
 interface Props {
 	slug: string;
 	title: string;
 	description: string;
 	image?: string;
+	url?: string;
 	tags?: string[];
-	/** 右寄せ(true) / 左寄せ(false) — ピークレイアウト用 */
-	peekRight?: boolean;
 }
 
-const { slug, title, description, image, tags = [], peekRight = false } = Astro.props;
+const { slug, title, description, image, url, tags = [] } = Astro.props;
 
 const fallbackImage = (await getImage({ src: videomockSrc, format: "webp", quality: 85 })).src;
-const imgSrc = image ?? fallbackImage;
+// 画像: 指定あり → OGP フェッチ → フォールバック の順
+const ogpImage = (!image && url) ? await fetchOgpImage(url) : undefined;
+const imgSrc = image ?? ogpImage ?? fallbackImage;
 
 const wrapClass = css({
 	display: "block",
@@ -98,6 +100,18 @@ const tagClass = css({
 	color: "#7a3a7a",
 	fontWeight: "bold",
 });
+
+const descClass = css({
+	padding: "0.75rem 0.5rem 0.25rem",
+	fontSize: "0.85rem",
+	lineHeight: 1.6,
+	color: "#5a4060",
+	fontFamily: '"Zen Maru Gothic", sans-serif',
+	display: "-webkit-box",
+	WebkitLineClamp: "2",
+	WebkitBoxOrient: "vertical",
+	overflow: "hidden",
+});
 ---
 
 <a href={`/works/${slug}`} class={wrapClass}>
@@ -109,4 +123,5 @@ const tagClass = css({
 		</div>
 		<p class={titleClass}>{title}</p>
 	</div>
+	{description && <p class={descClass}>{description}</p>}
 </a>

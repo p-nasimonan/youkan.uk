@@ -1,8 +1,8 @@
 ---
+import { type CollectionEntry, getCollection } from "astro:content";
 import { css } from "@styled/css";
-import { getCollection, type CollectionEntry } from "astro:content";
-import Layout from "../../layouts/Layout.astro";
 import WorkCard from "../../components/works/WorkCard.astro";
+import Layout from "../../layouts/Layout.astro";
 
 const works = (await getCollection("works")).sort(
 	(a: CollectionEntry<"works">, b: CollectionEntry<"works">) => a.data.order - b.data.order,
@@ -45,6 +45,7 @@ const gridStyles = css({
 	gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
 	gap: "2rem",
 });
+
 ---
 
 <Layout title="作品一覧 — ようかんのホームページ">
@@ -54,14 +55,21 @@ const gridStyles = css({
 			<h1 class={titleStyles}>作品一覧</h1>
 		</div>
 		<div class={gridStyles}>
-			{works.map((work: CollectionEntry<"works">) => (
-				<WorkCard
-					slug={work.slug}
-					title={work.data.title}
-					description={work.data.description}
-					image={work.data.image}
-					tags={work.data.tags}
-				/>
+			{works.map((work: CollectionEntry<"works">, i: number) => (
+				<div
+					data-animate
+					data-dir={i % 2 === 0 ? "left" : "right"}
+					style={`--stagger: ${i * 0.08}s`}
+				>
+					<WorkCard
+						slug={work.slug}
+						title={work.data.title}
+						description={work.data.description}
+						image={work.data.image}
+						url={work.data.url}
+						tags={work.data.tags}
+					/>
+				</div>
 			))}
 		</div>
 	</div>

@@ -1,14 +1,13 @@
 ---
+import { type CollectionEntry, getCollection } from "astro:content";
 import { css } from "@styled/css";
-import { getCollection, type CollectionEntry } from "astro:content";
 import SectionBackground from "../SectionBackground.astro";
 import WorkCard from "../works/WorkCard.astro";
 
 const allWorks = (await getCollection("works")).sort(
 	(a: CollectionEntry<"works">, b: CollectionEntry<"works">) => a.data.order - b.data.order,
 );
-// オーバービューとして最大4件表示
-const previewWorks = allWorks.slice(0, 4);
+const previewWorks = allWorks.slice(0, 6);
 
 const innerStyles = css({
 	padding: "9rem 0 6rem",
@@ -35,29 +34,21 @@ const subtitleStyles = css({
 	fontFamily: '"Zen Maru Gothic", sans-serif',
 });
 
-// 左右ピーク用ラッパー（overflow-x: clip でセクション外へのはみ出しを制御）
-const peekWrapperStyles = css({
-	overflowX: "clip",
+// 横スクロールトラック
+const scrollTrackStyles = css({
 	display: "flex",
-	flexDirection: "column",
-	gap: "2.5rem",
-	paddingBottom: "0.5rem",
+	overflowX: "auto",
+	gap: "2rem",
+	padding: "0.5rem 2.5rem 2rem",
+	scrollSnapType: "x mandatory",
+	scrollbarWidth: "none",
+	"&::-webkit-scrollbar": { display: "none" },
 });
 
-// カード行 — 右に寄せ（右端がはみ出す）
-const rowRightStyles = css({
-	width: "82%",
-	marginLeft: "auto",
-	marginRight: "-3%",
-	maxWidth: "900px",
-});
-
-// カード行 — 左に寄せ（左端がはみ出す）
-const rowLeftStyles = css({
-	width: "82%",
-	marginRight: "auto",
-	marginLeft: "-3%",
-	maxWidth: "900px",
+// 各カードラッパー
+const cardWrapStyles = css({
+	flex: "0 0 340px",
+	scrollSnapAlign: "start",
 });
 
 const moreButtonStyles = css({
@@ -90,21 +81,26 @@ const footerStyles = css({
 
 <SectionBackground id="works" bigTop hasBottom={false}>
 	<div class={innerStyles}>
-		<div class={headerStyles}>
+		<div class={headerStyles} data-animate>
 			<h2 class={titleStyles}>作品</h2>
 			<p class={subtitleStyles}>つくったもの</p>
 		</div>
 
-		<div class={peekWrapperStyles}>
+		<div class={scrollTrackStyles}>
 			{previewWorks.map((work: CollectionEntry<"works">, i: number) => (
-				<div class={i % 2 === 0 ? rowRightStyles : rowLeftStyles}>
+				<div
+					class={cardWrapStyles}
+					data-animate
+					data-dir={i % 2 === 0 ? "left" : "right"}
+					style={`--stagger: ${i * 0.08}s`}
+				>
 					<WorkCard
 						slug={work.slug}
 						title={work.data.title}
 						description={work.data.description}
 						image={work.data.image}
+						url={work.data.url}
 						tags={work.data.tags}
-						peekRight={i % 2 === 0}
 					/>
 				</div>
 			))}
