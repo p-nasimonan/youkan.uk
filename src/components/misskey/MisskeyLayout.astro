@@ -1,7 +1,6 @@
 ---
 import { css } from "@styled/css";
 import GlobalLayout from "../../layouts/Layout.astro";
-import MouseStalker from "../MouseStalker.astro";
 
 interface Props {
 	title?: string;
@@ -190,7 +189,6 @@ const backHomeBtnStyle = css({
 ---
 
 <GlobalLayout title={`Misskey - ${title}`} description={description}>
-	<MouseStalker />
 	<div class={containerStyle} data-animate>
 		<a href="https://mi.youkan.uk/" target="_blank" rel="noopener noreferrer" class={bannerContainerStyle}>
 			<img src="/misskey/assets/banner.png" alt="Misskey Banner" class={bannerImgStyle} />

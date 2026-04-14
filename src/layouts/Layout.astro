@@ -4,6 +4,7 @@ import { getImage } from "astro:assets";
 import { css } from "@styled/css";
 import videomockSrc from "../assets/hero/videomock.png";
 import MetaHead from "./MetaHead.astro";
+import MouseStalker from "../components/MouseStalker.astro";
 
 const poster = await getImage({ src: videomockSrc, format: "webp", quality: 85 });
 
@@ -52,6 +53,7 @@ const wrapperStyles = css({
 		<video class={videoBgStyles} autoplay loop muted playsinline poster={poster.src}>
 			<source src="/hero.webm" type="video/webm" />
 		</video>
+		<MouseStalker />
 		<div class={wrapperStyles}>
 			<slot />
 		</div>
