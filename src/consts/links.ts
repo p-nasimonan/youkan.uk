@@ -21,10 +21,10 @@ export const socialLinks: SocialLink[] = [
 	},
 	{
 		label: "GitHub",
-		url: "https://github.com/p-nasimonan",
+		url: "https://github.com/ieyoukan",
 		color: "#333",
 		rotate: "5deg",
-		description: "p-nasimonan",
+		description: "ieyoukan",
 		icon: "github",
 	},
 	{
